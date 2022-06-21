@@ -146,8 +146,8 @@ export default {
     'content.editable'(value) {
       this.editor.setEditable(value)
     },
-    'variableValue'(value) {
-      this.editor.commands.setContent(value)
+    'variableValue'(value, oldValue) {
+      if (value !== this.editor.getHTML()) this.editor.commands.setContent(value)
     },
     /* wwEditor:start */
     editorConfig() {
