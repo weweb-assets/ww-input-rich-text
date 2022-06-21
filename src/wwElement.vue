@@ -1,8 +1,8 @@
 <template>
   <div class="rich-text" v-if="editor" :style="isEditing && 'pointer-events: none;'">
     <div class="rich-text__menu" v-if="content.showMenu" :style="menuStyles">
-      <!-- Texte type (normal, ...) -->
       
+      <!-- Texte type (normal, ...) -->
       <select id="rich-size" v-model="currentTextType">
         <option v-for="option in textTypeOptions" :value="option.value">{{option.label}}</option>
       </select>
@@ -46,22 +46,24 @@
 
       <span class="separator"></span>
 
-      <!-- Tableau -->
+      <!-- Table -->
       <button class="rich-text__menu-item" @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
         <i class="fas fa-table"></i>
       </button>
+
       <!-- Code -->
-      
       <button class="rich-text__menu-item" @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('code') }">
         <i class="fas fa-code"></i>
       </button>
 
+      <!-- Quote -->
       <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
         <i class="fas fa-quote-left"></i>
       </button>
 
       <span class="separator"></span>
 
+      <!-- Undo/Redo -->
       <button class="rich-text__menu-item" @click="editor.chain().focus().undo().run()">
          <i class="fas fa-undo"></i>
       </button>
@@ -111,7 +113,7 @@ export default {
     wwEditorState: { type: Object, required: true },
     /* wwEditor:end */
   },
-  emits: ['trigger-event'],
+  emits: ['trigger-event', 'update:content:effect'],
   setup(props) {
     const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
       uid: props.uid,
@@ -150,6 +152,13 @@ export default {
     editorConfig() {
       this.loadEditor()
     },
+    'wwEditorState.boundProps.mentionList'(isBind) {
+      if (!isBind)
+        this.$emit('update:content:effect', {
+            mentionIdPath: null,
+            mentionLabelPath: null
+        });
+    },
     /* wwEditor:end */
   },
   computed: {
@@ -160,6 +169,14 @@ export default {
       // eslint-disable-next-line no-unreachable
       return false;
     },
+    mentionList() {
+      const data = wwLib.wwCollection.getCollectionData(this.content.mentionList)
+      if(!Array.isArray(data)) return []
+      return data.map(mention => ({
+        id: wwLib.resolveObjectPropertyPath(mention, this.content.mentionIdPath || 'id') || '',
+        label: wwLib.resolveObjectPropertyPath(mention, this.content.mentionLabelPath || 'label') || '',
+      }))
+    },
     editorConfig() {
       return {
         content: String(this.content.initialValue || ''),
@@ -168,7 +185,7 @@ export default {
         autofocus: this.content.autofocus,
         mention: {
           enabled: this.content.enableMention,
-          list: this.content.mentionList,
+          list: this.mentionList,
           allowSpaces: this.content.mentionAllowSpaces,
           char: this.content.mentionChar
         }
@@ -233,7 +250,8 @@ export default {
               class: 'mention',
             },
             suggestion: {
-              items: ({ query }) => this.editorConfig.mention.list.filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5),
+              items: ({ query }) => 
+                this.editorConfig.mention.list.filter(({ label }) => label.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5),
               render: suggestion.render,
               allowSpaces: this.editorConfig.mention.allowSpaces,
               char: this.editorConfig.mention.char
@@ -254,7 +272,7 @@ export default {
           // handleKeyDown: (view, event) => {},
           handleClickOn: (view, pos, node) => {
             if(node.type.name === 'mention') {
-              this.$emit('trigger-event', { name: 'mention:click', event: { mention: node.attrs.id } });
+              this.$emit('trigger-event', { name: 'mention:click', event: { mention: {id: node.attrs.id, label: node.attrs.label } } });
             }
           }
         }
@@ -266,8 +284,7 @@ export default {
     this.loadEditor()
   },
   beforeUnmount() {
-    if(this.editor) this.editor.destroy()
-    
+    if (this.editor) this.editor.destroy()
   },
 };
 </script>

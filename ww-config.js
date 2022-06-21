@@ -1,3 +1,15 @@
+function showObjectPropertyPath(basePropertyKey, {content, boundProps}) {
+  return boundProps[basePropertyKey] && content[basePropertyKey] && typeof wwLib.wwCollection.getCollectionData(content[basePropertyKey])[0] === 'object'
+}
+function getObjectPropertyPathOptions(basePropertyKey, {content}) {
+  const data = wwLib.wwCollection.getCollectionData(content[basePropertyKey])
+  if (!data.length || typeof data[0] !== 'object') {
+      return null;
+  }
+
+  return { object: data[0] };
+}
+
 export default {
   editor: {
     label: {
@@ -5,13 +17,13 @@ export default {
     },
     customSettingsPropertiesOrder: [
       'initialValue', 'placeholder', 'autofocus', 'editable', 'showMenu',
-      'enableMention', ['mentionChar', 'mentionAllowSpaces', 'mentionList']
+      'enableMention', ['mentionChar', 'mentionAllowSpaces', 'mentionList', 'mentionIdPath', 'mentionLabelPath']
     ]
   },
   triggerEvents: [
     { name: 'change', label: { en: 'On change' }, event: { value: '' } },
     { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
-    { name: 'mention:click', label: { en: 'On mention click' }, event: { mention: '' } },
+    { name: 'mention:click', label: { en: 'On mention click' }, event: { mention: { id: '', label: '' } } },
 ],
   properties: {
     showMenu: {
@@ -77,12 +89,44 @@ export default {
       type: 'Array',
       options: {
         item: {
-          type: 'Text',
-          defaultValue: '',
+          type: 'Object',
+          defaultValue: {id: '', label: ''},
+          options: {
+            item: {
+                id: {
+                  label: { en: 'Id' },
+                  type: 'Text'
+                },
+                label: {
+                    label: { en: 'Label' },
+                    type: 'Text',
+                },
+            },
+          },
         },
       },
       defaultValue: [],
       bindable: true
+    },
+    mentionIdPath: {
+      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('mentionList', {content, boundProps}),
+      label: {
+          en: 'Id property',
+      },
+      type: 'ObjectPropertyPath',
+      options: content => getObjectPropertyPathOptions('mentionList', {content}),
+      defaultValue: null,
+      section: 'settings',
+    },
+    mentionLabelPath: {
+      hidden: (content, sidepanelContent, boundProps) => !showObjectPropertyPath('mentionList', {content, boundProps}),
+      label: {
+          en: 'Label property',
+      },
+      type: 'ObjectPropertyPath',
+      options: content => getObjectPropertyPathOptions('mentionList', {content}),
+      defaultValue: null,
+      section: 'settings',
     },
     mentionAllowSpaces: {
       section: 'settings',
