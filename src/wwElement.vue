@@ -136,9 +136,6 @@ export default {
   }),
   
   watch: {
-    // 'content.editable'(value) {
-    //   this.editor.setEditable(value)
-    // },
     'content.initialValue'(value) {
       this.editor.commands.setContent(value)
       this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
