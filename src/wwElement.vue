@@ -1,6 +1,6 @@
 <template>
   <div class="rich-text" :style="isEditing && 'pointer-events: none;'">
-    <template v-if="editor">
+    <template v-if="richEditor">
       <div class="rich-text__menu" v-if="content.showMenu" :style="menuStyles">
         
         <!-- Texte type (normal, ...) -->
@@ -11,13 +11,13 @@
         <span class="separator"></span>
 
         <!-- Bold, Italic, Underline -->
-        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBold().run()" :class="{ 'is-active': richEditor.isActive('bold') }">
           <i class="fas fa-bold"></i>
         </button>
-        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleItalic().run()" :class="{ 'is-active': richEditor.isActive('italic') }">
           <i class="fas fa-italic"></i>
         </button>
-        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleStrike().run()" :class="{ 'is-active': richEditor.isActive('strike') }">
           <i class="fas fa-strikethrough"></i>
         </button>
 
@@ -29,8 +29,8 @@
           <input
             id="rich-color"
             type="color"
-            @input="editor.chain().focus().setColor($event.target.value).run()"
-            :value="editor.getAttributes('textStyle').color"
+            @input="richEditor.chain().focus().setColor($event.target.value).run()"
+            :value="richEditor.getAttributes('textStyle').color"
             style="display: none;"
           >
         </label>
@@ -38,41 +38,41 @@
         <span class="separator"></span>
         
         <!-- List (Bullet, number) -->
-        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': richEditor.isActive('bulletList') }">
           <i class="fas fa-list-ul"></i>
         </button>
-        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': richEditor.isActive('orderedList') }">
           <i class="fas fa-list-ol"></i>
         </button>
 
         <span class="separator"></span>
 
         <!-- Table -->
-        <button class="rich-text__menu-item" @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
           <i class="fas fa-table"></i>
         </button>
 
         <!-- Code -->
-        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('code') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': richEditor.isActive('code') }">
           <i class="fas fa-code"></i>
         </button>
 
         <!-- Quote -->
-        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': richEditor.isActive('blockquote') }">
           <i class="fas fa-quote-left"></i>
         </button>
 
         <span class="separator"></span>
 
         <!-- Undo/Redo -->
-        <button class="rich-text__menu-item" @click="editor.chain().focus().undo().run()">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().undo().run()">
           <i class="fas fa-undo"></i>
         </button>
-        <button class="rich-text__menu-item" @click="editor.chain().focus().redo().run()">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().redo().run()">
           <i class="fas fa-redo"></i>
         </button>
       </div>
-      <editor-content :editor="editor" :style="richStyles"/>
+      <editor-content :editor="richEditor" :style="richStyles"/>
     </template>
   </div>
 </template>
@@ -135,20 +135,20 @@ export default {
     return { variableValue, setValue, variableMentions, setMentions }
   },
   data: () => ({
-    editor: null,
+    richEditor: null,
     loading: false,
   }),
   
   watch: {
     'content.initialValue'(value) {
-      this.editor.commands.setContent(value)
+      this.richEditor.commands.setContent(value)
       this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
     },
     'content.editable'(value) {
-      this.editor.setEditable(value)
+      this.richEditor.setEditable(value)
     },
     'variableValue'(value, oldValue) {
-      if (value !== this.editor.getHTML()) this.editor.commands.setContent(value)
+      if (value !== this.richEditor.getHTML()) this.richEditor.commands.setContent(value)
     },
     /* wwEditor:start */
     editorConfig() {
@@ -199,20 +199,20 @@ export default {
         return currentType ? currentType.value : 0
       },
       set(value) {
-        if(value === 0) this.editor.chain().focus().setParagraph().run()
-        if(value !== 0) this.editor.chain().focus().toggleHeading({ level: Number(value) }).run()
+        if(value === 0) this.richEditor.chain().focus().setParagraph().run()
+        if(value !== 0) this.richEditor.chain().focus().toggleHeading({ level: Number(value) }).run()
       }
     },
     textTypeOptions() {
-      if (!this.editor) return []
+      if (!this.richEditor) return []
       return [
-        {label: 'Paragraph', value: 0, active: this.editor.isActive('paragraph')}, 
-        {label: 'Heading 1', value: 1, active: this.editor.isActive('heading', { level: 1 })}, 
-        {label: 'Heading 2', value: 2, active: this.editor.isActive('heading', { level: 2 })},
-        {label: 'Heading 3', value: 3, active: this.editor.isActive('heading', { level: 3 })},
-        {label: 'Heading 4', value: 4, active: this.editor.isActive('heading', { level: 4 })},
-        {label: 'Heading 5', value: 5, active: this.editor.isActive('heading', { level: 5 })},
-        {label: 'Heading 6', value: 6, active: this.editor.isActive('heading', { level: 6 })}
+        {label: 'Paragraph', value: 0, active: this.richEditor.isActive('paragraph')}, 
+        {label: 'Heading 1', value: 1, active: this.richEditor.isActive('heading', { level: 1 })}, 
+        {label: 'Heading 2', value: 2, active: this.richEditor.isActive('heading', { level: 2 })},
+        {label: 'Heading 3', value: 3, active: this.richEditor.isActive('heading', { level: 3 })},
+        {label: 'Heading 4', value: 4, active: this.richEditor.isActive('heading', { level: 4 })},
+        {label: 'Heading 5', value: 5, active: this.richEditor.isActive('heading', { level: 5 })},
+        {label: 'Heading 6', value: 6, active: this.richEditor.isActive('heading', { level: 6 })}
       ]
     },
     menuStyles() {
@@ -231,8 +231,8 @@ export default {
     loadEditor() {
       if (this.loading) return
       this.loading = true
-      if (this.editor) this.editor.destroy()
-      this.editor = new Editor({
+      if (this.richEditor) this.richEditor.destroy()
+      this.richEditor = new Editor({
         content: this.editorConfig.content,
         editable: this.editorConfig.editable,
         autofocus: this.editorConfig.autofocus,
@@ -262,12 +262,12 @@ export default {
           })
         ],
         onCreate: () => {
-          this.setValue(this.editor.getHTML())
-          this.setMentions(this.editor.getJSON().content.reduce(extractMentions, []))
+          this.setValue(this.richEditor.getHTML())
+          this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []))
         },
         onUpdate: () => {
-          this.setValue(this.editor.getHTML())
-          this.setMentions(this.editor.getJSON().content.reduce(extractMentions, []))
+          this.setValue(this.richEditor.getHTML())
+          this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []))
         },
         editorProps: {
           // TODO : find a workaround for backspace not working on editor
@@ -286,7 +286,7 @@ export default {
     this.loadEditor()
   },
   beforeUnmount() {
-    if (this.editor) this.editor.destroy()
+    if (this.richEditor) this.richEditor.destroy()
   },
 };
 </script>
