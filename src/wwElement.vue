@@ -1,77 +1,79 @@
 <template>
-  <div class="rich-text" v-if="editor" :style="isEditing && 'pointer-events: none;'">
-    <div class="rich-text__menu" v-if="content.showMenu" :style="menuStyles">
-      
-      <!-- Texte type (normal, ...) -->
-      <select id="rich-size" v-model="currentTextType">
-        <option v-for="option in textTypeOptions" :value="option.value">{{option.label}}</option>
-      </select>
+  <div class="rich-text" :style="isEditing && 'pointer-events: none;'">
+    <template v-if="editor">
+      <div class="rich-text__menu" v-if="content.showMenu" :style="menuStyles">
+        
+        <!-- Texte type (normal, ...) -->
+        <select id="rich-size" v-model="currentTextType">
+          <option v-for="option in textTypeOptions" :value="option.value">{{option.label}}</option>
+        </select>
 
-      <span class="separator"></span>
+        <span class="separator"></span>
 
-      <!-- Bold, Italic, Underline -->
-      <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
-        <i class="fas fa-bold"></i>
-      </button>
-      <button class="rich-text__menu-item" @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
-        <i class="fas fa-italic"></i>
-      </button>
-      <button class="rich-text__menu-item" @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
-        <i class="fas fa-strikethrough"></i>
-      </button>
+        <!-- Bold, Italic, Underline -->
+        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
+          <i class="fas fa-bold"></i>
+        </button>
+        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
+          <i class="fas fa-italic"></i>
+        </button>
+        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+          <i class="fas fa-strikethrough"></i>
+        </button>
 
-      <span class="separator"></span>
-      
-      <!-- Color -->
-      <label class="rich-text__menu-item" for="rich-color">
-        <i class="fas fa-palette"></i>
-        <input
-          id="rich-color"
-          type="color"
-          @input="editor.chain().focus().setColor($event.target.value).run()"
-          :value="editor.getAttributes('textStyle').color"
-          style="display: none;"
-        >
-      </label>
+        <span class="separator"></span>
+        
+        <!-- Color -->
+        <label class="rich-text__menu-item" for="rich-color">
+          <i class="fas fa-palette"></i>
+          <input
+            id="rich-color"
+            type="color"
+            @input="editor.chain().focus().setColor($event.target.value).run()"
+            :value="editor.getAttributes('textStyle').color"
+            style="display: none;"
+          >
+        </label>
 
-      <span class="separator"></span>
-      
-      <!-- List (Bullet, number) -->
-      <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }">
-        <i class="fas fa-list-ul"></i>
-      </button>
-      <button class="rich-text__menu-item" @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }">
-        <i class="fas fa-list-ol"></i>
-      </button>
+        <span class="separator"></span>
+        
+        <!-- List (Bullet, number) -->
+        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }">
+          <i class="fas fa-list-ul"></i>
+        </button>
+        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }">
+          <i class="fas fa-list-ol"></i>
+        </button>
 
-      <span class="separator"></span>
+        <span class="separator"></span>
 
-      <!-- Table -->
-      <button class="rich-text__menu-item" @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
-        <i class="fas fa-table"></i>
-      </button>
+        <!-- Table -->
+        <button class="rich-text__menu-item" @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
+          <i class="fas fa-table"></i>
+        </button>
 
-      <!-- Code -->
-      <button class="rich-text__menu-item" @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('code') }">
-        <i class="fas fa-code"></i>
-      </button>
+        <!-- Code -->
+        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('code') }">
+          <i class="fas fa-code"></i>
+        </button>
 
-      <!-- Quote -->
-      <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
-        <i class="fas fa-quote-left"></i>
-      </button>
+        <!-- Quote -->
+        <button class="rich-text__menu-item" @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
+          <i class="fas fa-quote-left"></i>
+        </button>
 
-      <span class="separator"></span>
+        <span class="separator"></span>
 
-      <!-- Undo/Redo -->
-      <button class="rich-text__menu-item" @click="editor.chain().focus().undo().run()">
-         <i class="fas fa-undo"></i>
-      </button>
-      <button class="rich-text__menu-item" @click="editor.chain().focus().redo().run()">
-         <i class="fas fa-redo"></i>
-      </button>
-    </div>
-    <editor-content :editor="editor" :style="richStyles"/>
+        <!-- Undo/Redo -->
+        <button class="rich-text__menu-item" @click="editor.chain().focus().undo().run()">
+          <i class="fas fa-undo"></i>
+        </button>
+        <button class="rich-text__menu-item" @click="editor.chain().focus().redo().run()">
+          <i class="fas fa-redo"></i>
+        </button>
+      </div>
+      <editor-content :editor="editor" :style="richStyles"/>
+    </template>
   </div>
 </template>
 
@@ -89,7 +91,6 @@ import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 
 import suggestion from './suggestion.js'
-import { computed } from 'vue'
 
 function extractMentions (acc, currentNode) {
   if (currentNode.type === 'mention') {
@@ -114,12 +115,13 @@ export default {
     /* wwEditor:end */
   },
   emits: ['trigger-event', 'update:content:effect'],
-  setup(props) {
+  setup(props, { emit }) {
     const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
       uid: props.uid,
       name: 'value',
       type: 'string',
       defaultValue: String(props.content.initialValue || ''),
+      onUpdate: value => emit('trigger-event', { name: 'change', event: { value } })
     });
 
     const { value: variableMentions, setValue: setMentions } = wwLib.wwVariable.useComponentVariable({
@@ -202,6 +204,7 @@ export default {
       }
     },
     textTypeOptions() {
+      if (!this.editor) return []
       return [
         {label: 'Paragraph', value: 0, active: this.editor.isActive('paragraph')}, 
         {label: 'Heading 1', value: 1, active: this.editor.isActive('heading', { level: 1 })}, 
@@ -265,7 +268,6 @@ export default {
         onUpdate: () => {
           this.setValue(this.editor.getHTML())
           this.setMentions(this.editor.getJSON().content.reduce(extractMentions, []))
-          this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
         },
         editorProps: {
           // TODO : find a workaround for backspace not working on editor
