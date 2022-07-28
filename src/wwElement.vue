@@ -1,23 +1,23 @@
 <template>
   <div class="rich-text" :style="isEditing && 'pointer-events: none;'">
     <template v-if="richEditor">
-      <div class="rich-text__menu" v-if="content.showMenu" :style="menuStyles">
+      <div class="rich-text__menu" v-if="!isReadonly" :style="menuStyles">
         
         <!-- Texte type (normal, ...) -->
-        <select id="rich-size" v-model="currentTextType">
+        <select id="rich-size" v-model="currentTextType" :disabled="!isEditable">
           <option v-for="option in textTypeOptions" :value="option.value">{{option.label}}</option>
         </select>
 
         <span class="separator"></span>
 
         <!-- Bold, Italic, Underline -->
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBold().run()" :class="{ 'is-active': richEditor.isActive('bold') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBold().run()" :class="{ 'is-active': richEditor.isActive('bold') }" :disabled="!isEditable">
           <i class="fas fa-bold"></i>
         </button>
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleItalic().run()" :class="{ 'is-active': richEditor.isActive('italic') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleItalic().run()" :class="{ 'is-active': richEditor.isActive('italic') }" :disabled="!isEditable">
           <i class="fas fa-italic"></i>
         </button>
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleStrike().run()" :class="{ 'is-active': richEditor.isActive('strike') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleStrike().run()" :class="{ 'is-active': richEditor.isActive('strike') }" :disabled="!isEditable">
           <i class="fas fa-strikethrough"></i>
         </button>
 
@@ -32,43 +32,44 @@
             @input="richEditor.chain().focus().setColor($event.target.value).run()"
             :value="richEditor.getAttributes('textStyle').color"
             style="display: none;"
+            :disabled="!isEditable"
           >
         </label>
 
         <span class="separator"></span>
         
         <!-- List (Bullet, number) -->
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': richEditor.isActive('bulletList') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': richEditor.isActive('bulletList') }" :disabled="!isEditable">
           <i class="fas fa-list-ul"></i>
         </button>
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': richEditor.isActive('orderedList') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': richEditor.isActive('orderedList') }" :disabled="!isEditable">
           <i class="fas fa-list-ol"></i>
         </button>
 
         <span class="separator"></span>
 
         <!-- Table -->
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
+        <!-- <button class="rich-text__menu-item" @click="richEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()" :disabled="!isEditable">
           <i class="fas fa-table"></i>
-        </button>
+        </button> -->
 
         <!-- Code -->
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': richEditor.isActive('code') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': richEditor.isActive('code') }" :disabled="!isEditable">
           <i class="fas fa-code"></i>
         </button>
 
         <!-- Quote -->
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': richEditor.isActive('blockquote') }">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': richEditor.isActive('blockquote') }" :disabled="!isEditable">
           <i class="fas fa-quote-left"></i>
         </button>
 
         <span class="separator"></span>
 
         <!-- Undo/Redo -->
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().undo().run()">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().undo().run()" :disabled="!isEditable">
           <i class="fas fa-undo"></i>
         </button>
-        <button class="rich-text__menu-item" @click="richEditor.chain().focus().redo().run()">
+        <button class="rich-text__menu-item" @click="richEditor.chain().focus().redo().run()" :disabled="!isEditable">
           <i class="fas fa-redo"></i>
         </button>
       </div>
@@ -81,16 +82,17 @@
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Mention from '@tiptap/extension-mention'
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import TableRow from '@tiptap/extension-table-row'
+// import Table from '@tiptap/extension-table'
+// import TableCell from '@tiptap/extension-table-cell'
+// import TableHeader from '@tiptap/extension-table-header'
+// import TableRow from '@tiptap/extension-table-row'
 import TextStyle from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 
 import suggestion from './suggestion.js'
+import { tsThisType } from '@babel/types'
 
 function extractMentions (acc, currentNode) {
   if (currentNode.type === 'mention') {
@@ -110,6 +112,7 @@ export default {
   props: {
     content: { type: Object, required: true },
     uid: { type: String, required: true },
+    wwElementState: { type: Object, required: true },
     /* wwEditor:start */
     wwEditorState: { type: Object, required: true },
     /* wwEditor:end */
@@ -144,7 +147,7 @@ export default {
       this.richEditor.commands.setContent(value)
       this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
     },
-    'content.editable'(value) {
+    'isEditable'(value) {
       this.richEditor.setEditable(value)
     },
     'variableValue'(value, oldValue) {
@@ -162,6 +165,16 @@ export default {
         });
     },
     /* wwEditor:end */
+    isReadonly: {
+      immediate: true,
+      handler(value) {
+          if (value) {
+              this.$emit('add-state', 'readonly');
+          } else {
+              this.$emit('remove-state', 'readonly');
+          }
+      },
+    },
   },
   computed: {
     isEditing() {
@@ -179,11 +192,18 @@ export default {
         label: wwLib.resolveObjectPropertyPath(mention, this.content.mentionLabelPath || 'label') || '',
       }))
     },
+    isReadonly() {
+      return this.wwElementState.props.readonly === undefined
+          ? this.content.readonly
+          : this.wwElementState.props.readonly;
+    },
+    isEditable() {
+      return !this.isReadonly && this.content.editable
+    },
     editorConfig() {
       return {
         content: String(this.content.initialValue || ''),
         placeholder: this.content.placeholder,
-        editable: this.content.editable,
         autofocus: this.content.autofocus,
         mention: {
           enabled: this.content.enableMention,
@@ -222,8 +242,97 @@ export default {
     },
     richStyles() {
       return {
-        '--rich-link-color': this.content.linkColor,
-        '--rich-mention-color': this.content.mentionColor
+        'max-height': '-webkit-fill-available',
+        // H1
+        '--h1-fontSize': this.content.h1.fontSize,
+        '--h1-fontFamily': this.content.h1.fontFamily,
+        '--h1-fontWeight': this.content.h1.fontWeight,
+        '--h1-textAlign': this.content.h1.textAlign,
+        '--h1-color': this.content.h1.color,
+        '--h1-lineHeight': this.content.h1.lineHeight,
+        '--h1-margin-top': this.content.h1.marginTop,
+        '--h1-margin-bottom': this.content.h1.marginBottom,
+        // H2
+        '--h2-fontSize': this.content.h2.fontSize,
+        '--h2-fontFamily': this.content.h2.fontFamily,
+        '--h2-fontWeight': this.content.h2.fontWeight,
+        '--h2-textAlign': this.content.h2.textAlign,
+        '--h2-color': this.content.h2.color,
+        '--h2-lineHeight': this.content.h2.lineHeight,
+        '--h2-margin-top': this.content.h2.marginTop,
+        '--h2-margin-bottom': this.content.h2.marginBottom,
+        // H3
+        '--h3-fontSize': this.content.h3.fontSize,
+        '--h3-fontFamily': this.content.h3.fontFamily,
+        '--h3-fontWeight': this.content.h3.fontWeight,
+        '--h3-textAlign': this.content.h3.textAlign,
+        '--h3-color': this.content.h3.color,
+        '--h3-lineHeight': this.content.h3.lineHeight,
+        '--h3-margin-top': this.content.h3.marginTop,
+        '--h3-margin-bottom': this.content.h3.marginBottom,
+        // H4
+        '--h4-fontSize': this.content.h4.fontSize,
+        '--h4-fontFamily': this.content.h4.fontFamily,
+        '--h4-fontWeight': this.content.h4.fontWeight,
+        '--h4-textAlign': this.content.h4.textAlign,
+        '--h4-color': this.content.h4.color,
+        '--h4-lineHeight': this.content.h4.lineHeight,
+        '--h4-margin-top': this.content.h4.marginTop,
+        '--h4-margin-bottom': this.content.h4.marginBottom,
+        // H5
+        '--h5-fontSize': this.content.h5.fontSize,
+        '--h5-fontFamily': this.content.h5.fontFamily,
+        '--h5-fontWeight': this.content.h5.fontWeight,
+        '--h5-textAlign': this.content.h5.textAlign,
+        '--h5-color': this.content.h5.color,
+        '--h5-lineHeight': this.content.h5.lineHeight,
+        '--h5-margin-top': this.content.h5.marginTop,
+        '--h5-margin-bottom': this.content.h5.marginBottom,
+        // H6
+        '--h6-fontSize': this.content.h6.fontSize,
+        '--h6-fontFamily': this.content.h6.fontFamily,
+        '--h6-fontWeight': this.content.h6.fontWeight,
+        '--h6-textAlign': this.content.h6.textAlign,
+        '--h6-color': this.content.h6.color,
+        '--h6-lineHeight': this.content.h6.lineHeight,
+        '--h6-margin-top': this.content.h6.marginTop,
+        '--h6-margin-bottom': this.content.h6.marginBottom,
+        // p
+        '--p-fontSize': this.content.p.fontSize,
+        '--p-fontFamily': this.content.p.fontFamily,
+        '--p-fontWeight': this.content.p.fontWeight,
+        '--p-textAlign': this.content.p.textAlign,
+        '--p-color': this.content.p.color,
+        '--p-lineHeight': this.content.p.lineHeight,
+        '--p-margin-top': this.content.p.marginTop,
+        '--p-margin-bottom': this.content.p.marginBottom,
+        // mention
+        '--mention-fontSize': this.content.mention.fontSize,
+        '--mention-fontFamily': this.content.mention.fontFamily,
+        '--mention-fontWeight': this.content.mention.fontWeight,
+        '--mention-color': this.content.mention.color,
+        '--mention-borderSize': this.content.mention.borderSize,
+        '--mention-border-radius': this.content.mention.borderRadius,
+        // a
+        '--a-fontSize': this.content.a.fontSize,
+        '--a-fontFamily': this.content.a.fontFamily,
+        '--a-fontWeight': this.content.a.fontWeight,
+        '--a-textAlign': this.content.a.textAlign,
+        '--a-color': this.content.a.color,
+        '--a-lineHeight': this.content.a.lineHeight,
+        '--a-underline': this.content.a.isUnderline ? 'underline' : 'none',
+        // blockquote
+        '--blockquote-color': this.content.blockquote.color,
+        '--blockquote-border-color': this.content.blockquote.borderColor,
+        '--blockquote-margin-top': this.content.blockquote.marginTop,
+        '--blockquote-margin-bottom': this.content.blockquote.marginBottom,
+        // blockquote
+        '--code-color': this.content.code.color,
+        '--code-bg-color': this.content.code.bgColor,
+        '--code-border-radius': this.content.code.borderRadius,
+        '--code-padding-y': this.content.code.paddingY,
+        '--code-padding-x': this.content.code.paddingX,
+        '--code-font-size': this.content.code.fontSize,
       }
     },
   },
@@ -234,14 +343,14 @@ export default {
       if (this.richEditor) this.richEditor.destroy()
       this.richEditor = new Editor({
         content: this.editorConfig.content,
-        editable: this.editorConfig.editable,
+        editable: this.isEditable,
         autofocus: this.editorConfig.autofocus,
         extensions: [
           StarterKit,
-          Table,
-          TableRow,
-          TableHeader,
-          TableCell,
+          // Table,
+          // TableRow,
+          // TableHeader,
+          // TableCell,
           Link,
           TextStyle,
           Color,
@@ -296,6 +405,7 @@ export default {
   --menu-color: unset;
   display: flex;
   flex-direction: column;
+  height: inherit;
 
   .separator {
     background: rgb(235, 236, 240);
@@ -342,13 +452,10 @@ export default {
   }
 }
 
-/* Basic editor styles */
 .ProseMirror {
-  --rich-link-color: unset;
-  --rich-mention-color: unset;
-
+  /* Basic editor styles */
   cursor: text;
-  max-height: 500px;
+  max-height: 100%;
   overflow: auto;
   padding: 8px;
   &-focused {
@@ -358,142 +465,233 @@ export default {
     margin-top: 0.75em;
   }
 
-  a {
-    color: var(--rich-link-color);
-    display: inline;
-    text-decoration: underline;
-    cursor: pointer;
+  /* Placeholder (at the top) */
+  & p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #adb5bd;
+    pointer-events: none;
+    height: 0;
   }
 
-  ul,
-  ol {
-    padding: 0 1rem;
+  h1 {
+    font-size: var(--h1-fontSize);
+    font-family: var(--h1-fontFamily);
+    font-weight: var(--h1-fontWeight);
+    text-align: var(--h1-textAlign);
+    color: var(--h1-color);
+    line-height: var(--h1-lineHeight);
+    margin-top: var(--h1-margin-top);
+    margin-bottom: var(--h1-margin-bottom);
   }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
+  h2 {
+    font-size: var(--h2-fontSize);
+    font-family: var(--h2-fontFamily);
+    font-weight: var(--h2-fontWeight);
+    text-align: var(--h2-textAlign);
+    color: var(--h2-color);
+    line-height: var(--h2-lineHeight);
+    margin-top: var(--h2-margin-top);
+    margin-bottom: var(--h2-margin-bottom);
+  }
+  h3 {
+    font-size: var(--h3-fontSize);
+    font-family: var(--h3-fontFamily);
+    font-weight: var(--h3-fontWeight);
+    text-align: var(--h3-textAlign);
+    color: var(--h3-color);
+    line-height: var(--h3-lineHeight);
+    margin-top: var(--h3-margin-top);
+    margin-bottom: var(--h3-margin-bottom);
+  }
+  h4 {
+    font-size: var(--h4-fontSize);
+    font-family: var(--h4-fontFamily);
+    font-weight: var(--h4-fontWeight);
+    text-align: var(--h4-textAlign);
+    color: var(--h4-color);
+    line-height: var(--h4-lineHeight);
+    margin-top: var(--h4-margin-top);
+    margin-bottom: var(--h4-margin-bottom);
+  }
+  h5 {
+    font-size: var(--h5-fontSize);
+    font-family: var(--h5-fontFamily);
+    font-weight: var(--h5-fontWeight);
+    text-align: var(--h5-textAlign);
+    color: var(--h5-color);
+    line-height: var(--h5-lineHeight);
+    margin-top: var(--h5-margin-top);
+    margin-bottom: var(--h5-margin-bottom);
+  }
   h6 {
-    line-height: 1.1;
+    font-size: var(--h6-fontSize);
+    font-family: var(--h6-fontFamily);
+    font-weight: var(--h6-fontWeight);
+    text-align: var(--h6-textAlign);
+    color: var(--h6-color);
+    line-height: var(--h6-lineHeight);
+    margin-top: var(--h6-margin-top);
+    margin-bottom: var(--h6-margin-bottom);
+  }
+  p {
+    font-size: var(--p-fontSize);
+    font-family: var(--p-fontFamily);
+    font-weight: var(--p-fontWeight);
+    text-align: var(--p-textAlign);
+    color: var(--p-color);
+    line-height: var(--p-lineHeight);
+    margin-top: var(--p-margin-top);
+    margin-bottom: var(--p-margin-bottom);
+  }
+  a {
+    display: initial;
+    text-decoration: var(--a-underline);
+    font-size: var(--a-fontSize);
+    font-family: var(--a-fontFamily);
+    font-weight: var(--a-fontWeight);
+    text-align: var(--a-textAlign);
+    color: var(--a-color);
+    line-height: var(--a-lineHeight);
+  }
+  font-size: var(--p-fontSize);
+  font-family: var(--p-fontFamily);
+  font-weight: var(--p-fontSize);
+  text-align: var(--p-textAlign);
+  color: var(--p-color);
+  line-height: var(--p-lineHeight);
+
+  .mention {
+    border: var(--mention-borderSize) solid var(--mention-color);
+    border-radius: var(--mention-border-radius);
+    padding: 0.1rem 0.3rem;
+    box-decoration-break: clone;
+    cursor: pointer;
+    font-size: var(--mention-fontSize);
+    font-family: var(--mention-fontFamily);
+    font-weight: var(--mention-fontSize);
+    color: var(--mention-color);
   }
 
-  code {
-    background-color: rgba(#616161, 0.1);
-    color: #616161;
+  table {
+    margin: 64px 0 !important;
+    width: 100% !important;
+    display: table;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-spacing: 2px;
+
+    thead > tr {
+      background: #f7f7fa;
+
+      th {
+        color: #5a6482;
+        font-family: Work Sans;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        letter-spacing: -0.08px;
+      }
+    }
+    td,
+    th {
+      text-align: left;
+      padding: 1.25em 1rem !important;
+    }
+    tbody {
+      border: 1px solid #d1cfd7;
+      tr:nth-child(2n) {
+          background: #f7f7fa;
+      }
+    }
+  }
+  blockquote {
+    color: var(--blockquote-color);
+    border-left: 0.2rem solid var(--blockquote-border-color);
+    margin: 1rem 0;
+    padding: 0.25rem 0 0.25rem 1rem;
+    margin-top: var(--blockquote-margin-top);
+    margin-bottom: var(--blockquote-margin-bottom);
   }
 
   pre {
-    background: #0D0D0D;
-    color: #FFF;
+    background: var(--code-bg-color);
+    color: var(--code-color);
     font-family: 'JetBrainsMono', monospace;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
+    padding: var(--code-padding-y) var(--code-padding-x);
+    border-radius: var(--code-border-radius);
 
     code {
       color: inherit;
       padding: 0;
       background: none;
-      font-size: 0.8rem;
+      font-size: var(--code-font-size);
     }
   }
 
-  img {
-    max-width: 100%;
-    height: auto;
-  }
+  /* Table-specific styling */
+// .ProseMirror {
+//   table {
+//     border-collapse: collapse;
+//     table-layout: fixed;
+//     width: 100%;
+//     margin: 0;
+//     overflow: hidden;
 
-  blockquote {
-    padding-left: 1rem;
-    border-left: 2px solid rgba(#0D0D0D, 0.1);
-  }
+//     td,
+//     th {
+//       min-width: 1em;
+//       border: 2px solid #ced4da;
+//       padding: 3px 5px;
+//       vertical-align: top;
+//       box-sizing: border-box;
+//       position: relative;
 
-  hr {
-    border: none;
-    border-top: 2px solid rgba(#0D0D0D, 0.1);
-    margin: 2rem 0;
-  }
+//       > * {
+//         margin-bottom: 0;
+//       }
+//     }
 
-  .mention {
-    border: 1px solid var(--rich-mention-color);
-    border-radius: 0.4rem;
-    padding: 0.1rem 0.3rem;
-    box-decoration-break: clone;
-    cursor: pointer;
-    color: var(--rich-mention-color);
-  }
-}
+//     th {
+//       font-weight: bold;
+//       text-align: left;
+//       background-color: #f1f3f5;
+//     }
 
-/* Table-specific styling */
-.ProseMirror {
-  table {
-    border-collapse: collapse;
-    table-layout: fixed;
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
+//     .selectedCell:after {
+//       z-index: 2;
+//       position: absolute;
+//       content: "";
+//       left: 0; right: 0; top: 0; bottom: 0;
+//       background: rgba(200, 200, 255, 0.4);
+//       pointer-events: none;
+//     }
 
-    td,
-    th {
-      min-width: 1em;
-      border: 2px solid #ced4da;
-      padding: 3px 5px;
-      vertical-align: top;
-      box-sizing: border-box;
-      position: relative;
+//     .column-resize-handle {
+//       position: absolute;
+//       right: -2px;
+//       top: 0;
+//       bottom: -2px;
+//       width: 4px;
+//       background-color: #adf;
+//       pointer-events: none;
+//     }
 
-      > * {
-        margin-bottom: 0;
-      }
-    }
+//     p {
+//       margin: 0;
+//     }
+//   }
+// }
 
-    th {
-      font-weight: bold;
-      text-align: left;
-      background-color: #f1f3f5;
-    }
+// .tableWrapper {
+//   overflow-x: auto;
+// }
 
-    .selectedCell:after {
-      z-index: 2;
-      position: absolute;
-      content: "";
-      left: 0; right: 0; top: 0; bottom: 0;
-      background: rgba(200, 200, 255, 0.4);
-      pointer-events: none;
-    }
-
-    .column-resize-handle {
-      position: absolute;
-      right: -2px;
-      top: 0;
-      bottom: -2px;
-      width: 4px;
-      background-color: #adf;
-      pointer-events: none;
-    }
-
-    p {
-      margin: 0;
-    }
-  }
-}
-
-.tableWrapper {
-  overflow-x: auto;
-}
-
-.resize-cursor {
-  cursor: ew-resize;
-  cursor: col-resize;
-}
-
-/* Placeholder (at the top) */
-.ProseMirror p.is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  float: left;
-  color: #adb5bd;
-  pointer-events: none;
-  height: 0;
+// .resize-cursor {
+//   cursor: ew-resize;
+//   cursor: col-resize;
+// }
 }
 </style>

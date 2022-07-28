@@ -10,13 +10,18 @@ function getObjectPropertyPathOptions(basePropertyKey, {content}) {
   return { object: data[0] };
 }
 
+import { textOptions } from './src/settings'
+
 export default {
   editor: {
     label: {
       en: 'Rich text',
     },
+    customStylePropertiesOrder: [
+      'selectedTag', ['h1', 'h2', 'h3', 'h4', 'p', 'mention', 'a', 'blockquote']
+    ],
     customSettingsPropertiesOrder: [
-      'initialValue', 'placeholder', 'autofocus', 'editable', 'showMenu',
+      'readonly', 'editable', 'initialValue', 'placeholder', 'autofocus', 'menuColor',
       'enableMention', ['mentionChar', 'mentionAllowSpaces', 'mentionList', 'mentionIdPath', 'mentionLabelPath']
     ]
   },
@@ -24,35 +29,24 @@ export default {
     { name: 'change', label: { en: 'On change' }, event: { value: '' } },
     { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
     { name: 'mention:click', label: { en: 'On mention click' }, event: { mention: { id: '', label: '' } } },
-],
+  ],
   properties: {
-    showMenu: {
+    readonly: {
+      section: 'settings',
       label: {
-        en: 'Show menu',
+        en: 'Read only',
       },
       type: 'OnOff',
-      defaultValue: true,
+      defaultValue: false,
+      bindable: true,
     },
     menuColor: {
+      section: 'settings',
       label: {
         en: 'Menu color',
       },
       type: 'Color',
-      defaultValue: null
-    },
-    linkColor: {
-      label: {
-        en: 'Link color',
-      },
-      type: 'Color',
-      defaultValue: null
-    },
-    mentionColor: {
-      label: {
-        en: 'Mention color',
-      },
-      type: 'Color',
-      defaultValue: null
+      defaultValue: '#000000ad'
     },
     initialValue: {
       section: 'settings',
@@ -163,5 +157,395 @@ export default {
       defaultValue: true,
       bindable: true
     },
-  },
+    selectedTag: {
+      label: {
+          en: 'Tag to edit',
+          fr: 'Tag à éditer',
+      },
+      type: 'TextSelect',
+      editorOnly: true,
+      options: {
+          options: [
+              { value: 'h1', label: { en: 'h1' } },
+              { value: 'h2', label: { en: 'h2' } },
+              { value: 'h3', label: { en: 'h3' } },
+              { value: 'h4', label: { en: 'h4' } },
+              { value: 'p', label: { en: 'p' } },
+              { value: 'a', label: { en: 'a' } },
+              { value: 'blockquote', label: { en: 'blockquote' } },
+              { value: 'code', label: { en: 'code' } },
+              { value: 'mention', label: { en: 'mention' } },
+          ],
+      },
+      defaultValue: null,
+    },
+    h1: {
+        type: 'Object',
+        hidden: (content, sidepanelContent) => {
+            return sidepanelContent.selectedTag !== 'h1';
+        },
+        options: {
+            item: textOptions,
+        },
+        defaultValue: {
+            fontSize: '32px',
+            fontFamily: '',
+            fontWeight: '',
+            textAlign: '',
+            color: '',
+            lineHeight: '',
+            marginTop: '',
+            marginBottom: '',
+        },
+        responsive: true,
+    },
+    h2: {
+        type: 'Object',
+        hidden: (content, sidepanelContent) => {
+            return sidepanelContent.selectedTag !== 'h2';
+        },
+        options: {
+            item: textOptions,
+        },
+        defaultValue: {
+            fontSize: '24px',
+            fontFamily: '',
+            fontWeight: '',
+            textAlign: '',
+            color: '',
+            lineHeight: '',
+            marginTop: '',
+            marginBottom: '',
+        },
+        responsive: true,
+    },
+    h3: {
+        type: 'Object',
+        hidden: (content, sidepanelContent) => {
+            return sidepanelContent.selectedTag !== 'h3';
+        },
+        options: {
+            item: textOptions,
+        },
+        defaultValue: {
+            fontSize: '19px',
+            fontFamily: '',
+            fontWeight: '',
+            textAlign: '',
+            color: '',
+            lineHeight: '',
+            marginTop: '',
+            marginBottom: '',
+        },
+        responsive: true,
+    },
+    h4: {
+        type: 'Object',
+        hidden: (content, sidepanelContent) => {
+            return sidepanelContent.selectedTag !== 'h4';
+        },
+        options: {
+            item: textOptions,
+        },
+        defaultValue: {
+            fontSize: '16px',
+            fontFamily: '',
+            fontWeight: '',
+            textAlign: '',
+            color: '',
+            lineHeight: '',
+            marginTop: '',
+            marginBottom: '',
+        },
+        responsive: true,
+    },
+    h5: {
+      type: 'Object',
+      hidden: (content, sidepanelContent) => {
+          return sidepanelContent.selectedTag !== 'h5';
+      },
+      options: {
+          item: textOptions,
+      },
+      defaultValue: {
+          fontSize: '16px',
+          fontFamily: '',
+          fontWeight: '',
+          textAlign: '',
+          color: '',
+          lineHeight: '',
+          marginTop: '',
+          marginBottom: '',
+      },
+      responsive: true,
+    },
+    h6: {
+      type: 'Object',
+      hidden: (content, sidepanelContent) => {
+          return sidepanelContent.selectedTag !== 'h6';
+      },
+      options: {
+          item: textOptions,
+      },
+      defaultValue: {
+          fontSize: '16px',
+          fontFamily: '',
+          fontWeight: '',
+          textAlign: '',
+          color: '',
+          lineHeight: '',
+          marginTop: '',
+          marginBottom: '',
+      },
+      responsive: true,
+    },
+    p: {
+        type: 'Object',
+        hidden: (content, sidepanelContent) => {
+            return sidepanelContent.selectedTag !== 'p';
+        },
+        options: {
+            item: textOptions,
+        },
+        defaultValue: {
+            fontSize: '16px',
+            fontFamily: '',
+            fontWeight: '',
+            textAlign: '',
+            color: '',
+            lineHeight: '',
+            marginTop: '',
+            marginBottom: '',
+        },
+        responsive: true,
+    },
+    mention: {
+      type: 'Object',
+      hidden: (content, sidepanelContent) => {
+          return sidepanelContent.selectedTag !== 'mention';
+      },
+      options: {
+          item: {
+            fontSize: textOptions.fontSize,
+            fontFamily: textOptions.fontFamily,
+            fontWeight: textOptions.fontWeight,
+            color: textOptions.color,
+            borderSize: {
+              type: 'Length',
+              label: {
+                en: 'Border',
+                fr: 'Bordure',
+              },
+              options: {
+                unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+              },
+              bindable: true,
+              responsive: true,
+            },
+            borderRadius: {
+              type: 'Length',
+              label: {
+                  en: 'Border radius',
+                  fr: 'Border radius',
+              },
+              bindable: true,
+              options: {
+                  unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+              },
+              responsive: true,
+            },
+          }
+      },
+      defaultValue: {
+        fontSize: '16px',
+        fontFamily: '',
+        fontFWeight: '',
+        color: '#099AF2',
+        borderSize: '1px',
+        borderRadius: '6px'
+      },
+      responsive: true,
+    },
+    a: {
+      type: 'Object',
+      hidden: (content, sidepanelContent) => {
+          return sidepanelContent.selectedTag !== 'a';
+      },
+      options: {
+          item: {
+              fontSize: textOptions.fontSize,
+              fontFamily: textOptions.fontFamily,
+              color: {
+                  type: 'Color',
+                  label: {
+                      en: 'Text color',
+                      fr: 'Couleur du texte',
+                  },
+                  bindable: true,
+                  options: {
+                      nullable: true,
+                  },
+                  responsive: true,
+              },
+              isUnderline: {
+                  type: 'OnOff',
+                  label: {
+                      en: 'Underline',
+                      fr: 'Soulingé',
+                  },
+                  bindable: true,
+              },
+          },
+      },
+      defaultValue: {
+          fontSize: '16px',
+          fontFamily: '',
+          color: '',
+          isUnderline: true,
+      },
+    },
+    blockquote: {
+        type: 'Object',
+        hidden: (content, sidepanelContent) => {
+            return sidepanelContent.selectedTag !== 'blockquote';
+        },
+        options: {
+            item: {
+                color: {
+                    type: 'Color',
+                    label: {
+                        en: 'Text color',
+                        fr: 'Couleur du texte',
+                    },
+                    bindable: true,
+                    options: {
+                        nullable: true,
+                    },
+                    responsive: true,
+                },
+                borderColor: {
+                    type: 'Color',
+                    label: {
+                        en: 'Blockquote color',
+                        fr: 'Couleur de la bordure',
+                    },
+                    bindable: true,
+                    options: {
+                        nullable: true,
+                    },
+                    responsive: true,
+                },
+                marginTop: {
+                    type: 'Length',
+                    label: {
+                        en: 'Margin top',
+                        fr: 'Margin top',
+                    },
+                    bindable: true,
+                    options: {
+                        unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                    },
+                    responsive: true,
+                },
+                marginBottom: {
+                    type: 'Length',
+                    label: {
+                        en: 'Margin bottom',
+                        fr: 'Margin bottom',
+                    },
+                    bindable: true,
+                    options: {
+                        unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                    },
+                    responsive: true,
+                },
+            },
+        },
+        defaultValue: {
+            color: 'rgb(153, 153, 153)',
+            borderColor: 'rgb(223, 226, 229)',
+            marginTop: '6px',
+            marginBottom: '6px',
+        },
+    },
+    code: {
+      type: 'Object',
+      hidden: (content, sidepanelContent) => {
+          return sidepanelContent.selectedTag !== 'code';
+      },
+      options: {
+          item: {
+              fontSize: textOptions.fontSize,
+              color: {
+                  type: 'Color',
+                  label: {
+                      en: 'Text color',
+                      fr: 'Couleur du texte',
+                  },
+                  bindable: true,
+                  options: {
+                      nullable: true,
+                  },
+                  responsive: true,
+              },
+              bgColor: {
+                  type: 'Color',
+                  label: {
+                      en: 'Blockquote color',
+                      fr: 'Couleur de la bordure',
+                  },
+                  bindable: true,
+                  options: {
+                      nullable: true,
+                  },
+                  responsive: true,
+              },
+              borderRadius: {
+                type: 'Length',
+                  label: {
+                      en: 'Border radius',
+                      fr: 'Border radius',
+                  },
+                  bindable: true,
+                  options: {
+                      unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                  },
+                  responsive: true,
+              },
+              paddingX: {
+                  type: 'Length',
+                  label: {
+                      en: 'Padding X',
+                      fr: 'Padding X',
+                  },
+                  bindable: true,
+                  options: {
+                      unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                  },
+                  responsive: true,
+              },
+              paddingY: {
+                  type: 'Length',
+                  label: {
+                      en: 'Padding Y',
+                      fr: 'Padding Y',
+                  },
+                  bindable: true,
+                  options: {
+                      unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                  },
+                  responsive: true,
+              },
+          },
+      },
+      defaultValue: {
+        color: '#FFF',
+        bgColor: '#0D0D0D',
+        borderRadius: '8px',
+        paddingX: '16px',
+        paddingY: '12px',
+        fontSize: '13px'
+      }
+    }
+  }
 };
