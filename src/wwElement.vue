@@ -1,5 +1,5 @@
 <template>
-  <div class="rich-text" :style="isEditing && 'pointer-events: none;'">
+  <div class="rich-text" :style="isEditing && 'pointer-events: none;'" data-capture>
     <template v-if="richEditor">
       <div class="rich-text__menu" v-if="!isReadonly" :style="menuStyles">
         
