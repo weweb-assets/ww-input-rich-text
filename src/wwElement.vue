@@ -242,7 +242,7 @@ export default {
     },
     richStyles() {
       return {
-        'max-height': '-webkit-fill-available',
+        'overflow': 'auto',
         // H1
         '--h1-fontSize': this.content.h1.fontSize,
         '--h1-fontFamily': this.content.h1.fontFamily,
@@ -405,7 +405,7 @@ export default {
   --menu-color: unset;
   display: flex;
   flex-direction: column;
-  height: inherit;
+  height: inherit !important;
 
   .separator {
     background: rgb(235, 236, 240);
@@ -421,6 +421,7 @@ export default {
     margin-bottom: 4px;
     gap: 4px;
     overflow-x: auto;
+    min-height: 32px;
     select {
       padding: 8px;
       appearance: none;
