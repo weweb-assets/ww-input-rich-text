@@ -18,7 +18,7 @@ export default {
       en: 'Rich text',
     },
     customStylePropertiesOrder: [
-      'selectedTag', ['h1', 'h2', 'h3', 'h4', 'p', 'mention', 'a', 'blockquote']
+      'selectedTag', ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code']
     ],
     customSettingsPropertiesOrder: [
       'readonly', 'editable', 'initialValue', 'placeholder', 'autofocus', 'menuColor',
@@ -170,6 +170,8 @@ export default {
               { value: 'h2', label: { en: 'h2' } },
               { value: 'h3', label: { en: 'h3' } },
               { value: 'h4', label: { en: 'h4' } },
+              { value: 'h5', label: { en: 'h5' } },
+              { value: 'h6', label: { en: 'h6' } },
               { value: 'p', label: { en: 'p' } },
               { value: 'a', label: { en: 'a' } },
               { value: 'blockquote', label: { en: 'blockquote' } },
