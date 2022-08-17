@@ -22,8 +22,8 @@ export default {
             en: 'Rich text',
         },
         customStylePropertiesOrder: [
-            'selectedTag',
-            ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code'],
+            'menuColor',
+            ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code'],
         ],
         customSettingsPropertiesOrder: [
             'readonly',
@@ -31,7 +31,6 @@ export default {
             'initialValue',
             'placeholder',
             'autofocus',
-            'menuColor',
             'enableMention',
             ['mentionChar', 'mentionAllowSpaces', 'mentionList', 'mentionIdPath', 'mentionLabelPath'],
         ],
@@ -50,14 +49,6 @@ export default {
             type: 'OnOff',
             defaultValue: false,
             bindable: true,
-        },
-        menuColor: {
-            section: 'settings',
-            label: {
-                en: 'Menu color',
-            },
-            type: 'Color',
-            defaultValue: '#000000ad',
         },
         initialValue: {
             section: 'settings',
@@ -169,6 +160,13 @@ export default {
             type: 'OnOff',
             defaultValue: true,
             bindable: true,
+        },
+        menuColor: {
+            label: {
+                en: 'Menu color',
+            },
+            type: 'Color',
+            defaultValue: '#000000ad',
         },
         selectedTag: {
             label: {
