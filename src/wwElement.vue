@@ -72,10 +72,15 @@
 
                 <span class="separator"></span>
 
-                <!-- Table -->
-                <!-- <button class="ww-rich-text__menu-item" @click="richEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()" :disabled="!isEditable">
-          <i class="fas fa-table"></i>
-        </button> -->
+                <!-- Link -->
+                <button
+                    class="ww-rich-text__menu-item"
+                    @click="setLink"
+                    :class="{ 'is-active': richEditor.isActive('link') }"
+                    :disabled="!isEditable"
+                >
+                    <i class="fas fa-link"></i>
+                </button>
 
                 <!-- Code -->
                 <button
@@ -432,6 +437,40 @@ export default {
             });
             this.loading = false;
         },
+        setLink() {
+            if (this.richEditor.isActive('link')) {
+                this.richEditor.chain().focus().unsetLink().run()
+                return
+            }
+
+            const previousUrl = this.richEditor.getAttributes('link').href
+            const url = window.prompt('URL', previousUrl)
+
+            // cancelled
+            if (url === null) {
+                return
+            }
+
+            // empty
+            if (url === '') {
+                this.richEditor
+                .chain()
+                .focus()
+                .extendMarkRange('link')
+                .unsetLink()
+                .run()
+
+                return
+            }
+
+            // update link
+            this.richEditor
+                .chain()
+                .focus()
+                .extendMarkRange('link')
+                .setLink({ href: url })
+                .run()
+        },
     },
     mounted() {
         this.loadEditor();
@@ -471,6 +510,7 @@ export default {
             font-weight: 700;
             cursor: pointer;
             color: var(--menu-color);
+            background-color: transparent;
             &:hover {
                 background-color: rgb(245, 245, 245);
             }
@@ -595,6 +635,7 @@ export default {
             text-align: var(--a-textAlign);
             color: var(--a-color);
             line-height: var(--a-lineHeight);
+            cursor: pointer;
         }
         font-size: var(--p-fontSize);
         font-family: var(--p-fontFamily);
