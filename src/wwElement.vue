@@ -11,6 +11,7 @@
 
                 <!-- Bold, Italic, Underline -->
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleBold().run()"
                     :class="{ 'is-active': richEditor.isActive('bold') }"
@@ -19,6 +20,7 @@
                     <i class="fas fa-bold"></i>
                 </button>
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleItalic().run()"
                     :class="{ 'is-active': richEditor.isActive('italic') }"
@@ -27,6 +29,7 @@
                     <i class="fas fa-italic"></i>
                 </button>
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleStrike().run()"
                     :class="{ 'is-active': richEditor.isActive('strike') }"
@@ -54,6 +57,7 @@
 
                 <!-- List (Bullet, number) -->
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleBulletList().run()"
                     :class="{ 'is-active': richEditor.isActive('bulletList') }"
@@ -62,6 +66,7 @@
                     <i class="fas fa-list-ul"></i>
                 </button>
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleOrderedList().run()"
                     :class="{ 'is-active': richEditor.isActive('orderedList') }"
@@ -74,6 +79,7 @@
 
                 <!-- Link -->
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="setLink"
                     :class="{ 'is-active': richEditor.isActive('link') }"
@@ -84,6 +90,7 @@
 
                 <!-- Code -->
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleCodeBlock().run()"
                     :class="{ 'is-active': richEditor.isActive('code') }"
@@ -94,6 +101,7 @@
 
                 <!-- Quote -->
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleBlockquote().run()"
                     :class="{ 'is-active': richEditor.isActive('blockquote') }"
@@ -106,6 +114,7 @@
 
                 <!-- Undo/Redo -->
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().undo().run()"
                     :disabled="!isEditable"
@@ -113,6 +122,7 @@
                     <i class="fas fa-undo"></i>
                 </button>
                 <button
+                    type="button"
                     class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().redo().run()"
                     :disabled="!isEditable"
