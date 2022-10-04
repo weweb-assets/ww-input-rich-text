@@ -1,17 +1,9 @@
-function showObjectPropertyPath(basePropertyKey, { content, boundProps }) {
-    return (
-        boundProps[basePropertyKey] &&
-        content[basePropertyKey] &&
-        typeof wwLib.wwCollection.getCollectionData(content[basePropertyKey])[0] === 'object'
-    );
+function showFormula(basePropertyKey, { content, boundProps }) {
+    return boundProps[basePropertyKey] && content[basePropertyKey];
 }
-function getObjectPropertyPathOptions(basePropertyKey, { content }) {
+function getFormulaOptions(basePropertyKey, { content }) {
     const data = wwLib.wwCollection.getCollectionData(content[basePropertyKey]);
-    if (!data.length || typeof data[0] !== 'object') {
-        return null;
-    }
-
-    return { object: data[0] };
+    return { template: data.length ? data[0] : null };
 }
 
 import { textOptions } from './src/settings';
@@ -67,6 +59,7 @@ export default {
             type: 'Textarea',
             defaultValue: 'Type here...',
             bindable: true,
+            multiLang: true,
         },
         enableMention: {
             section: 'settings',
@@ -106,23 +99,23 @@ export default {
         },
         mentionIdPath: {
             hidden: (content, sidepanelContent, boundProps) =>
-                !showObjectPropertyPath('mentionList', { content, boundProps }),
+                !showFormula('mentionList', { content, boundProps }),
             label: {
-                en: 'Id property',
+                en: 'Mention id',
             },
-            type: 'ObjectPropertyPath',
-            options: content => getObjectPropertyPathOptions('mentionList', { content }),
+            type: 'Formula',
+            options: content => getFormulaOptions('mentionList', { content }),
             defaultValue: null,
             section: 'settings',
         },
         mentionLabelPath: {
             hidden: (content, sidepanelContent, boundProps) =>
-                !showObjectPropertyPath('mentionList', { content, boundProps }),
+                !showFormula('mentionList', { content, boundProps }),
             label: {
-                en: 'Label property',
+                en: 'Mention label',
             },
-            type: 'ObjectPropertyPath',
-            options: content => getObjectPropertyPathOptions('mentionList', { content }),
+            type: 'Formula',
+            options: content => getFormulaOptions('mentionList', { content }),
             defaultValue: null,
             section: 'settings',
         },

@@ -187,7 +187,9 @@ export default {
             readonly: true,
         });
 
-        return { variableValue, setValue, variableMentions, setMentions };
+        const { resolveMappingFormula } = wwLib.wwFormula.useFormula()
+
+        return { variableValue, setValue, variableMentions, setMentions, resolveMappingFormula };
     },
     data: () => ({
         richEditor: null,
@@ -240,9 +242,9 @@ export default {
             const data = wwLib.wwCollection.getCollectionData(this.content.mentionList);
             if (!Array.isArray(data)) return [];
             return data.map(mention => ({
-                id: wwLib.resolveObjectPropertyPath(mention, this.content.mentionIdPath || 'id') || '',
-                label: wwLib.resolveObjectPropertyPath(mention, this.content.mentionLabelPath || 'label') || '',
-            }));
+                id: this.resolveMappingFormula(this.content.mentionIdPath, mention, mention.id || ''),
+                label: this.resolveMappingFormula(this.content.mentionLabelPath, mention, mention.label || '')
+            }))
         },
         isReadonly() {
             return this.wwElementState.props.readonly === undefined
