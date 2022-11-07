@@ -176,7 +176,6 @@ export default {
             name: 'value',
             type: 'string',
             defaultValue: String(props.content.initialValue || ''),
-            onUpdate: value => emit('trigger-event', { name: 'change', event: { value } }),
         });
 
         const { value: variableMentions, setValue: setMentions } = wwLib.wwVariable.useComponentVariable({
@@ -432,6 +431,7 @@ export default {
                 },
                 onUpdate: () => {
                     this.setValue(this.richEditor.getHTML());
+                    this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
                 editorProps: {
@@ -449,37 +449,27 @@ export default {
         },
         setLink() {
             if (this.richEditor.isActive('link')) {
-                this.richEditor.chain().focus().unsetLink().run()
-                return
+                this.richEditor.chain().focus().unsetLink().run();
+                return;
             }
 
-            const previousUrl = this.richEditor.getAttributes('link').href
-            const url = window.prompt('URL', previousUrl)
+            const previousUrl = this.richEditor.getAttributes('link').href;
+            const url = window.prompt('URL', previousUrl);
 
             // cancelled
             if (url === null) {
-                return
+                return;
             }
 
             // empty
             if (url === '') {
-                this.richEditor
-                .chain()
-                .focus()
-                .extendMarkRange('link')
-                .unsetLink()
-                .run()
+                this.richEditor.chain().focus().extendMarkRange('link').unsetLink().run();
 
-                return
+                return;
             }
 
             // update link
-            this.richEditor
-                .chain()
-                .focus()
-                .extendMarkRange('link')
-                .setLink({ href: url })
-                .run()
+            this.richEditor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
         },
     },
     mounted() {
