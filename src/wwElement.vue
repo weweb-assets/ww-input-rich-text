@@ -195,7 +195,7 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            this.richEditor.commands.setContent(value);
+            if (value !== this.richEditor.getHTML()) this.richEditor.commands.setContent(value);
             this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
         },
         isEditable(value) {
@@ -253,7 +253,6 @@ export default {
         },
         editorConfig() {
             return {
-                content: String(this.content.initialValue || ''),
                 placeholder: this.content.placeholder,
                 autofocus: this.content.autofocus,
                 mention: {
@@ -398,7 +397,7 @@ export default {
             this.loading = true;
             if (this.richEditor) this.richEditor.destroy();
             this.richEditor = new Editor({
-                content: this.editorConfig.content,
+                content: String(this.content.initialValue || ''),
                 editable: this.isEditable,
                 autofocus: this.editorConfig.autofocus,
                 extensions: [
