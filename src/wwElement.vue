@@ -143,7 +143,7 @@ import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
-
+import { computed } from 'vue';
 import suggestion from './suggestion.js';
 
 function extractMentions(acc, currentNode) {
@@ -175,7 +175,7 @@ export default {
             uid: props.uid,
             name: 'value',
             type: 'string',
-            defaultValue: String(props.content.initialValue || ''),
+            defaultValue: computed(() => String(props.content.initialValue || '')),
         });
 
         const { value: variableMentions, setValue: setMentions } = wwLib.wwVariable.useComponentVariable({
