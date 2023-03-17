@@ -390,6 +390,9 @@ export default {
                 '--code-font-size': this.content.code.fontSize,
             };
         },
+        delay() {
+            return wwLib.wwUtils.getLengthUnit(this.content.debounceDelay)[0];
+        },
     },
     methods: {
         loadEditor() {
@@ -430,7 +433,18 @@ export default {
                 },
                 onUpdate: () => {
                     this.setValue(this.richEditor.getHTML());
-                    this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+                    if (this.content.debounce) {
+                        this.isDebouncing = true;
+                        if (this.debounce) {
+                            clearTimeout(this.debounce);
+                        }
+                        this.debounce = setTimeout(() => {
+                            this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+                            this.isDebouncing = false;
+                        }, this.delay);
+                    } else {
+                        this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+                    }
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
                 editorProps: {
