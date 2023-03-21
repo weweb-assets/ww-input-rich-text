@@ -32,7 +32,7 @@ export default {
             'placeholder',
             'autofocus',
             'enableMention',
-            ['mentionChar', 'mentionAllowSpaces', 'mentionList', 'mentionIdPath', 'mentionLabelPath'],
+            ['mentionChar', 'mentionAllowSpaces', 'mentionListLength', 'mentionList', 'mentionIdPath', 'mentionLabelPath'],
         ],
     },
     triggerEvents: [
@@ -143,6 +143,21 @@ export default {
             },
             type: 'Text',
             defaultValue: '@',
+        },
+        mentionListLength: {
+            section: 'settings',
+            hidden: content => !content.enableMention,
+            label: {
+                en: 'Numbers of suggestion',
+            },
+            type: 'Number',
+            options: {
+                min: 1,
+                max: 20,
+                step: 1,
+            },
+            bindable: true,
+            defaultValue: 5,
         },
         autofocus: {
             section: 'settings',
