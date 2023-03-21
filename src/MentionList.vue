@@ -91,6 +91,8 @@ export default {
     overflow: hidden;
     font-size: 0.9rem;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0px 10px 20px rgba(0, 0, 0, 0.1);
+    max-height: 150px;
+    overflow: auto;
 }
 
 .item {
