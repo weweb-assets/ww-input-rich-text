@@ -417,7 +417,7 @@ export default {
                                 items: ({ query }) =>
                                     this.editorConfig.mention.list
                                         .filter(({ label }) => label.toLowerCase().startsWith(query.toLowerCase()))
-                                        .slice(0, this.content.mentionListNumbers || 5),
+                                        .slice(0, this.content.mentionListLength || 5),
                                 render: suggestion.render,
                                 allowSpaces: this.editorConfig.mention.allowSpaces,
                                 char: this.editorConfig.mention.char,

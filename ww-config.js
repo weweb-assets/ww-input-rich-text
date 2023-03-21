@@ -32,7 +32,7 @@ export default {
             'placeholder',
             'autofocus',
             'enableMention',
-            ['mentionChar', 'mentionAllowSpaces', 'mentionListNumbers', 'mentionList', 'mentionIdPath', 'mentionLabelPath'],
+            ['mentionChar', 'mentionAllowSpaces', 'mentionListLength', 'mentionList', 'mentionIdPath', 'mentionLabelPath'],
         ],
     },
     triggerEvents: [
@@ -144,7 +144,7 @@ export default {
             type: 'Text',
             defaultValue: '@',
         },
-        mentionListNumbers: {
+        mentionListLength: {
             section: 'settings',
             hidden: content => !content.enableMention,
             label: {
