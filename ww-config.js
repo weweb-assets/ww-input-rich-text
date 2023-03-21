@@ -156,6 +156,7 @@ export default {
                 max: 20,
                 step: 1,
             },
+            bindable: true,
             defaultValue: 5,
         },
         autofocus: {

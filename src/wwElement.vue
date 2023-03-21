@@ -243,6 +243,10 @@ export default {
                 label: wwLib.resolveObjectPropertyPath(mention, this.content.mentionLabelPath || 'label') || '',
             }));
         },
+        mentionListLength() {
+            if (!this.content.mentionListLength || isNaN(this.content.mentionListLength)) return 5
+            return this.content.mentionListLength
+        },
         isReadonly() {
             return this.wwElementState.props.readonly === undefined
                 ? this.content.readonly
@@ -417,7 +421,7 @@ export default {
                                 items: ({ query }) =>
                                     this.editorConfig.mention.list
                                         .filter(({ label }) => label.toLowerCase().startsWith(query.toLowerCase()))
-                                        .slice(0, this.content.mentionListLength || 5),
+                                        .slice(0, this.mentionListLength),
                                 render: suggestion.render,
                                 allowSpaces: this.editorConfig.mention.allowSpaces,
                                 char: this.editorConfig.mention.char,
