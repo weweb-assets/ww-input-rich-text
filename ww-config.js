@@ -30,6 +30,8 @@ export default {
             'editable',
             'initialValue',
             'placeholder',
+            'debounce',
+            'debounceDelay',
             'autofocus',
             'enableMention',
             ['mentionChar', 'mentionAllowSpaces', 'mentionListLength', 'mentionList', 'mentionIdPath', 'mentionLabelPath'],
@@ -58,6 +60,24 @@ export default {
             type: 'Textarea',
             defaultValue: '',
             bindable: true,
+        },
+        debounce: {
+            label: { en: 'Debounce' },
+            type: 'OnOff',
+            section: 'settings',
+            defaultValue: false,
+        },
+        debounceDelay: {
+            type: 'Length',
+            label: {
+                en: 'Delay',
+            },
+            options: {
+                unitChoices: [{ value: 'ms', label: 'ms', min: 1, max: 5000 }],
+            },
+            section: 'settings',
+            defaultValue: '500ms',
+            hidden: content => !content.debounce,
         },
         placeholder: {
             section: 'settings',
