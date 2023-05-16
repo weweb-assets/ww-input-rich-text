@@ -41,7 +41,7 @@
                 <span class="separator"></span>
 
                 <!-- Color -->
-                <label class="ww-rich-text__menu-item" for="rich-color">
+                <label class="ww-rich-text__menu-item" for="rich-color" @click="richEditor.commands.focus()">
                     <i class="fas fa-palette"></i>
                     <input
                         id="rich-color"
