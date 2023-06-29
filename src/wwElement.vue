@@ -256,7 +256,7 @@ export default {
             return !this.isReadonly && this.content.editable;
         },
         hideMenu() {
-            this.content.hideMenu || this.isReadonly
+            return this.content.hideMenu || this.isReadonly
         },
         editorConfig() {
             return {
