@@ -28,6 +28,7 @@ export default {
         customSettingsPropertiesOrder: [
             'readonly',
             'editable',
+            'hideMenu',
             'initialValue',
             'placeholder',
             'debounce',
@@ -194,6 +195,15 @@ export default {
             },
             type: 'OnOff',
             defaultValue: true,
+            bindable: true,
+        },
+        hideMenu: {
+            section: 'settings',
+            label: {
+                en: 'Hide menu',
+            },
+            type: 'OnOff',
+            defaultValue: false,
             bindable: true,
         },
         menuColor: {

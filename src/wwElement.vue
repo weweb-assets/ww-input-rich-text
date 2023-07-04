@@ -1,7 +1,7 @@
 <template>
     <div class="ww-rich-text" :style="isEditing && 'pointer-events: none;'" data-capture>
         <template v-if="richEditor">
-            <div class="ww-rich-text__menu" v-if="!isReadonly" :style="menuStyles">
+            <div class="ww-rich-text__menu" v-if="!hideMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
                 <select id="rich-size" v-model="currentTextType" :disabled="!isEditable">
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
@@ -254,6 +254,9 @@ export default {
         },
         isEditable() {
             return !this.isReadonly && this.content.editable;
+        },
+        hideMenu() {
+            return this.content.hideMenu || this.isReadonly
         },
         editorConfig() {
             return {
