@@ -202,6 +202,9 @@ export default {
             },
             type: 'Color',
             defaultValue: '#000000ad',
+            states: true,
+            classes: true,
+            responsive: true,
         },
         selectedTag: {
             label: {
@@ -245,6 +248,8 @@ export default {
                 marginTop: '',
                 marginBottom: '',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         h2: {
@@ -265,6 +270,8 @@ export default {
                 marginTop: '',
                 marginBottom: '',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         h3: {
@@ -285,6 +292,8 @@ export default {
                 marginTop: '',
                 marginBottom: '',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         h4: {
@@ -305,6 +314,8 @@ export default {
                 marginTop: '',
                 marginBottom: '',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         h5: {
@@ -325,6 +336,8 @@ export default {
                 marginTop: '',
                 marginBottom: '',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         h6: {
@@ -345,6 +358,8 @@ export default {
                 marginTop: '',
                 marginBottom: '',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         p: {
@@ -365,6 +380,8 @@ export default {
                 marginTop: '',
                 marginBottom: '',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         mention: {
@@ -388,7 +405,6 @@ export default {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                         },
                         bindable: true,
-                        responsive: true,
                     },
                     borderRadius: {
                         type: 'Length',
@@ -400,7 +416,6 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                         },
-                        responsive: true,
                     },
                 },
             },
@@ -412,6 +427,8 @@ export default {
                 borderSize: '1px',
                 borderRadius: '6px',
             },
+            states: true,
+            classes: true,
             responsive: true,
         },
         a: {
@@ -433,7 +450,6 @@ export default {
                         options: {
                             nullable: true,
                         },
-                        responsive: true,
                     },
                     isUnderline: {
                         type: 'OnOff',
@@ -451,6 +467,9 @@ export default {
                 color: '',
                 isUnderline: true,
             },
+            states: true,
+            classes: true,
+            responsive: true,
         },
         blockquote: {
             type: 'Object',
@@ -469,7 +488,6 @@ export default {
                         options: {
                             nullable: true,
                         },
-                        responsive: true,
                     },
                     borderColor: {
                         type: 'Color',
@@ -481,7 +499,6 @@ export default {
                         options: {
                             nullable: true,
                         },
-                        responsive: true,
                     },
                     marginTop: {
                         type: 'Length',
@@ -493,7 +510,6 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                         },
-                        responsive: true,
                     },
                     marginBottom: {
                         type: 'Length',
@@ -505,7 +521,6 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                         },
-                        responsive: true,
                     },
                 },
             },
@@ -515,6 +530,9 @@ export default {
                 marginTop: '6px',
                 marginBottom: '6px',
             },
+            states: true,
+            classes: true,
+            responsive: true,
         },
         code: {
             type: 'Object',
@@ -534,7 +552,6 @@ export default {
                         options: {
                             nullable: true,
                         },
-                        responsive: true,
                     },
                     bgColor: {
                         type: 'Color',
@@ -546,7 +563,6 @@ export default {
                         options: {
                             nullable: true,
                         },
-                        responsive: true,
                     },
                     borderRadius: {
                         type: 'Length',
@@ -558,7 +574,6 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                         },
-                        responsive: true,
                     },
                     paddingX: {
                         type: 'Length',
@@ -570,7 +585,6 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                         },
-                        responsive: true,
                     },
                     paddingY: {
                         type: 'Length',
@@ -582,7 +596,6 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                         },
-                        responsive: true,
                     },
                 },
             },
@@ -594,6 +607,9 @@ export default {
                 paddingY: '12px',
                 fontSize: '13px',
             },
+            states: true,
+            classes: true,
+            responsive: true,
         },
     },
 };
