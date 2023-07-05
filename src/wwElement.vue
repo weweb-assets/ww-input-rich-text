@@ -439,7 +439,9 @@ export default {
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
                 onUpdate: () => {
-                    this.setValue(this.richEditor.getHTML());
+                    const htmlValue = this.richEditor.getHTML();
+                    if(this.variableValue === htmlValue) return;
+                    this.setValue(htmlValue);
                     if (this.content.debounce) {
                         this.isDebouncing = true;
                         if (this.debounce) {
