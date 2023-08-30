@@ -158,6 +158,16 @@ function extractMentions(acc, currentNode) {
     }
 }
 
+const TAGS_MAP = {
+    p: 0,
+    h1: 1,
+    h2: 2,
+    h3: 3,
+    h4: 4,
+    h5: 5,
+    h6: 6,
+};
+
 export default {
     components: {
         EditorContent,
@@ -498,6 +508,10 @@ export default {
             this.richEditor.chain().focus().run();
         },
         setTag(tag) {
+            if (typeof tag === 'string') {
+                tag = tag.toLocaleLowerCase().trim();
+                if (tag in TAGS_MAP) tag = TAGS_MAP[tag];
+            }
             if (tag === 0) this.richEditor.chain().focus().setParagraph().run();
             if (tag !== 0)
                 this.richEditor
