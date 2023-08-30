@@ -22,6 +22,7 @@ export default {
             en: 'Rich text',
         },
         customStylePropertiesOrder: [
+            'customMenu',
             'menuColor',
             ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code'],
         ],
@@ -35,7 +36,14 @@ export default {
             'debounceDelay',
             'autofocus',
             'enableMention',
-            ['mentionChar', 'mentionAllowSpaces', 'mentionListLength', 'mentionList', 'mentionIdPath', 'mentionLabelPath'],
+            [
+                'mentionChar',
+                'mentionAllowSpaces',
+                'mentionListLength',
+                'mentionList',
+                'mentionIdPath',
+                'mentionLabelPath',
+            ],
         ],
     },
     triggerEvents: [
@@ -43,11 +51,62 @@ export default {
         { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
         { name: 'mention:click', label: { en: 'On mention click' }, event: { mention: { id: '', label: '' } } },
     ],
+    actions: [
+        { label: 'Focus Rich text', action: 'focusEditor' },
+        { label: 'Set Link', action: 'setLink' },
+        {
+            label: 'Set Tag',
+            action: 'setTag',
+            args: [
+                {
+                    name: 'Tag',
+                    type: 'select',
+                    options: [
+                        { value: 0, label: { en: 'p' } },
+                        { value: 1, label: { en: 'h1' } },
+                        { value: 2, label: { en: 'h2' } },
+                        { value: 3, label: { en: 'h3' } },
+                        { value: 4, label: { en: 'h4' } },
+                        { value: 5, label: { en: 'h5' } },
+                        { value: 6, label: { en: 'h6' } },
+                    ],
+                },
+            ],
+        },
+        { label: 'Toggle Bold', action: 'toggleBold' },
+        { label: 'Toggle Underline', action: 'toggleUnderline' },
+        { label: 'Toggle Italic', action: 'toggleItalic' },
+        { label: 'Toggle Strike', action: 'toggleStrike' },
+        {
+            label: 'Set Color',
+            action: 'setColor',
+            args: [
+                {
+                    name: 'Color',
+                    type: 'color',
+                },
+            ],
+        },
+        { label: 'Toggle Bullet List', action: 'toggleBulletList' },
+        { label: 'Toggle Ordered List', action: 'toggleOrderedList' },
+        { label: 'Toggle Code Block', action: 'toggleCodeBlock' },
+        { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
+        { label: 'Undo', action: 'undo' },
+        { label: 'Redo', action: 'redo' },
+    ],
     properties: {
         readonly: {
             section: 'settings',
             label: {
                 en: 'Read only',
+            },
+            type: 'OnOff',
+            defaultValue: false,
+            bindable: true,
+        },
+        customMenu: {
+            label: {
+                en: 'Custom menu',
             },
             type: 'OnOff',
             defaultValue: false,
@@ -215,6 +274,7 @@ export default {
             states: true,
             classes: true,
             responsive: true,
+            hidden: content => content.customMenu,
         },
         selectedTag: {
             label: {
@@ -620,6 +680,24 @@ export default {
             states: true,
             classes: true,
             responsive: true,
+        },
+        customMenuElement: {
+            hidden: true,
+            defaultValue: {
+                isWwObject: true,
+                type: 'ww-flexbox',
+                state: {
+                    name: 'Custom menu container',
+                    style: {
+                        default: {
+                            width: '100%',
+                        },
+                    },
+                },
+            },
+            navigator: {
+                hidden: content => !content.customMenu,
+            },
         },
     },
 };

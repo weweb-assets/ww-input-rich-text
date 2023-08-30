@@ -1,7 +1,7 @@
 <template>
     <div class="ww-rich-text" :style="isEditing && 'pointer-events: none;'" data-capture>
         <template v-if="richEditor">
-            <div class="ww-rich-text__menu" v-if="!hideMenu" :style="menuStyles">
+            <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
                 <select id="rich-size" v-model="currentTextType" :disabled="!isEditable">
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
@@ -13,7 +13,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleBold().run()"
+                    @click="toggleBold"
                     :class="{ 'is-active': richEditor.isActive('bold') }"
                     :disabled="!isEditable"
                 >
@@ -22,7 +22,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleItalic().run()"
+                    @click="toggleItalic"
                     :class="{ 'is-active': richEditor.isActive('italic') }"
                     :disabled="!isEditable"
                 >
@@ -31,7 +31,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleMark('underline').run()"
+                    @click="toggleUnderline"
                     :class="{ 'is-active': richEditor.isActive('underline') }"
                     :disabled="!isEditable"
                 >
@@ -40,7 +40,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleStrike().run()"
+                    @click="toggleStrike"
                     :class="{ 'is-active': richEditor.isActive('strike') }"
                     :disabled="!isEditable"
                 >
@@ -55,7 +55,7 @@
                     <input
                         id="rich-color"
                         type="color"
-                        @input="richEditor.chain().focus().setColor($event.target.value).run()"
+                        @input="setColor($event.target.value)"
                         :value="richEditor.getAttributes('textStyle').color"
                         style="display: none"
                         :disabled="!isEditable"
@@ -68,7 +68,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleBulletList().run()"
+                    @click="toggleBulletList"
                     :class="{ 'is-active': richEditor.isActive('bulletList') }"
                     :disabled="!isEditable"
                 >
@@ -77,7 +77,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleOrderedList().run()"
+                    @click="toggleOrderedList"
                     :class="{ 'is-active': richEditor.isActive('orderedList') }"
                     :disabled="!isEditable"
                 >
@@ -101,7 +101,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleCodeBlock().run()"
+                    @click="toggleCodeBlock"
                     :class="{ 'is-active': richEditor.isActive('code') }"
                     :disabled="!isEditable"
                 >
@@ -112,7 +112,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().toggleBlockquote().run()"
+                    @click="toggleBlockquote"
                     :class="{ 'is-active': richEditor.isActive('blockquote') }"
                     :disabled="!isEditable"
                 >
@@ -122,23 +122,14 @@
                 <span class="separator"></span>
 
                 <!-- Undo/Redo -->
-                <button
-                    type="button"
-                    class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().undo().run()"
-                    :disabled="!isEditable"
-                >
+                <button type="button" class="ww-rich-text__menu-item" @click="undo" :disabled="!isEditable">
                     <i class="fas fa-undo"></i>
                 </button>
-                <button
-                    type="button"
-                    class="ww-rich-text__menu-item"
-                    @click="richEditor.chain().focus().redo().run()"
-                    :disabled="!isEditable"
-                >
+                <button type="button" class="ww-rich-text__menu-item" @click="redo" :disabled="!isEditable">
                     <i class="fas fa-redo"></i>
                 </button>
             </div>
+            <wwElement class="ww-rich-text__menu" v-else-if="content.customMenu" v-bind="content.customMenuElement" />
             <editor-content :editor="richEditor" :style="richStyles" />
         </template>
     </div>
@@ -196,7 +187,12 @@ export default {
             readonly: true,
         });
 
-        return { variableValue, setValue, variableMentions, setMentions };
+        return {
+            variableValue,
+            setValue,
+            variableMentions,
+            setMentions,
+        };
     },
     data: () => ({
         richEditor: null,
@@ -286,13 +282,7 @@ export default {
                 return currentType ? currentType.value : 0;
             },
             set(value) {
-                if (value === 0) this.richEditor.chain().focus().setParagraph().run();
-                if (value !== 0)
-                    this.richEditor
-                        .chain()
-                        .focus()
-                        .toggleHeading({ level: Number(value) })
-                        .run();
+                this.setTag(value);
             },
         },
         textTypeOptions() {
@@ -503,6 +493,51 @@ export default {
 
             // update link
             this.richEditor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+        },
+        focusEditor() {
+            this.richEditor.chain().focus().run();
+        },
+        setTag(tag) {
+            if (tag === 0) this.richEditor.chain().focus().setParagraph().run();
+            if (tag !== 0)
+                this.richEditor
+                    .chain()
+                    .focus()
+                    .toggleHeading({ level: Number(tag) })
+                    .run();
+        },
+        toggleUnderline() {
+            this.richEditor.chain().focus().toggleMark('underline').run();
+        },
+        toggleBold() {
+            this.richEditor.chain().focus().toggleBold().run();
+        },
+        toggleItalic() {
+            this.richEditor.chain().focus().toggleItalic().run();
+        },
+        toggleStrike() {
+            this.richEditor.chain().focus().toggleStrike().run();
+        },
+        setColor(color) {
+            this.richEditor.chain().focus().setColor(color).run();
+        },
+        toggleBulletList() {
+            this.richEditor.chain().focus().toggleBulletList().run();
+        },
+        toggleOrderedList() {
+            this.richEditor.chain().focus().toggleOrderedList().run();
+        },
+        toggleCodeBlock() {
+            this.richEditor.chain().focus().toggleCodeBlock().run();
+        },
+        toggleBlockquote() {
+            this.richEditor.chain().focus().toggleBlockquote().run();
+        },
+        undo() {
+            this.richEditor.chain().undo().run();
+        },
+        redo() {
+            this.richEditor.chain().redo().run();
         },
     },
     mounted() {
