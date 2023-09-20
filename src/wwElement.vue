@@ -31,6 +31,15 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
+                    @click="richEditor.chain().focus().toggleMark('underline').run()"
+                    :class="{ 'is-active': richEditor.isActive('underline') }"
+                    :disabled="!isEditable"
+                >
+                    <i class="fas fa-underline"></i>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
                     @click="richEditor.chain().focus().toggleStrike().run()"
                     :class="{ 'is-active': richEditor.isActive('strike') }"
                     :disabled="!isEditable"
@@ -143,6 +152,7 @@ import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
+import Underline from '@tiptap/extension-underline';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
 
@@ -244,8 +254,8 @@ export default {
             }));
         },
         mentionListLength() {
-            if (!this.content.mentionListLength || isNaN(this.content.mentionListLength)) return 5
-            return this.content.mentionListLength
+            if (!this.content.mentionListLength || isNaN(this.content.mentionListLength)) return 5;
+            return this.content.mentionListLength;
         },
         isReadonly() {
             return this.wwElementState.props.readonly === undefined
@@ -256,7 +266,7 @@ export default {
             return !this.isReadonly && this.content.editable;
         },
         hideMenu() {
-            return this.content.hideMenu || this.isReadonly
+            return this.content.hideMenu || this.isReadonly;
         },
         editorConfig() {
             return {
@@ -415,6 +425,7 @@ export default {
                     Link,
                     TextStyle,
                     Color,
+                    Underline,
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
@@ -440,7 +451,7 @@ export default {
                 },
                 onUpdate: () => {
                     const htmlValue = this.richEditor.getHTML();
-                    if(this.variableValue === htmlValue) return;
+                    if (this.variableValue === htmlValue) return;
                     this.setValue(htmlValue);
                     if (this.content.debounce) {
                         this.isDebouncing = true;
