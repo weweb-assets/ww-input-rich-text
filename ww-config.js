@@ -76,6 +76,7 @@ export default {
         { label: 'Toggle Bold', action: 'toggleBold' },
         { label: 'Toggle Underline', action: 'toggleUnderline' },
         { label: 'Toggle Italic', action: 'toggleItalic' },
+        { label: 'Toggle Underline', action: 'toggleUnderline' },
         { label: 'Toggle Strike', action: 'toggleStrike' },
         {
             label: 'Set Color',
