@@ -265,6 +265,7 @@ export default {
             type: 'OnOff',
             defaultValue: false,
             bindable: true,
+            hidden: content => content.customMenu,
         },
         menuColor: {
             label: {
