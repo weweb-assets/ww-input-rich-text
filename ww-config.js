@@ -44,6 +44,10 @@ export default {
                 'mentionIdPath',
                 'mentionLabelPath',
             ],
+            [
+                'imageInline',
+                'imageAllowBase64',
+            ],
         ],
     },
     triggerEvents: [
@@ -53,7 +57,28 @@ export default {
     ],
     actions: [
         { label: 'Focus Rich text', action: 'focusEditor' },
-        { label: 'Set Link', action: 'setLink' },
+        { label: 'Set Link', action: 'setLink', args: [
+            {
+                name: 'URL',
+                type: 'Text',
+            },
+        ], },
+        { label: 'Set Image', action: 'setImage', args: 
+            [
+                {
+                    name: 'Source',
+                    type: 'Text',
+                },
+                {
+                    name: 'Alt',
+                    type: 'Text',
+                },
+                {
+                    name: 'Title',
+                    type: 'Text',
+                },
+            ], 
+        },
         {
             label: 'Set Tag',
             action: 'setTag',
@@ -238,6 +263,22 @@ export default {
             },
             bindable: true,
             defaultValue: 5,
+        },
+        imageInline: {
+            section: 'settings',
+            label: {
+                en: 'Image inline',
+            },
+            type: 'OnOff',
+            defaultValue: false,
+        },
+        imageAllowBase64: {
+            section: 'settings',
+            label: {
+                en: 'Image allow base64',
+            },
+            type: 'OnOff',
+            defaultValue: false,
         },
         autofocus: {
             section: 'settings',

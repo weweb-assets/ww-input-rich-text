@@ -144,6 +144,7 @@ import Color from '@tiptap/extension-color';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
+import Image from '@tiptap/extension-image';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
 
@@ -278,6 +279,10 @@ export default {
             return {
                 placeholder: this.content.placeholder,
                 autofocus: this.content.autofocus,
+                image: {
+                    inline: this.content.imageAllowInline,
+                    allowBase64: this.content.imageAllowBase64
+                },
                 mention: {
                     enabled: this.content.enableMention,
                     list: this.mentionList,
@@ -429,6 +434,7 @@ export default {
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
+                    Image.configure(this.editorConfig.image),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
                             HTMLAttributes: {
@@ -480,29 +486,32 @@ export default {
             });
             this.loading = false;
         },
-        setLink() {
+        setLink(url) {
             if (this.richEditor.isActive('link')) {
                 this.richEditor.chain().focus().unsetLink().run();
                 return;
             }
 
             const previousUrl = this.richEditor.getAttributes('link').href;
-            const url = window.prompt('URL', previousUrl);
+            const selectedUrl = url !== undefined ? url : window.prompt('URL', previousUrl);
 
             // cancelled
-            if (url === null) {
+            if (selectedUrl === null) {
                 return;
             }
 
             // empty
-            if (url === '') {
+            if (selectedUrl === '') {
                 this.richEditor.chain().focus().extendMarkRange('link').unsetLink().run();
 
                 return;
             }
 
             // update link
-            this.richEditor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+            this.richEditor.chain().focus().extendMarkRange('link').setLink({ href: selectedUrl }).run();
+        },
+        setImage(src, alt = '', title = '') {
+            this.richEditor.commands.setImage({ src, alt, title })
         },
         focusEditor() {
             this.richEditor.chain().focus().run();
