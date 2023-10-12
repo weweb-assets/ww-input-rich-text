@@ -178,6 +178,7 @@ export default {
         wwElementState: { type: Object, required: true },
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
+        wwFrontState: { type: Object, required: true },
         /* wwEditor:end */
     },
     emits: ['trigger-event', 'update:content:effect'],
@@ -230,6 +231,30 @@ export default {
                     mentionIdPath: null,
                     mentionLabelPath: null,
                 });
+        },
+        // For updating legacy elements before introduction of custom menu
+        'content.customMenu': {
+            async handler(value) {
+                if (value && !this.content.customMenuElement) {
+                    const element = await wwLib.createElement(
+                        'ww-flexbox',
+                        {},
+                        {
+                            name: 'Custom menu container',
+                            style: {
+                                default: {
+                                    width: '100%',
+                                },
+                            },
+                        },
+                        this.wwFrontState.sectionId
+                    );
+                    this.$emit('update:content:effect', {
+                        customMenuElement: element,
+                    });
+                }
+            },
+            immediate: true,
         },
         /* wwEditor:end */
         isReadonly: {
