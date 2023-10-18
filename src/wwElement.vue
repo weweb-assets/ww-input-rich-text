@@ -187,7 +187,7 @@ export default {
         wwFrontState: { type: Object, required: true },
         /* wwEditor:end */
     },
-    emits: ['trigger-event', 'update:content:effect'],
+    emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
     setup(props, { emit }) {
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
@@ -262,6 +262,9 @@ export default {
             },
             immediate: true,
         },
+        'wwEditorState.isSelected'() {
+            this.$emit('update:sidepanel-content', { path: 'selectedTag', value: null });
+        },
         /* wwEditor:end */
         isReadonly: {
             immediate: true,
@@ -311,7 +314,7 @@ export default {
                 autofocus: this.content.autofocus,
                 image: {
                     inline: this.content.img?.inline,
-                    allowBase64: true
+                    allowBase64: true,
                 },
                 mention: {
                     enabled: this.content.enableMention,
@@ -467,7 +470,7 @@ export default {
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
-                    Image.configure({...this.editorConfig.image}),
+                    Image.configure({ ...this.editorConfig.image }),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
                             HTMLAttributes: {
@@ -544,7 +547,7 @@ export default {
             this.richEditor.chain().focus().extendMarkRange('link').setLink({ href: selectedUrl }).run();
         },
         setImage(src, alt = '', title = '') {
-            this.richEditor.commands.setImage({ src, alt, title })
+            this.richEditor.commands.setImage({ src, alt, title });
         },
         focusEditor() {
             this.richEditor.chain().focus().run();
