@@ -145,6 +145,7 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import { Markdown } from 'tiptap-markdown';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
 
@@ -438,6 +439,7 @@ export default {
                         placeholder: this.editorConfig.placeholder,
                     }),
                     Image.configure(this.editorConfig.image),
+                    Markdown,
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
                             HTMLAttributes: {
@@ -568,6 +570,9 @@ export default {
         redo() {
             this.richEditor.chain().redo().run();
         },
+        getMarkdown() {
+            return this.richEditor.storage.markdown.getMarkdown()[0]
+        }
     },
     mounted() {
         this.loadEditor();

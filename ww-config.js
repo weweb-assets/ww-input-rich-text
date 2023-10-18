@@ -118,6 +118,7 @@ export default {
         { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
         { label: 'Undo', action: 'undo' },
         { label: 'Redo', action: 'redo' },
+        { label: 'Get content as Markdown', action: 'getMarkdown' }
     ],
     properties: {
         readonly: {
