@@ -213,14 +213,14 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            if (value !== this.richEditor.getHTML()) this.richEditor.commands.setContent(value);
+            if (value !== this.getContent()) this.richEditor.commands.setContent(value);
             this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
         },
         isEditable(value) {
             this.richEditor.setEditable(value);
         },
         variableValue(value, oldValue) {
-            if (value !== this.richEditor.getHTML()) this.richEditor.commands.setContent(value);
+            if (value !== this.getContent()) this.richEditor.commands.setContent(value);
         },
         /* wwEditor:start */
         editorConfig() {
@@ -457,11 +457,11 @@ export default {
                         }),
                 ],
                 onCreate: () => {
-                    this.setValue(this.richEditor.getHTML());
+                    this.setValue(this.getContent());
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
                 onUpdate: () => {
-                    const htmlValue = this.richEditor.getHTML();
+                    const htmlValue = this.getContent();
                     if (this.variableValue === htmlValue) return;
                     this.setValue(htmlValue);
                     if (this.content.debounce) {
@@ -570,8 +570,9 @@ export default {
         redo() {
             this.richEditor.chain().redo().run();
         },
-        getMarkdown() {
-            return this.richEditor.storage.markdown.getMarkdown()[0]
+        getContent() {
+            if(this.content.output === 'markdown') return this.richEditor.storage.markdown.getMarkdown()
+            return this.richEditor.getHTML()
         }
     },
     mounted() {

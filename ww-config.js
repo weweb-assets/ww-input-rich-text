@@ -31,6 +31,7 @@ export default {
             'editable',
             'hideMenu',
             'initialValue',
+            'output',
             'placeholder',
             'debounce',
             'debounceDelay',
@@ -118,7 +119,6 @@ export default {
         { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
         { label: 'Undo', action: 'undo' },
         { label: 'Redo', action: 'redo' },
-        { label: 'Get content as Markdown', action: 'getMarkdown' }
     ],
     properties: {
         readonly: {
@@ -146,6 +146,21 @@ export default {
             type: 'Textarea',
             defaultValue: '',
             bindable: true,
+        },
+        output: {
+            label: {
+                en: 'Output',
+                fr: 'Output',
+            },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'html', label: { en: 'html' } },
+                    { value: 'markdown', label: { en: 'markdown' } },
+                ],
+            },
+            section: 'settings',
+            defaultValue: 'html',
         },
         debounce: {
             label: { en: 'Debounce' },
