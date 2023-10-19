@@ -493,7 +493,7 @@ export default {
             }
 
             const previousUrl = this.richEditor.getAttributes('link').href;
-            const selectedUrl = url !== undefined ? url : window.prompt('URL', previousUrl);
+            const selectedUrl = url ?? window.prompt('URL', previousUrl);
 
             // cancelled
             if (selectedUrl === null) {
