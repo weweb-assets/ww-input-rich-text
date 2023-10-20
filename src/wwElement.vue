@@ -403,13 +403,16 @@ export default {
                 '--blockquote-border-color': this.content.blockquote.borderColor,
                 '--blockquote-margin-top': this.content.blockquote.marginTop,
                 '--blockquote-margin-bottom': this.content.blockquote.marginBottom,
-                // blockquote
+                // code
                 '--code-color': this.content.code.color,
                 '--code-bg-color': this.content.code.bgColor,
                 '--code-border-radius': this.content.code.borderRadius,
                 '--code-padding-y': this.content.code.paddingY,
                 '--code-padding-x': this.content.code.paddingX,
                 '--code-font-size': this.content.code.fontSize,
+                // img
+                '--img-max-width': this.content.img.maxWidth,
+                '--img-max-height': this.content.img.maxHeight,
             };
         },
         delay() {
@@ -806,6 +809,11 @@ export default {
                 background: none;
                 font-size: var(--code-font-size);
             }
+        }
+
+        img {
+            max-width: var(--img-max-width);
+            max-height: var(--img-max-height);
         }
     }
 }

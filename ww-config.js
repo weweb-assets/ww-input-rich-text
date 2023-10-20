@@ -24,7 +24,7 @@ export default {
         customStylePropertiesOrder: [
             'customMenu',
             'menuColor',
-            ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code'],
+            ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code', 'img'],
         ],
         customSettingsPropertiesOrder: [
             'readonly',
@@ -718,6 +718,51 @@ export default {
                 paddingX: '16px',
                 paddingY: '12px',
                 fontSize: '13px',
+            },
+            states: true,
+            classes: true,
+            responsive: true,
+        },
+        img: {
+            type: 'Object',
+            hidden: (content, sidepanelContent) => {
+                return sidepanelContent.selectedTag !== 'img';
+            },
+            options: {
+                item: {
+                    maxWidth: {
+                        type: 'Length',
+                        label: {
+                            en: 'Max width',
+                            fr: 'Max width',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [
+                                { value: 'auto', label: 'auto', default: true },
+                                { value: 'px', label: 'px', min: 1, max: 300 }
+                            ],
+                        },
+                    },
+                    maxHeight: {
+                        type: 'Length',
+                        label: {
+                            en: 'Max height',
+                            fr: 'Max height',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [
+                                { value: 'auto', label: 'auto', default: true },
+                                { value: 'px', label: 'px', min: 1, max: 300 }
+                            ],
+                        },
+                    },
+                },
+            },
+            defaultValue: {
+                maxWidth: 'auto',
+                maxHeight: 'auto',
             },
             states: true,
             classes: true,
