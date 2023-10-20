@@ -743,6 +743,7 @@ export default {
                                 { value: 'auto', label: 'auto', default: true },
                                 { value: 'px', label: 'px', min: 1, max: 300 }
                             ],
+                            noRange: true,
                         },
                     },
                     maxHeight: {
@@ -757,6 +758,7 @@ export default {
                                 { value: 'auto', label: 'auto', default: true },
                                 { value: 'px', label: 'px', min: 1, max: 300 }
                             ],
+                            noRange: true,
                         },
                     },
                 },
