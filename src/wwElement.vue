@@ -411,8 +411,8 @@ export default {
                 '--code-padding-x': this.content.code.paddingX,
                 '--code-font-size': this.content.code.fontSize,
                 // img
-                '--img-max-width': this.content.img.maxWidth,
-                '--img-max-height': this.content.img.maxHeight,
+                '--img-max-width': this.content.img?.maxWidth,
+                '--img-max-height': this.content.img?.maxHeight,
             };
         },
         delay() {
