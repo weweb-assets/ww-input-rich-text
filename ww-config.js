@@ -335,6 +335,7 @@ export default {
                     { value: 'h6', label: { en: 'h6' } },
                     { value: 'p', label: { en: 'p' } },
                     { value: 'a', label: { en: 'a' } },
+                    { value: 'img', label: { en: 'image' } },
                     { value: 'blockquote', label: { en: 'blockquote' } },
                     { value: 'code', label: { en: 'code' } },
                     { value: 'mention', label: { en: 'mention' } },
