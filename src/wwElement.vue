@@ -1,5 +1,10 @@
 <template>
-    <div class="ww-rich-text" :style="isEditing && 'pointer-events: none;'" data-capture>
+    <div
+        class="ww-rich-text"
+        :class="{ '-readonly': isReadonly }"
+        :style="isEditing && 'pointer-events: none;'"
+        data-capture
+    >
         <template v-if="richEditor">
             <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
@@ -840,6 +845,10 @@ export default {
             max-width: var(--img-max-width);
             max-height: var(--img-max-height);
         }
+    }
+
+    &.-readonly .ProseMirror {
+        cursor: inherit;
     }
 }
 </style>
