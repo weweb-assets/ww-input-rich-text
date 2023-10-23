@@ -24,7 +24,7 @@ export default {
         customStylePropertiesOrder: [
             'customMenu',
             'menuColor',
-            ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code'],
+            ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code', 'img'],
         ],
         customSettingsPropertiesOrder: [
             'readonly',
@@ -44,6 +44,10 @@ export default {
                 'mentionIdPath',
                 'mentionLabelPath',
             ],
+            [
+                'imageInline',
+                'imageAllowBase64',
+            ],
         ],
     },
     triggerEvents: [
@@ -53,7 +57,28 @@ export default {
     ],
     actions: [
         { label: 'Focus Rich text', action: 'focusEditor' },
-        { label: 'Set Link', action: 'setLink' },
+        { label: 'Set Link', action: 'setLink', args: [
+            {
+                name: 'URL',
+                type: 'Text',
+            },
+        ], },
+        { label: 'Set Image', action: 'setImage', args: 
+            [
+                {
+                    name: 'Source',
+                    type: 'Text',
+                },
+                {
+                    name: 'Alt',
+                    type: 'Text',
+                },
+                {
+                    name: 'Title',
+                    type: 'Text',
+                },
+            ], 
+        },
         {
             label: 'Set Tag',
             action: 'setTag',
@@ -239,6 +264,22 @@ export default {
             bindable: true,
             defaultValue: 5,
         },
+        imageInline: {
+            section: 'settings',
+            label: {
+                en: 'Image inline',
+            },
+            type: 'OnOff',
+            defaultValue: false,
+        },
+        imageAllowBase64: {
+            section: 'settings',
+            label: {
+                en: 'Image allow base64',
+            },
+            type: 'OnOff',
+            defaultValue: false,
+        },
         autofocus: {
             section: 'settings',
             label: {
@@ -294,6 +335,7 @@ export default {
                     { value: 'h6', label: { en: 'h6' } },
                     { value: 'p', label: { en: 'p' } },
                     { value: 'a', label: { en: 'a' } },
+                    { value: 'img', label: { en: 'image' } },
                     { value: 'blockquote', label: { en: 'blockquote' } },
                     { value: 'code', label: { en: 'code' } },
                     { value: 'mention', label: { en: 'mention' } },
@@ -677,6 +719,53 @@ export default {
                 paddingX: '16px',
                 paddingY: '12px',
                 fontSize: '13px',
+            },
+            states: true,
+            classes: true,
+            responsive: true,
+        },
+        img: {
+            type: 'Object',
+            hidden: (content, sidepanelContent) => {
+                return sidepanelContent.selectedTag !== 'img';
+            },
+            options: {
+                item: {
+                    maxWidth: {
+                        type: 'Length',
+                        label: {
+                            en: 'Max width',
+                            fr: 'Max width',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [
+                                { value: 'auto', label: 'auto', default: true },
+                                { value: 'px', label: 'px', min: 1, max: 300 }
+                            ],
+                            noRange: true,
+                        },
+                    },
+                    maxHeight: {
+                        type: 'Length',
+                        label: {
+                            en: 'Max height',
+                            fr: 'Max height',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [
+                                { value: 'auto', label: 'auto', default: true },
+                                { value: 'px', label: 'px', min: 1, max: 300 }
+                            ],
+                            noRange: true,
+                        },
+                    },
+                },
+            },
+            defaultValue: {
+                maxWidth: 'auto',
+                maxHeight: 'auto',
             },
             states: true,
             classes: true,
