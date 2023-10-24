@@ -95,7 +95,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="setLink"
+                    @click="setLink()"
                     :class="{ 'is-active': richEditor.isActive('link') }"
                     :disabled="!isEditable"
                 >
