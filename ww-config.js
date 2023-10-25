@@ -747,7 +747,6 @@ export default {
                             en: 'Inline',
                             fr: 'Inline',
                         },
-                        bindable: true,
                     }
                 },
             },
