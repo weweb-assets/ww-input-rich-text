@@ -49,7 +49,7 @@ export const textOptions = {
                     value: 'left',
                     default: true,
                     title: { en: 'Left', fr: 'Gauche' },
-                    icon: 'menu-alt-3',
+                    icon: 'menu-alt-2',
                 },
                 {
                     value: 'center',

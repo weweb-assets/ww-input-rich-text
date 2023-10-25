@@ -330,6 +330,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '32px',
@@ -352,6 +353,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '24px',
@@ -374,6 +376,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '19px',
@@ -396,6 +399,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -418,6 +422,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -440,6 +445,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -462,6 +468,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -496,6 +503,7 @@ export default {
                         },
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
                         },
                         bindable: true,
                     },
@@ -508,9 +516,11 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
                         },
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -553,6 +563,7 @@ export default {
                         bindable: true,
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -602,6 +613,7 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                     marginBottom: {
@@ -613,9 +625,11 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 color: 'rgb(153, 153, 153)',
@@ -666,6 +680,7 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
                         },
                     },
                     paddingX: {
@@ -677,6 +692,7 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                     paddingY: {
@@ -688,9 +704,11 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 color: '#FFF',
