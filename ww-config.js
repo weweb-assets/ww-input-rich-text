@@ -44,10 +44,6 @@ export default {
                 'mentionIdPath',
                 'mentionLabelPath',
             ],
-            [
-                'imageInline',
-                'imageAllowBase64',
-            ],
         ],
     },
     triggerEvents: [
@@ -263,22 +259,6 @@ export default {
             },
             bindable: true,
             defaultValue: 5,
-        },
-        imageInline: {
-            section: 'settings',
-            label: {
-                en: 'Image inline',
-            },
-            type: 'OnOff',
-            defaultValue: false,
-        },
-        imageAllowBase64: {
-            section: 'settings',
-            label: {
-                en: 'Image allow base64',
-            },
-            type: 'OnOff',
-            defaultValue: false,
         },
         autofocus: {
             section: 'settings',
@@ -761,11 +741,19 @@ export default {
                             noRange: true,
                         },
                     },
+                    inline: {
+                        type: 'OnOff',
+                        label: {
+                            en: 'Inline',
+                            fr: 'Inline',
+                        },
+                    }
                 },
             },
             defaultValue: {
                 maxWidth: 'auto',
                 maxHeight: 'auto',
+                inline: false
             },
             states: true,
             classes: true,

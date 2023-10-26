@@ -310,8 +310,8 @@ export default {
                 placeholder: this.content.placeholder,
                 autofocus: this.content.autofocus,
                 image: {
-                    inline: this.content.imageAllowInline,
-                    allowBase64: this.content.imageAllowBase64
+                    inline: this.content.img?.inline,
+                    allowBase64: true
                 },
                 mention: {
                     enabled: this.content.enableMention,
@@ -467,7 +467,7 @@ export default {
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
-                    Image.configure(this.editorConfig.image),
+                    Image.configure({...this.editorConfig.image}),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
                             HTMLAttributes: {
