@@ -53,14 +53,20 @@ export default {
     ],
     actions: [
         { label: 'Focus Rich text', action: 'focusEditor' },
-        { label: 'Set Link', action: 'setLink', args: [
-            {
-                name: 'URL',
-                type: 'Text',
-            },
-        ], },
-        { label: 'Set Image', action: 'setImage', args: 
-            [
+        {
+            label: 'Set Link',
+            action: 'setLink',
+            args: [
+                {
+                    name: 'URL',
+                    type: 'Text',
+                },
+            ],
+        },
+        {
+            label: 'Set Image',
+            action: 'setImage',
+            args: [
                 {
                     name: 'Source',
                     type: 'Text',
@@ -73,7 +79,7 @@ export default {
                     name: 'Title',
                     type: 'Text',
                 },
-            ], 
+            ],
         },
         {
             label: 'Set Tag',
@@ -739,7 +745,7 @@ export default {
                         options: {
                             unitChoices: [
                                 { value: 'auto', label: 'auto', default: true },
-                                { value: 'px', label: 'px', min: 1, max: 300 }
+                                { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
                         },
@@ -754,7 +760,7 @@ export default {
                         options: {
                             unitChoices: [
                                 { value: 'auto', label: 'auto', default: true },
-                                { value: 'px', label: 'px', min: 1, max: 300 }
+                                { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
                         },
@@ -765,13 +771,14 @@ export default {
                             en: 'Inline',
                             fr: 'Inline',
                         },
-                    }
+                    },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 maxWidth: 'auto',
                 maxHeight: 'auto',
-                inline: false
+                inline: false,
             },
             states: true,
             classes: true,
