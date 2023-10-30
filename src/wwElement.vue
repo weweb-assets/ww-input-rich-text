@@ -436,7 +436,9 @@ export default {
                     TextStyle,
                     Color,
                     Underline,
-                    TextAlign,
+                    TextAlign.configure({
+                        types: ['heading', 'paragraph'],
+                    }),
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
