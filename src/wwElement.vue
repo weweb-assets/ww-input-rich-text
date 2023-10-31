@@ -554,9 +554,7 @@ export default {
             this.richEditor.chain().focus().toggleStrike().run();
         },
         setTextAlign(textAlign) {
-            this.richEditor.isActive({ textAlign }) ?
-                this.richEditor.chain().focus().unsetTextAlign().run() :
-                this.richEditor.chain().focus().setTextAlign(textAlign).run();
+            this.richEditor.chain().focus().setTextAlign(textAlign).run();
         },
         setColor(color) {
             this.richEditor.chain().focus().setColor(color).run();
