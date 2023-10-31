@@ -7,6 +7,7 @@ export const textOptions = {
         },
         options: {
             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+            noRange: true,
         },
         responsive: true,
     },
@@ -48,7 +49,7 @@ export const textOptions = {
                     value: 'left',
                     default: true,
                     title: { en: 'Left', fr: 'Gauche' },
-                    icon: 'menu-alt-3',
+                    icon: 'menu-alt-2',
                 },
                 {
                     value: 'center',
@@ -95,6 +96,7 @@ export const textOptions = {
         type: 'Length',
         options: {
             unitChoices: [{ value: 'px', label: 'px', min: 0, max: 100 }],
+            noRange: true,
         },
         bindable: true,
     },
@@ -107,6 +109,7 @@ export const textOptions = {
         },
         options: {
             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+            noRange: true,
         },
         bindable: true,
     },
@@ -119,6 +122,7 @@ export const textOptions = {
         },
         options: {
             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+            noRange: true,
         },
         bindable: true,
     },
