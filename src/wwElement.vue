@@ -1,5 +1,10 @@
 <template>
-    <div class="ww-rich-text" :style="isEditing && 'pointer-events: none;'" data-capture>
+    <div
+        class="ww-rich-text"
+        :class="{ '-readonly': isReadonly }"
+        :style="isEditing && 'pointer-events: none;'"
+        data-capture
+    >
         <template v-if="richEditor">
             <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
@@ -90,7 +95,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="setLink"
+                    @click="setLink()"
                     :class="{ 'is-active': richEditor.isActive('link') }"
                     :disabled="!isEditable"
                 >
@@ -181,9 +186,10 @@ export default {
         wwElementState: { type: Object, required: true },
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
+        wwFrontState: { type: Object, required: true },
         /* wwEditor:end */
     },
-    emits: ['trigger-event', 'update:content:effect'],
+    emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
     setup(props, { emit }) {
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
@@ -234,6 +240,33 @@ export default {
                     mentionLabelPath: null,
                 });
         },
+        // For updating legacy elements before introduction of custom menu
+        'content.customMenu': {
+            async handler(value) {
+                if (value && !this.content.customMenuElement) {
+                    const element = await wwLib.createElement(
+                        'ww-flexbox',
+                        {},
+                        {
+                            name: 'Custom menu container',
+                            style: {
+                                default: {
+                                    width: '100%',
+                                },
+                            },
+                        },
+                        this.wwFrontState.sectionId
+                    );
+                    this.$emit('update:content:effect', {
+                        customMenuElement: element,
+                    });
+                }
+            },
+            immediate: true,
+        },
+        'wwEditorState.isSelected'() {
+            this.$emit('update:sidepanel-content', { path: 'selectedTag', value: null });
+        },
         /* wwEditor:end */
         isReadonly: {
             immediate: true,
@@ -282,8 +315,8 @@ export default {
                 placeholder: this.content.placeholder,
                 autofocus: this.content.autofocus,
                 image: {
-                    inline: this.content.imageAllowInline,
-                    allowBase64: this.content.imageAllowBase64
+                    inline: this.content.img?.inline,
+                    allowBase64: true,
                 },
                 mention: {
                     enabled: this.content.enableMention,
@@ -442,8 +475,8 @@ export default {
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
-                    Image.configure(this.editorConfig.image),
                     Markdown,
+                    Image.configure({ ...this.editorConfig.image }),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
                             HTMLAttributes: {
@@ -520,7 +553,7 @@ export default {
             this.richEditor.chain().focus().extendMarkRange('link').setLink({ href: selectedUrl }).run();
         },
         setImage(src, alt = '', title = '') {
-            this.richEditor.commands.setImage({ src, alt, title })
+            this.richEditor.commands.setImage({ src, alt, title });
         },
         focusEditor() {
             this.richEditor.chain().focus().run();
@@ -828,6 +861,10 @@ export default {
             max-width: var(--img-max-width);
             max-height: var(--img-max-height);
         }
+    }
+
+    &.-readonly .ProseMirror {
+        cursor: inherit;
     }
 }
 </style>

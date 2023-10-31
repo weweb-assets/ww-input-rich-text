@@ -45,10 +45,6 @@ export default {
                 'mentionIdPath',
                 'mentionLabelPath',
             ],
-            [
-                'imageInline',
-                'imageAllowBase64',
-            ],
         ],
     },
     triggerEvents: [
@@ -58,14 +54,20 @@ export default {
     ],
     actions: [
         { label: 'Focus Rich text', action: 'focusEditor' },
-        { label: 'Set Link', action: 'setLink', args: [
-            {
-                name: 'URL',
-                type: 'Text',
-            },
-        ], },
-        { label: 'Set Image', action: 'setImage', args: 
-            [
+        {
+            label: 'Set Link',
+            action: 'setLink',
+            args: [
+                {
+                    name: 'URL',
+                    type: 'Text',
+                },
+            ],
+        },
+        {
+            label: 'Set Image',
+            action: 'setImage',
+            args: [
                 {
                     name: 'Source',
                     type: 'Text',
@@ -78,7 +80,7 @@ export default {
                     name: 'Title',
                     type: 'Text',
                 },
-            ], 
+            ],
         },
         {
             label: 'Set Tag',
@@ -296,22 +298,6 @@ export default {
             bindable: true,
             defaultValue: 5,
         },
-        imageInline: {
-            section: 'settings',
-            label: {
-                en: 'Image inline',
-            },
-            type: 'OnOff',
-            defaultValue: false,
-        },
-        imageAllowBase64: {
-            section: 'settings',
-            label: {
-                en: 'Image allow base64',
-            },
-            type: 'OnOff',
-            defaultValue: false,
-        },
         autofocus: {
             section: 'settings',
             label: {
@@ -382,6 +368,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '32px',
@@ -404,6 +391,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '24px',
@@ -426,6 +414,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '19px',
@@ -448,6 +437,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -470,6 +460,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -492,6 +483,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -514,6 +506,7 @@ export default {
             },
             options: {
                 item: textOptions,
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -548,6 +541,7 @@ export default {
                         },
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
                         },
                         bindable: true,
                     },
@@ -560,9 +554,11 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
                         },
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -605,6 +601,7 @@ export default {
                         bindable: true,
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 fontSize: '16px',
@@ -654,6 +651,7 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                     marginBottom: {
@@ -665,9 +663,11 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 color: 'rgb(153, 153, 153)',
@@ -718,6 +718,7 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
                         },
                     },
                     paddingX: {
@@ -729,6 +730,7 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                     paddingY: {
@@ -740,9 +742,11 @@ export default {
                         bindable: true,
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
+                            noRange: true,
                         },
                     },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 color: '#FFF',
@@ -773,7 +777,7 @@ export default {
                         options: {
                             unitChoices: [
                                 { value: 'auto', label: 'auto', default: true },
-                                { value: 'px', label: 'px', min: 1, max: 300 }
+                                { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
                         },
@@ -788,16 +792,25 @@ export default {
                         options: {
                             unitChoices: [
                                 { value: 'auto', label: 'auto', default: true },
-                                { value: 'px', label: 'px', min: 1, max: 300 }
+                                { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
                         },
                     },
+                    inline: {
+                        type: 'OnOff',
+                        label: {
+                            en: 'Inline',
+                            fr: 'Inline',
+                        },
+                    },
                 },
+                singleLine: true,
             },
             defaultValue: {
                 maxWidth: 'auto',
                 maxHeight: 'auto',
+                inline: false,
             },
             states: true,
             classes: true,
