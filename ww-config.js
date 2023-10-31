@@ -31,6 +31,7 @@ export default {
             'editable',
             'hideMenu',
             'initialValue',
+            'output',
             'placeholder',
             'debounce',
             'debounceDelay',
@@ -105,6 +106,22 @@ export default {
         { label: 'Toggle Underline', action: 'toggleUnderline' },
         { label: 'Toggle Strike', action: 'toggleStrike' },
         {
+            label: 'Set Text Align',
+            action: 'setTextAlign',
+            args: [
+                {
+                    name: 'Alignment',
+                    type: 'select',
+                    options: [
+                        { value: 'left', label: { en: 'left' } },
+                        { value: 'center', label: { en: 'center' } },
+                        { value: 'right', label: { en: 'right' } },
+                        { value: 'justify', label: { en: 'justify' } },
+                    ],
+                },
+            ],
+        },
+        {
             label: 'Set Color',
             action: 'setColor',
             args: [
@@ -147,6 +164,21 @@ export default {
             type: 'Textarea',
             defaultValue: '',
             bindable: true,
+        },
+        output: {
+            label: {
+                en: 'Output',
+                fr: 'Output',
+            },
+            type: 'TextSelect',
+            options: {
+                options: [
+                    { value: 'html', label: { en: 'html' } },
+                    { value: 'markdown', label: { en: 'markdown' } },
+                ],
+            },
+            section: 'settings',
+            defaultValue: 'html',
         },
         debounce: {
             label: { en: 'Debounce' },

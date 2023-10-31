@@ -150,6 +150,8 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import TextAlign from '@tiptap/extension-text-align'
+import { Markdown } from 'tiptap-markdown';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
 
@@ -218,14 +220,14 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            if (value !== this.richEditor.getHTML()) this.richEditor.commands.setContent(value);
+            if (value !== this.getContent()) this.richEditor.commands.setContent(value);
             this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
         },
         isEditable(value) {
             this.richEditor.setEditable(value);
         },
         variableValue(value, oldValue) {
-            if (value !== this.richEditor.getHTML()) this.richEditor.commands.setContent(value);
+            if (value !== this.getContent()) this.richEditor.commands.setContent(value);
         },
         /* wwEditor:start */
         editorConfig() {
@@ -467,9 +469,13 @@ export default {
                     TextStyle,
                     Color,
                     Underline,
+                    TextAlign.configure({
+                        types: ['heading', 'paragraph'],
+                    }),
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
+                    Markdown,
                     Image.configure({ ...this.editorConfig.image }),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
@@ -488,11 +494,11 @@ export default {
                         }),
                 ],
                 onCreate: () => {
-                    this.setValue(this.richEditor.getHTML());
+                    this.setValue(this.getContent());
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
                 onUpdate: () => {
-                    const htmlValue = this.richEditor.getHTML();
+                    const htmlValue = this.getContent();
                     if (this.variableValue === htmlValue) return;
                     this.setValue(htmlValue);
                     if (this.content.debounce) {
@@ -580,6 +586,9 @@ export default {
         toggleStrike() {
             this.richEditor.chain().focus().toggleStrike().run();
         },
+        setTextAlign(textAlign) {
+            this.richEditor.chain().focus().setTextAlign(textAlign).run();
+        },
         setColor(color) {
             this.richEditor.chain().focus().setColor(color).run();
         },
@@ -601,6 +610,10 @@ export default {
         redo() {
             this.richEditor.chain().redo().run();
         },
+        getContent() {
+            if(this.content.output === 'markdown') return this.richEditor.storage.markdown.getMarkdown()
+            return this.richEditor.getHTML()
+        }
     },
     mounted() {
         this.loadEditor();
