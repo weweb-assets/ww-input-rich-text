@@ -104,6 +104,22 @@ export default {
         { label: 'Toggle Underline', action: 'toggleUnderline' },
         { label: 'Toggle Strike', action: 'toggleStrike' },
         {
+            label: 'Set Text Align',
+            action: 'setTextAlign',
+            args: [
+                {
+                    name: 'Alignment',
+                    type: 'select',
+                    options: [
+                        { value: 'left', label: { en: 'left' } },
+                        { value: 'center', label: { en: 'center' } },
+                        { value: 'right', label: { en: 'right' } },
+                        { value: 'justify', label: { en: 'justify' } },
+                    ],
+                },
+            ],
+        },
+        {
             label: 'Set Color',
             action: 'setColor',
             args: [

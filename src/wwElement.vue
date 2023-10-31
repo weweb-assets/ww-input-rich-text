@@ -145,6 +145,7 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import TextAlign from '@tiptap/extension-text-align'
 import { Markdown } from 'tiptap-markdown';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
@@ -435,6 +436,9 @@ export default {
                     TextStyle,
                     Color,
                     Underline,
+                    TextAlign.configure({
+                        types: ['heading', 'paragraph'],
+                    }),
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
@@ -548,6 +552,9 @@ export default {
         },
         toggleStrike() {
             this.richEditor.chain().focus().toggleStrike().run();
+        },
+        setTextAlign(textAlign) {
+            this.richEditor.chain().focus().setTextAlign(textAlign).run();
         },
         setColor(color) {
             this.richEditor.chain().focus().setColor(color).run();
