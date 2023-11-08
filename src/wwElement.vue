@@ -206,11 +206,21 @@ export default {
             readonly: true,
         });
 
+        const { value: states, setValue: setStates } = wwLib.wwVariable.useComponentVariable({
+            uid: props.uid,
+            name: 'states',
+            type: 'object',
+            defaultValue: {},
+            readonly: true,
+        });
+
         return {
             variableValue,
             setValue,
             variableMentions,
             setMentions,
+            states,
+            setStates
         };
     },
     data: () => ({
@@ -278,6 +288,12 @@ export default {
                 }
             },
         },
+        states: {
+            immediate: true,
+            handler(value) {
+                this.setStates(value)
+            },
+        },
     },
     computed: {
         isEditing() {
@@ -286,6 +302,27 @@ export default {
             /* wwEditor:end */
             // eslint-disable-next-line no-unreachable
             return false;
+        },
+        states() {
+            if(!this.richEditor) return {}
+            return {
+                textType: Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType),
+                textStyle: this.richEditor.getAttributes('textStyle'),
+                bold: this.richEditor.isActive('bold'),
+                italic: this.richEditor.isActive('italic'),
+                underline: this.richEditor.isActive('underline'),
+                strike: this.richEditor.isActive('strike'),
+                bulletList: this.richEditor.isActive('bulletList'),
+                orderedList: this.richEditor.isActive('orderedList'),
+                link: this.richEditor.isActive('link'),
+                code: this.richEditor.isActive('code'),
+                blockquote: this.richEditor.isActive('blockquote'),
+                textAlign: 
+                    this.richEditor.isActive({ textAlign: 'left' }) ? 'left' : 
+                    this.richEditor.isActive({ textAlign: 'center' }) ? 'center' : 
+                    this.richEditor.isActive({ textAlign: 'right' }) ? 'right' : 
+                    this.richEditor.isActive({ textAlign: 'justify' }) ? 'justify' : false
+            }
         },
         mentionList() {
             const data = wwLib.wwCollection.getCollectionData(this.content.mentionList);
