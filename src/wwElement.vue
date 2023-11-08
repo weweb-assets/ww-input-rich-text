@@ -288,12 +288,12 @@ export default {
                 }
             },
         },
-        // states: {
-        //     immediate: true,
-        //     handler(value) {
-        //         this.setStates(value)
-        //     },
-        // },
+        editorStates: {
+            immediate: true,
+            handler(value) {
+                this.setStates(value)
+            },
+        },
     },
     computed: {
         isEditing() {
@@ -303,7 +303,7 @@ export default {
             // eslint-disable-next-line no-unreachable
             return false;
         },
-        states() {
+        editorStates() {
             if(!this.richEditor) return {}
             return {
                 textType: Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType),
