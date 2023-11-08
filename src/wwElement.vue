@@ -288,12 +288,12 @@ export default {
                 }
             },
         },
-        states: {
-            immediate: true,
-            handler(value) {
-                this.setStates(value)
-            },
-        },
+        // states: {
+        //     immediate: true,
+        //     handler(value) {
+        //         this.setStates(value)
+        //     },
+        // },
     },
     computed: {
         isEditing() {
