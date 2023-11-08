@@ -107,7 +107,7 @@
                     type="button"
                     class="ww-rich-text__menu-item"
                     @click="toggleCodeBlock"
-                    :class="{ 'is-active': richEditor.isActive('code') }"
+                    :class="{ 'is-active': richEditor.isActive('codeBlock') }"
                     :disabled="!isEditable"
                 >
                     <i class="fas fa-code"></i>
@@ -315,7 +315,7 @@ export default {
                 bulletList: this.richEditor.isActive('bulletList'),
                 orderedList: this.richEditor.isActive('orderedList'),
                 link: this.richEditor.isActive('link'),
-                code: this.richEditor.isActive('code'),
+                codeBlock: this.richEditor.isActive('codeBlock'),
                 blockquote: this.richEditor.isActive('blockquote'),
                 textAlign: 
                     this.richEditor.isActive({ textAlign: 'left' }) ? 'left' : 
