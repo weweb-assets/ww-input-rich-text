@@ -309,7 +309,7 @@ export default {
             if(!this.richEditor) return {}
             return {
                 textType: Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType),
-                textColor: this.richEditor.getAttributes('textStyle')?.color || null,
+                textColor: this.currentColor,
                 bold: this.richEditor.isActive('bold'),
                 italic: this.richEditor.isActive('italic'),
                 underline: this.richEditor.isActive('underline'),
@@ -325,6 +325,13 @@ export default {
                     this.richEditor.isActive({ textAlign: 'right' }) ? 'right' : 
                     this.richEditor.isActive({ textAlign: 'justify' }) ? 'justify' : false
             }
+        },
+        currentColor() {
+            if (this.richEditor.getAttributes('textStyle')?.color) return this.richEditor.getAttributes('textStyle')?.color
+            else if (this.richEditor.isActive('link')) return this.content.link.color
+            else if (this.richEditor.isActive('codeBlock')) return this.content.code.color
+            else if (this.richEditor.isActive('blockquote')) return this.content.blockquote.color
+            else return this.content[Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType)]?.color
         },
         mentionList() {
             const data = wwLib.wwCollection.getCollectionData(this.content.mentionList);
