@@ -238,6 +238,8 @@ export default {
         },
         variableValue(value, oldValue) {
             if (value !== this.getContent()) this.richEditor.commands.setContent(value);
+            // If format changed
+            if (value !== this.getContent()) this.setValue(this.getContent())
         },
         /* wwEditor:start */
         editorConfig() {
@@ -307,7 +309,7 @@ export default {
             if(!this.richEditor) return {}
             return {
                 textType: Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType),
-                textStyle: this.richEditor.getAttributes('textStyle'),
+                textColor: this.richEditor.getAttributes('textStyle')?.color || null,
                 bold: this.richEditor.isActive('bold'),
                 italic: this.richEditor.isActive('italic'),
                 underline: this.richEditor.isActive('underline'),
