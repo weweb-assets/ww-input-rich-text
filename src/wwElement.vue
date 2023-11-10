@@ -291,6 +291,7 @@ export default {
             },
         },
         editorStates: {
+            deep: true,
             immediate: true,
             handler(value) {
                 this.setStates(value)
