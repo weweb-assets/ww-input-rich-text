@@ -329,7 +329,7 @@ export default {
         },
         currentColor() {
             if (this.richEditor.getAttributes('textStyle')?.color) return this.richEditor.getAttributes('textStyle')?.color
-            else if (this.richEditor.isActive('link')) return this.content.link.color
+            else if (this.richEditor.isActive('link')) return this.content.a.color
             else if (this.richEditor.isActive('codeBlock')) return this.content.code.color
             else if (this.richEditor.isActive('blockquote')) return this.content.blockquote.color
             else return this.content[Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType)]?.color
