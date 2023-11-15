@@ -107,7 +107,7 @@
                     type="button"
                     class="ww-rich-text__menu-item"
                     @click="toggleCodeBlock"
-                    :class="{ 'is-active': richEditor.isActive('code') }"
+                    :class="{ 'is-active': richEditor.isActive('codeBlock') }"
                     :disabled="!isEditable"
                 >
                     <i class="fas fa-code"></i>
@@ -206,11 +206,21 @@ export default {
             readonly: true,
         });
 
+        const { value: states, setValue: setStates } = wwLib.wwVariable.useComponentVariable({
+            uid: props.uid,
+            name: 'states',
+            type: 'object',
+            defaultValue: {},
+            readonly: true,
+        });
+
         return {
             variableValue,
             setValue,
             variableMentions,
             setMentions,
+            states,
+            setStates
         };
     },
     data: () => ({
@@ -228,6 +238,8 @@ export default {
         },
         variableValue(value, oldValue) {
             if (value !== this.getContent()) this.richEditor.commands.setContent(value);
+            // If format changed
+            if (value !== this.getContent()) this.setValue(this.getContent())
         },
         /* wwEditor:start */
         editorConfig() {
@@ -278,6 +290,13 @@ export default {
                 }
             },
         },
+        editorStates: {
+            deep: true,
+            immediate: true,
+            handler(value) {
+                this.setStates(value)
+            },
+        },
     },
     computed: {
         isEditing() {
@@ -286,6 +305,34 @@ export default {
             /* wwEditor:end */
             // eslint-disable-next-line no-unreachable
             return false;
+        },
+        editorStates() {
+            if(!this.richEditor) return {}
+            return {
+                textType: Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType),
+                textColor: this.currentColor,
+                bold: this.richEditor.isActive('bold'),
+                italic: this.richEditor.isActive('italic'),
+                underline: this.richEditor.isActive('underline'),
+                strike: this.richEditor.isActive('strike'),
+                bulletList: this.richEditor.isActive('bulletList'),
+                orderedList: this.richEditor.isActive('orderedList'),
+                link: this.richEditor.isActive('link'),
+                codeBlock: this.richEditor.isActive('codeBlock'),
+                blockquote: this.richEditor.isActive('blockquote'),
+                textAlign: 
+                    this.richEditor.isActive({ textAlign: 'left' }) ? 'left' : 
+                    this.richEditor.isActive({ textAlign: 'center' }) ? 'center' : 
+                    this.richEditor.isActive({ textAlign: 'right' }) ? 'right' : 
+                    this.richEditor.isActive({ textAlign: 'justify' }) ? 'justify' : false
+            }
+        },
+        currentColor() {
+            if (this.richEditor.getAttributes('textStyle')?.color) return this.richEditor.getAttributes('textStyle')?.color
+            else if (this.richEditor.isActive('link')) return this.content.a.color
+            else if (this.richEditor.isActive('codeBlock')) return this.content.code.color
+            else if (this.richEditor.isActive('blockquote')) return this.content.blockquote.color
+            else return this.content[Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType)]?.color
         },
         mentionList() {
             const data = wwLib.wwCollection.getCollectionData(this.content.mentionList);
