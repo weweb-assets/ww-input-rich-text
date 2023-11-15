@@ -45,6 +45,22 @@ export default {
                 'mentionIdPath',
                 'mentionLabelPath',
             ],
+            [
+                'parameterTitle',
+                'parameterTextType',
+                'parameterBold',
+                'parameterItalic',
+                'parameterUnderline',
+                'parameterStrike',
+                'parameterTextColor',
+                'parameterBulletList',
+                'parameterOrderedList',
+                'parameterLink',
+                'parameterCodeBlock',
+                'parameterQuote',
+                'parameterUndo',
+                'parameterRedo',
+            ],
         ],
     },
     triggerEvents: [
@@ -833,6 +849,132 @@ export default {
             navigator: {
                 hidden: content => !content.customMenu,
             },
+        },
+        parameterTitle: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            type: 'Title',
+            label: {
+                en: 'Parameters',
+            },
+            editorOnly: true,
+        },
+        parameterTextType: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Text type',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterBold: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Bold',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterItalic: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Italic',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterUnderline: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Underline',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterStrike: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Strike',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterTextColor: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Text color',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterBulletList: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Bullet list',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterOrderedList: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Ordered list',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterLink: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Link',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterCodeBlock: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Code block',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterQuote: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Quote',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterUndo: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Undo',
+            },
+            type: 'OnOff',
+            defaultValue: true,
+        },
+        parameterRedo: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Redo',
+            },
+            type: 'OnOff',
+            defaultValue: true,
         },
     },
 };

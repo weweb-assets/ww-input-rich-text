@@ -8,11 +8,16 @@
         <template v-if="richEditor">
             <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
-                <select id="rich-size" v-model="currentTextType" :disabled="!isEditable">
+                <select
+                    id="rich-size"
+                    v-model="currentTextType"
+                    :disabled="!isEditable"
+                    v-if="content.parameterTextType"
+                >
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
                 </select>
 
-                <span class="separator"></span>
+                <span class="separator" v-if="content.parameterTextType"></span>
 
                 <!-- Bold, Italic, Underline -->
                 <button
@@ -21,6 +26,7 @@
                     @click="toggleBold"
                     :class="{ 'is-active': richEditor.isActive('bold') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterBold"
                 >
                     <i class="fas fa-bold"></i>
                 </button>
@@ -30,6 +36,7 @@
                     @click="toggleItalic"
                     :class="{ 'is-active': richEditor.isActive('italic') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterItalic"
                 >
                     <i class="fas fa-italic"></i>
                 </button>
@@ -39,6 +46,7 @@
                     @click="toggleUnderline"
                     :class="{ 'is-active': richEditor.isActive('underline') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterUnderline"
                 >
                     <i class="fas fa-underline"></i>
                 </button>
@@ -48,14 +56,29 @@
                     @click="toggleStrike"
                     :class="{ 'is-active': richEditor.isActive('strike') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterStrike"
                 >
                     <i class="fas fa-strikethrough"></i>
                 </button>
 
-                <span class="separator"></span>
+                <!-- Show the separator only if at least on of the previous block are visible -->
+                <span
+                    class="separator"
+                    v-if="
+                        content.parameterBold ||
+                        content.parameterItalic ||
+                        content.parameterUnderline ||
+                        content.parameterStrike
+                    "
+                ></span>
 
                 <!-- Color -->
-                <label class="ww-rich-text__menu-item" for="rich-color" @click="richEditor.commands.focus()">
+                <label
+                    class="ww-rich-text__menu-item"
+                    for="rich-color"
+                    @click="richEditor.commands.focus()"
+                    v-if="content.parameterTextColor"
+                >
                     <i class="fas fa-palette"></i>
                     <input
                         id="rich-color"
@@ -67,7 +90,7 @@
                     />
                 </label>
 
-                <span class="separator"></span>
+                <span class="separator" v-if="content.parameterTextColor"></span>
 
                 <!-- List (Bullet, number) -->
                 <button
@@ -76,6 +99,7 @@
                     @click="toggleBulletList"
                     :class="{ 'is-active': richEditor.isActive('bulletList') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterBulletList"
                 >
                     <i class="fas fa-list-ul"></i>
                 </button>
@@ -85,11 +109,12 @@
                     @click="toggleOrderedList"
                     :class="{ 'is-active': richEditor.isActive('orderedList') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterOrderedList"
                 >
                     <i class="fas fa-list-ol"></i>
                 </button>
 
-                <span class="separator"></span>
+                <span class="separator" v-if="content.parameterBulletList || content.parameterOrderedList"></span>
 
                 <!-- Link -->
                 <button
@@ -98,6 +123,7 @@
                     @click="setLink()"
                     :class="{ 'is-active': richEditor.isActive('link') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterLink"
                 >
                     <i class="fas fa-link"></i>
                 </button>
@@ -109,6 +135,7 @@
                     @click="toggleCodeBlock"
                     :class="{ 'is-active': richEditor.isActive('codeBlock') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterCodeBlock"
                 >
                     <i class="fas fa-code"></i>
                 </button>
@@ -120,17 +147,33 @@
                     @click="toggleBlockquote"
                     :class="{ 'is-active': richEditor.isActive('blockquote') }"
                     :disabled="!isEditable"
+                    v-if="content.parameterQuote"
                 >
                     <i class="fas fa-quote-left"></i>
                 </button>
 
-                <span class="separator"></span>
+                <span
+                    class="separator"
+                    v-if="content.parameterLink || content.parameterCodeBlock || content.parameterQuote"
+                ></span>
 
                 <!-- Undo/Redo -->
-                <button type="button" class="ww-rich-text__menu-item" @click="undo" :disabled="!isEditable">
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="undo"
+                    :disabled="!isEditable"
+                    v-if="content.parameterUndo"
+                >
                     <i class="fas fa-undo"></i>
                 </button>
-                <button type="button" class="ww-rich-text__menu-item" @click="redo" :disabled="!isEditable">
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="redo"
+                    :disabled="!isEditable"
+                    v-if="content.parameterRedo"
+                >
                     <i class="fas fa-redo"></i>
                 </button>
             </div>
@@ -150,7 +193,7 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
-import TextAlign from '@tiptap/extension-text-align'
+import TextAlign from '@tiptap/extension-text-align';
 import { Markdown } from 'tiptap-markdown';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
@@ -220,7 +263,7 @@ export default {
             variableMentions,
             setMentions,
             states,
-            setStates
+            setStates,
         };
     },
     data: () => ({
@@ -239,7 +282,7 @@ export default {
         variableValue(value, oldValue) {
             if (value !== this.getContent()) this.richEditor.commands.setContent(value);
             // If format changed
-            if (value !== this.getContent()) this.setValue(this.getContent())
+            if (value !== this.getContent()) this.setValue(this.getContent());
         },
         /* wwEditor:start */
         editorConfig() {
@@ -294,7 +337,7 @@ export default {
             deep: true,
             immediate: true,
             handler(value) {
-                this.setStates(value)
+                this.setStates(value);
             },
         },
     },
@@ -307,7 +350,7 @@ export default {
             return false;
         },
         editorStates() {
-            if(!this.richEditor) return {}
+            if (!this.richEditor) return {};
             return {
                 textType: Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType),
                 textColor: this.currentColor,
@@ -320,19 +363,24 @@ export default {
                 link: this.richEditor.isActive('link'),
                 codeBlock: this.richEditor.isActive('codeBlock'),
                 blockquote: this.richEditor.isActive('blockquote'),
-                textAlign: 
-                    this.richEditor.isActive({ textAlign: 'left' }) ? 'left' : 
-                    this.richEditor.isActive({ textAlign: 'center' }) ? 'center' : 
-                    this.richEditor.isActive({ textAlign: 'right' }) ? 'right' : 
-                    this.richEditor.isActive({ textAlign: 'justify' }) ? 'justify' : false
-            }
+                textAlign: this.richEditor.isActive({ textAlign: 'left' })
+                    ? 'left'
+                    : this.richEditor.isActive({ textAlign: 'center' })
+                    ? 'center'
+                    : this.richEditor.isActive({ textAlign: 'right' })
+                    ? 'right'
+                    : this.richEditor.isActive({ textAlign: 'justify' })
+                    ? 'justify'
+                    : false,
+            };
         },
         currentColor() {
-            if (this.richEditor.getAttributes('textStyle')?.color) return this.richEditor.getAttributes('textStyle')?.color
-            else if (this.richEditor.isActive('link')) return this.content.a.color
-            else if (this.richEditor.isActive('codeBlock')) return this.content.code.color
-            else if (this.richEditor.isActive('blockquote')) return this.content.blockquote.color
-            else return this.content[Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType)]?.color
+            if (this.richEditor.getAttributes('textStyle')?.color)
+                return this.richEditor.getAttributes('textStyle')?.color;
+            else if (this.richEditor.isActive('link')) return this.content.a.color;
+            else if (this.richEditor.isActive('codeBlock')) return this.content.code.color;
+            else if (this.richEditor.isActive('blockquote')) return this.content.blockquote.color;
+            else return this.content[Object.keys(TAGS_MAP).find(key => TAGS_MAP[key] === this.currentTextType)]?.color;
         },
         mentionList() {
             const data = wwLib.wwCollection.getCollectionData(this.content.mentionList);
@@ -658,9 +706,9 @@ export default {
             this.richEditor.chain().redo().run();
         },
         getContent() {
-            if(this.content.output === 'markdown') return this.richEditor.storage.markdown.getMarkdown()
-            return this.richEditor.getHTML()
-        }
+            if (this.content.output === 'markdown') return this.richEditor.storage.markdown.getMarkdown();
+            return this.richEditor.getHTML();
+        },
     },
     mounted() {
         this.loadEditor();
