@@ -214,7 +214,9 @@ export default {
             readonly: true,
         });
 
+        /* wwEditor:start */
         const { createElement } = wwLib.useCreateElement();
+        /* wwEditor:end */
 
         return {
             variableValue,
@@ -223,7 +225,9 @@ export default {
             setMentions,
             states,
             setStates,
+            /* wwEditor:start */
             createElement
+            /* wwEditor:end */
         };
     },
     data: () => ({
