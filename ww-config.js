@@ -870,6 +870,7 @@ export default {
                 choices: [
                     {
                         value: true,
+                        default: true,
                         label: 'Show',
                     },
                     {
@@ -891,6 +892,7 @@ export default {
                 choices: [
                     {
                         value: true,
+                        default: true,
                         label: 'Show',
                     },
                     {
@@ -899,6 +901,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterItalicHidden: {
             section: 'settings',
@@ -920,6 +923,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterUnderlineHidden: {
             section: 'settings',
@@ -941,6 +945,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterStrikeHidden: {
             section: 'settings',
@@ -962,6 +967,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterTextColorHidden: {
             section: 'settings',
@@ -983,6 +989,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterBulletListHidden: {
             section: 'settings',
@@ -1004,6 +1011,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterOrderedListHidden: {
             section: 'settings',
@@ -1025,6 +1033,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterLinkHidden: {
             section: 'settings',
@@ -1046,6 +1055,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterCodeBlockHidden: {
             section: 'settings',
@@ -1067,6 +1077,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterQuoteHidden: {
             section: 'settings',
@@ -1088,6 +1099,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterUndoHidden: {
             section: 'settings',
@@ -1109,6 +1121,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
         parameterRedoHidden: {
             section: 'settings',
@@ -1130,6 +1143,7 @@ export default {
                     },
                 ],
             },
+            defaultValue: true,
         },
     },
 };
