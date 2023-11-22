@@ -859,121 +859,277 @@ export default {
             },
             editorOnly: true,
         },
-        parameterTextType: {
+        parameterTextTypeHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Text type',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterBold: {
+        parameterBoldHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Bold',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterItalic: {
+        parameterItalicHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Italic',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterUnderline: {
+        parameterUnderlineHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Underline',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterStrike: {
+        parameterStrikeHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Strike',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterTextColor: {
+        parameterTextColorHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Text color',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterBulletList: {
+        parameterBulletListHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Bullet list',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterOrderedList: {
+        parameterOrderedListHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Ordered list',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterLink: {
+        parameterLinkHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Link',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterCodeBlock: {
+        parameterCodeBlockHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Code block',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterQuote: {
+        parameterQuoteHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Quote',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterUndo: {
+        parameterUndoHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Undo',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
-        parameterRedo: {
+        parameterRedoHidden: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
                 en: 'Redo',
             },
-            type: 'OnOff',
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
             defaultValue: true,
         },
     },

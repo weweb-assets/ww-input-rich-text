@@ -12,12 +12,12 @@
                     id="rich-size"
                     v-model="currentTextType"
                     :disabled="!isEditable"
-                    v-if="content.parameterTextType"
+                    v-if="content.parameterTextTypeHidden"
                 >
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
                 </select>
 
-                <span class="separator" v-if="content.parameterTextType"></span>
+                <span class="separator" v-if="content.parameterTextTypeHidden"></span>
 
                 <!-- Bold, Italic, Underline -->
                 <button
@@ -26,7 +26,7 @@
                     @click="toggleBold"
                     :class="{ 'is-active': richEditor.isActive('bold') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterBold"
+                    v-if="content.parameterBoldHidden"
                 >
                     <i class="fas fa-bold"></i>
                 </button>
@@ -36,7 +36,7 @@
                     @click="toggleItalic"
                     :class="{ 'is-active': richEditor.isActive('italic') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterItalic"
+                    v-if="content.parameterItalicHidden"
                 >
                     <i class="fas fa-italic"></i>
                 </button>
@@ -46,7 +46,7 @@
                     @click="toggleUnderline"
                     :class="{ 'is-active': richEditor.isActive('underline') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterUnderline"
+                    v-if="content.parameterUnderlineHidden"
                 >
                     <i class="fas fa-underline"></i>
                 </button>
@@ -56,7 +56,7 @@
                     @click="toggleStrike"
                     :class="{ 'is-active': richEditor.isActive('strike') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterStrike"
+                    v-if="content.parameterStrikeHidden"
                 >
                     <i class="fas fa-strikethrough"></i>
                 </button>
@@ -65,10 +65,10 @@
                 <span
                     class="separator"
                     v-if="
-                        content.parameterBold ||
-                        content.parameterItalic ||
-                        content.parameterUnderline ||
-                        content.parameterStrike
+                        content.parameterBoldHidden ||
+                        content.parameterItalicHidden ||
+                        content.parameterUnderlineHidden ||
+                        content.parameterStrikeHidden
                     "
                 ></span>
 
@@ -77,7 +77,7 @@
                     class="ww-rich-text__menu-item"
                     for="rich-color"
                     @click="richEditor.commands.focus()"
-                    v-if="content.parameterTextColor"
+                    v-if="content.parameterTextColorHidden"
                 >
                     <i class="fas fa-palette"></i>
                     <input
@@ -90,7 +90,7 @@
                     />
                 </label>
 
-                <span class="separator" v-if="content.parameterTextColor"></span>
+                <span class="separator" v-if="content.parameterTextColorHidden"></span>
 
                 <!-- List (Bullet, number) -->
                 <button
@@ -99,7 +99,7 @@
                     @click="toggleBulletList"
                     :class="{ 'is-active': richEditor.isActive('bulletList') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterBulletList"
+                    v-if="content.parameterBulletListHidden"
                 >
                     <i class="fas fa-list-ul"></i>
                 </button>
@@ -109,12 +109,15 @@
                     @click="toggleOrderedList"
                     :class="{ 'is-active': richEditor.isActive('orderedList') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterOrderedList"
+                    v-if="content.parameterOrderedListHidden"
                 >
                     <i class="fas fa-list-ol"></i>
                 </button>
 
-                <span class="separator" v-if="content.parameterBulletList || content.parameterOrderedList"></span>
+                <span
+                    class="separator"
+                    v-if="content.parameterBulletListHidden || content.parameterOrderedListHidden"
+                ></span>
 
                 <!-- Link -->
                 <button
@@ -123,7 +126,7 @@
                     @click="setLink()"
                     :class="{ 'is-active': richEditor.isActive('link') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterLink"
+                    v-if="content.parameterLinkHidden"
                 >
                     <i class="fas fa-link"></i>
                 </button>
@@ -135,7 +138,7 @@
                     @click="toggleCodeBlock"
                     :class="{ 'is-active': richEditor.isActive('codeBlock') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterCodeBlock"
+                    v-if="content.parameterCodeBlockHidden"
                 >
                     <i class="fas fa-code"></i>
                 </button>
@@ -147,14 +150,16 @@
                     @click="toggleBlockquote"
                     :class="{ 'is-active': richEditor.isActive('blockquote') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterQuote"
+                    v-if="content.parameterQuoteHidden"
                 >
                     <i class="fas fa-quote-left"></i>
                 </button>
 
                 <span
                     class="separator"
-                    v-if="content.parameterLink || content.parameterCodeBlock || content.parameterQuote"
+                    v-if="
+                        content.parameterLinkHidden || content.parameterCodeBlockHidden || content.parameterQuoteHidden
+                    "
                 ></span>
 
                 <!-- Undo/Redo -->
@@ -163,7 +168,7 @@
                     class="ww-rich-text__menu-item"
                     @click="undo"
                     :disabled="!isEditable"
-                    v-if="content.parameterUndo"
+                    v-if="content.parameterUndoHidden"
                 >
                     <i class="fas fa-undo"></i>
                 </button>
@@ -172,7 +177,7 @@
                     class="ww-rich-text__menu-item"
                     @click="redo"
                     :disabled="!isEditable"
-                    v-if="content.parameterRedo"
+                    v-if="content.parameterRedoHidden"
                 >
                     <i class="fas fa-redo"></i>
                 </button>
