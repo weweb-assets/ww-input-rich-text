@@ -214,13 +214,20 @@ export default {
             readonly: true,
         });
 
+        /* wwEditor:start */
+        const { createElement } = wwLib.useCreateElement();
+        /* wwEditor:end */
+
         return {
             variableValue,
             setValue,
             variableMentions,
             setMentions,
             states,
-            setStates
+            setStates,
+            /* wwEditor:start */
+            createElement
+            /* wwEditor:end */
         };
     },
     data: () => ({
@@ -256,18 +263,18 @@ export default {
         'content.customMenu': {
             async handler(value) {
                 if (value && !this.content.customMenuElement) {
-                    const element = await wwLib.createElement(
+                    const element = await this.createElement(
                         'ww-flexbox',
-                        {},
                         {
-                            name: 'Custom menu container',
-                            style: {
-                                default: {
-                                    width: '100%',
+                            _state: { 
+                                name: 'Custom menu container',
+                                style: {
+                                    default: {
+                                        width: '100%',
+                                    },
                                 },
-                            },
-                        },
-                        this.wwFrontState.sectionId
+                            }
+                        }
                     );
                     this.$emit('update:content:effect', {
                         customMenuElement: element,
