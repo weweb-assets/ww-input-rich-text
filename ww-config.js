@@ -859,7 +859,7 @@ export default {
             },
             editorOnly: true,
         },
-        parameterTextTypeHidden: {
+        parameterTextType: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -881,7 +881,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterBoldHidden: {
+        parameterBold: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -903,7 +903,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterItalicHidden: {
+        parameterItalic: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -925,7 +925,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterUnderlineHidden: {
+        parameterUnderline: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -947,7 +947,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterStrikeHidden: {
+        parameterStrike: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -969,7 +969,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterTextColorHidden: {
+        parameterTextColor: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -991,7 +991,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterBulletListHidden: {
+        parameterBulletList: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -1013,7 +1013,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterOrderedListHidden: {
+        parameterOrderedList: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -1035,7 +1035,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterLinkHidden: {
+        parameterLink: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -1057,7 +1057,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterCodeBlockHidden: {
+        parameterCodeBlock: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -1079,7 +1079,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterQuoteHidden: {
+        parameterQuote: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -1101,7 +1101,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterUndoHidden: {
+        parameterUndo: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
@@ -1123,7 +1123,7 @@ export default {
             },
             defaultValue: true,
         },
-        parameterRedoHidden: {
+        parameterRedo: {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
