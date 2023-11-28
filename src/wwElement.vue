@@ -731,6 +731,10 @@ export default {
         width: 1px;
         height: 24px;
         margin: 0px 8px;
+
+        &:last-child {
+            display: none;
+        }
     }
 
     &__menu {
