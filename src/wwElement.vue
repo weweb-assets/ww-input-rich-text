@@ -12,12 +12,12 @@
                     id="rich-size"
                     v-model="currentTextType"
                     :disabled="!isEditable"
-                    v-if="content.parameterTextType"
+                    v-if="menu.textType"
                 >
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
                 </select>
 
-                <span class="separator" v-if="content.parameterTextType"></span>
+                <span class="separator" v-if="menu.textType"></span>
 
                 <!-- Bold, Italic, Underline -->
                 <button
@@ -26,7 +26,7 @@
                     @click="toggleBold"
                     :class="{ 'is-active': richEditor.isActive('bold') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterBold"
+                    v-if="menu.bold"
                 >
                     <i class="fas fa-bold"></i>
                 </button>
@@ -36,7 +36,7 @@
                     @click="toggleItalic"
                     :class="{ 'is-active': richEditor.isActive('italic') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterItalic"
+                    v-if="menu.italic"
                 >
                     <i class="fas fa-italic"></i>
                 </button>
@@ -46,7 +46,7 @@
                     @click="toggleUnderline"
                     :class="{ 'is-active': richEditor.isActive('underline') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterUnderline"
+                    v-if="menu.underline"
                 >
                     <i class="fas fa-underline"></i>
                 </button>
@@ -56,7 +56,7 @@
                     @click="toggleStrike"
                     :class="{ 'is-active': richEditor.isActive('strike') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterStrike"
+                    v-if="menu.strike"
                 >
                     <i class="fas fa-strikethrough"></i>
                 </button>
@@ -65,10 +65,10 @@
                 <span
                     class="separator"
                     v-if="
-                        content.parameterBold ||
-                        content.parameterItalic ||
-                        content.parameterUnderline ||
-                        content.parameterStrike
+                        menu.bold ||
+                        menu.italic ||
+                        menu.underline ||
+                        menu.strike
                     "
                 ></span>
 
@@ -77,7 +77,7 @@
                     class="ww-rich-text__menu-item"
                     for="rich-color"
                     @click="richEditor.commands.focus()"
-                    v-if="content.parameterTextColor"
+                    v-if="menu.textColor"
                 >
                     <i class="fas fa-palette"></i>
                     <input
@@ -90,7 +90,7 @@
                     />
                 </label>
 
-                <span class="separator" v-if="content.parameterTextColor"></span>
+                <span class="separator" v-if="menu.textColor"></span>
 
                 <!-- List (Bullet, number) -->
                 <button
@@ -99,7 +99,7 @@
                     @click="toggleBulletList"
                     :class="{ 'is-active': richEditor.isActive('bulletList') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterBulletList"
+                    v-if="menu.bulletList"
                 >
                     <i class="fas fa-list-ul"></i>
                 </button>
@@ -109,12 +109,12 @@
                     @click="toggleOrderedList"
                     :class="{ 'is-active': richEditor.isActive('orderedList') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterOrderedList"
+                    v-if="menu.orderedList"
                 >
                     <i class="fas fa-list-ol"></i>
                 </button>
 
-                <span class="separator" v-if="content.parameterBulletList || content.parameterOrderedList"></span>
+                <span class="separator" v-if="menu.bulletList || menu.orderedList"></span>
 
                 <!-- Link -->
                 <button
@@ -123,7 +123,7 @@
                     @click="setLink()"
                     :class="{ 'is-active': richEditor.isActive('link') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterLink"
+                    v-if="menu.link"
                 >
                     <i class="fas fa-link"></i>
                 </button>
@@ -135,7 +135,7 @@
                     @click="toggleCodeBlock"
                     :class="{ 'is-active': richEditor.isActive('codeBlock') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterCodeBlock"
+                    v-if="menu.codeBlock"
                 >
                     <i class="fas fa-code"></i>
                 </button>
@@ -147,14 +147,14 @@
                     @click="toggleBlockquote"
                     :class="{ 'is-active': richEditor.isActive('blockquote') }"
                     :disabled="!isEditable"
-                    v-if="content.parameterQuote"
+                    v-if="menu.blockquote"
                 >
                     <i class="fas fa-quote-left"></i>
                 </button>
 
                 <span
                     class="separator"
-                    v-if="content.parameterLink || content.parameterCodeBlock || content.parameterQuote"
+                    v-if="menu.link || menu.codeBlock || menu.blockquote"
                 ></span>
 
                 <!-- Undo/Redo -->
@@ -163,7 +163,7 @@
                     class="ww-rich-text__menu-item"
                     @click="undo"
                     :disabled="!isEditable"
-                    v-if="content.parameterUndo"
+                    v-if="menu.undo"
                 >
                     <i class="fas fa-undo"></i>
                 </button>
@@ -172,7 +172,7 @@
                     class="ww-rich-text__menu-item"
                     @click="redo"
                     :disabled="!isEditable"
-                    v-if="content.parameterRedo"
+                    v-if="menu.redo"
                 >
                     <i class="fas fa-redo"></i>
                 </button>
@@ -411,6 +411,23 @@ export default {
         },
         hideMenu() {
             return this.content.hideMenu || this.isReadonly;
+        },
+        menu() {
+            return {
+                textType: this.content.parameterTextType ?? true,
+                bold: this.content.parameterBold ?? true,
+                italic: this.content.parameterItalic ?? true,
+                underline: this.content.parameterUnderline ?? true,
+                strike: this.content.parameterStrike ?? true,
+                textColor: this.content.parameterTextColor ?? true,
+                bulletList: this.content.parameterBulletList ?? true,
+                orderedList: this.content.parameterOrderedList ?? true,
+                link: this.content.parameterLink ?? true,
+                codeBlock: this.content.parameterCodeBlock ?? true,
+                blockquote: this.content.parameterQuote ?? true,
+                undo: this.content.parameterUndo ?? true,
+                redo: this.content.parameterRedo ?? true,
+            }
         },
         editorConfig() {
             return {
