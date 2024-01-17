@@ -75,13 +75,13 @@
                 <!-- Color -->
                 <label
                     class="ww-rich-text__menu-item"
-                    for="rich-color"
+                    :for="`rich-color-${randomUid}`"
                     @click="richEditor.commands.focus()"
                     v-if="menu.textColor"
                 >
                     <i class="fas fa-palette"></i>
                     <input
-                        id="rich-color"
+                        :id="`rich-color-${randomUid}`"
                         type="color"
                         @input="setColor($event.target.value)"
                         :value="richEditor.getAttributes('textStyle').color"
@@ -261,6 +261,8 @@ export default {
         const { createElement } = wwLib.useCreateElement();
         /* wwEditor:end */
 
+        const randomUid = wwLib.wwUtils.getUid();
+
         return {
             variableValue,
             setValue,
@@ -268,6 +270,7 @@ export default {
             setMentions,
             states,
             setStates,
+            randomUid,
             /* wwEditor:start */
             createElement
             /* wwEditor:end */
