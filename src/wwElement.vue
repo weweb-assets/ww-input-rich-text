@@ -280,7 +280,10 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            if (value !== this.getContent()) this.richEditor.commands.setContent(value);
+            if (value !== this.getContent()){
+                this.richEditor.commands.setContent(value);
+                this.setValue(value);
+            }
             this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
         },
         isEditable(value) {
