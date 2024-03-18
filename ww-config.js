@@ -212,6 +212,7 @@ export default {
             },
             section: 'settings',
             defaultValue: '500ms',
+            responsive: true,
             hidden: content => !content.debounce,
         },
         placeholder: {
