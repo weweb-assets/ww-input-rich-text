@@ -55,6 +55,7 @@ export default {
                 'parameterTextColor',
                 'parameterBulletList',
                 'parameterOrderedList',
+                'parameterTaskList',
                 'parameterLink',
                 'parameterCodeBlock',
                 'parameterQuote',
@@ -1035,6 +1036,28 @@ export default {
                 ],
             },
             defaultValue: true,
+        },
+        parameterTaskList: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Task list',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        default: true,
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
         },
         parameterLink: {
             section: 'settings',

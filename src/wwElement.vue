@@ -8,12 +8,7 @@
         <template v-if="richEditor">
             <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
-                <select
-                    id="rich-size"
-                    v-model="currentTextType"
-                    :disabled="!isEditable"
-                    v-if="menu.textType"
-                >
+                <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
                 </select>
 
@@ -62,15 +57,7 @@
                 </button>
 
                 <!-- Show the separator only if at least on of the previous block are visible -->
-                <span
-                    class="separator"
-                    v-if="
-                        menu.bold ||
-                        menu.italic ||
-                        menu.underline ||
-                        menu.strike
-                    "
-                ></span>
+                <span class="separator" v-if="menu.bold || menu.italic || menu.underline || menu.strike"></span>
 
                 <!-- Color -->
                 <label
@@ -113,8 +100,18 @@
                 >
                     <i class="fas fa-list-ol"></i>
                 </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="toggleTaskList"
+                    :class="{ 'is-active': richEditor.isActive('taskList') }"
+                    :disabled="!isEditable"
+                    v-if="menu.taskList"
+                >
+                    <i class="fas fa-check-square"></i>
+                </button>
 
-                <span class="separator" v-if="menu.bulletList || menu.orderedList"></span>
+                <span class="separator" v-if="menu.bulletList || menu.orderedList || menu.taskList"></span>
 
                 <!-- Link -->
                 <button
@@ -152,10 +149,7 @@
                     <i class="fas fa-quote-left"></i>
                 </button>
 
-                <span
-                    class="separator"
-                    v-if="menu.link || menu.codeBlock || menu.blockquote"
-                ></span>
+                <span class="separator" v-if="menu.link || menu.codeBlock || menu.blockquote"></span>
 
                 <!-- Undo/Redo -->
                 <button
@@ -193,7 +187,9 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import TaskItem from '@tiptap/extension-task-item';
 import TextAlign from '@tiptap/extension-text-align';
+import TaskList from '@tiptap/extension-task-list';
 import { Markdown } from 'tiptap-markdown';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
@@ -272,7 +268,7 @@ export default {
             setStates,
             randomUid,
             /* wwEditor:start */
-            createElement
+            createElement,
             /* wwEditor:end */
         };
     },
@@ -283,7 +279,7 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            if (value !== this.getContent()){
+            if (value !== this.getContent()) {
                 this.richEditor.commands.setContent(value);
                 this.setValue(value);
             }
@@ -312,19 +308,16 @@ export default {
         'content.customMenu': {
             async handler(value) {
                 if (value && !this.content.customMenuElement) {
-                    const element = await this.createElement(
-                        'ww-flexbox',
-                        {
-                            _state: { 
-                                name: 'Custom menu container',
-                                style: {
-                                    default: {
-                                        width: '100%',
-                                    },
+                    const element = await this.createElement('ww-flexbox', {
+                        _state: {
+                            name: 'Custom menu container',
+                            style: {
+                                default: {
+                                    width: '100%',
                                 },
-                            }
-                        }
-                    );
+                            },
+                        },
+                    });
                     this.$emit('update:content:effect', {
                         customMenuElement: element,
                     });
@@ -373,6 +366,7 @@ export default {
                 strike: this.richEditor.isActive('strike'),
                 bulletList: this.richEditor.isActive('bulletList'),
                 orderedList: this.richEditor.isActive('orderedList'),
+                taskList: this.richEditor.isActive('taskList'),
                 link: this.richEditor.isActive('link'),
                 codeBlock: this.richEditor.isActive('codeBlock'),
                 blockquote: this.richEditor.isActive('blockquote'),
@@ -428,12 +422,13 @@ export default {
                 textColor: this.content.parameterTextColor ?? true,
                 bulletList: this.content.parameterBulletList ?? true,
                 orderedList: this.content.parameterOrderedList ?? true,
+                taskList: this.content.parameterTaskList ?? true,
                 link: this.content.parameterLink ?? true,
                 codeBlock: this.content.parameterCodeBlock ?? true,
                 blockquote: this.content.parameterQuote ?? true,
                 undo: this.content.parameterUndo ?? true,
                 redo: this.content.parameterRedo ?? true,
-            }
+            };
         },
         editorConfig() {
             return {
@@ -594,6 +589,10 @@ export default {
                     TextStyle,
                     Color,
                     Underline,
+                    TaskList,
+                    TaskItem.configure({
+                        nested: true,
+                    }),
                     TextAlign.configure({
                         types: ['heading', 'paragraph'],
                     }),
@@ -722,6 +721,9 @@ export default {
         },
         toggleOrderedList() {
             this.richEditor.chain().focus().toggleOrderedList().run();
+        },
+        toggleTaskList() {
+            this.richEditor.chain().focus().toggleTaskList().run();
         },
         toggleCodeBlock() {
             this.richEditor.chain().focus().toggleCodeBlock().run();
@@ -989,6 +991,38 @@ export default {
         img {
             max-width: var(--img-max-width);
             max-height: var(--img-max-height);
+        }
+
+        ul[data-type='taskList'] {
+            list-style: none;
+            padding: 0;
+
+            p {
+                margin: 0;
+            }
+
+            li {
+                display: flex;
+
+                > label {
+                    flex: 0 0 auto;
+                    margin-right: 0.5rem;
+                    user-select: none;
+                }
+
+                > div {
+                    flex: 1 1 auto;
+                }
+
+                ul li,
+                ol li {
+                    display: list-item;
+                }
+
+                ul[data-type='taskList'] > li {
+                    display: flex;
+                }
+            }
         }
     }
 
