@@ -1006,7 +1006,7 @@ export default {
 
                 > label {
                     flex: 0 0 auto;
-                    margin-right: 0.5rem;
+                    margin-right: var(--ww-spacing-01);
                     user-select: none;
                 }
 
