@@ -150,6 +150,7 @@ export default {
         },
         { label: 'Toggle Bullet List', action: 'toggleBulletList' },
         { label: 'Toggle Ordered List', action: 'toggleOrderedList' },
+        { label: 'Toggle Check List', action: 'toggleTaskList' },
         { label: 'Toggle Code Block', action: 'toggleCodeBlock' },
         { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
         { label: 'Undo', action: 'undo' },
@@ -1041,7 +1042,7 @@ export default {
             section: 'settings',
             hidden: content => content.customMenu,
             label: {
-                en: 'Task list',
+                en: 'Check list',
             },
             type: 'TextRadioGroup',
             options: {
