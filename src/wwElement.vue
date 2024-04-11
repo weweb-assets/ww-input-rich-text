@@ -272,6 +272,8 @@ export default {
                 this.setValue(value);
             }
             this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
+
+            if (this.isReadonly) this.handleOnUpdate();
         },
         isEditable(value) {
             this.richEditor.setEditable(value);
@@ -603,24 +605,7 @@ export default {
                     this.setValue(this.getContent());
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
-                onUpdate: () => {
-                    const htmlValue = this.getContent();
-                    if (this.variableValue === htmlValue) return;
-                    this.setValue(htmlValue);
-                    if (this.content.debounce) {
-                        this.isDebouncing = true;
-                        if (this.debounce) {
-                            clearTimeout(this.debounce);
-                        }
-                        this.debounce = setTimeout(() => {
-                            this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
-                            this.isDebouncing = false;
-                        }, this.delay);
-                    } else {
-                        this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
-                    }
-                    this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
-                },
+                onUpdate: this.handleOnUpdate,
                 editorProps: {
                     handleClickOn: (view, pos, node) => {
                         if (node.type.name === 'mention') {
@@ -633,6 +618,25 @@ export default {
                 },
             });
             this.loading = false;
+        },
+        handleOnUpdate() {
+            const htmlValue = this.getContent();
+            if (this.variableValue === htmlValue) return;
+            this.setValue(htmlValue);
+            if (this.content.debounce) {
+                this.isDebouncing = true;
+                if (this.debounce) {
+                    clearTimeout(this.debounce);
+                }
+                this.debounce = setTimeout(() => {
+                    this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+                    this.isDebouncing = false;
+                }, this.delay);
+            } else {
+                this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+            }
+            console.log('Set mentions');
+            this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
         },
         setLink(url) {
             if (this.richEditor.isActive('link')) {
