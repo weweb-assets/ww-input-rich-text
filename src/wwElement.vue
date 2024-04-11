@@ -8,12 +8,7 @@
         <template v-if="richEditor">
             <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
-                <select
-                    id="rich-size"
-                    v-model="currentTextType"
-                    :disabled="!isEditable"
-                    v-if="menu.textType"
-                >
+                <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
                 </select>
 
@@ -62,15 +57,7 @@
                 </button>
 
                 <!-- Show the separator only if at least on of the previous block are visible -->
-                <span
-                    class="separator"
-                    v-if="
-                        menu.bold ||
-                        menu.italic ||
-                        menu.underline ||
-                        menu.strike
-                    "
-                ></span>
+                <span class="separator" v-if="menu.bold || menu.italic || menu.underline || menu.strike"></span>
 
                 <!-- Color -->
                 <label
@@ -152,10 +139,7 @@
                     <i class="fas fa-quote-left"></i>
                 </button>
 
-                <span
-                    class="separator"
-                    v-if="menu.link || menu.codeBlock || menu.blockquote"
-                ></span>
+                <span class="separator" v-if="menu.link || menu.codeBlock || menu.blockquote"></span>
 
                 <!-- Undo/Redo -->
                 <button
@@ -272,7 +256,7 @@ export default {
             setStates,
             randomUid,
             /* wwEditor:start */
-            createElement
+            createElement,
             /* wwEditor:end */
         };
     },
@@ -283,7 +267,9 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            if (value !== this.getContent()){
+            console.log('VALUE 🔥', value);
+
+            if (value !== this.getContent()) {
                 this.richEditor.commands.setContent(value);
                 this.setValue(value);
             }
@@ -312,19 +298,16 @@ export default {
         'content.customMenu': {
             async handler(value) {
                 if (value && !this.content.customMenuElement) {
-                    const element = await this.createElement(
-                        'ww-flexbox',
-                        {
-                            _state: { 
-                                name: 'Custom menu container',
-                                style: {
-                                    default: {
-                                        width: '100%',
-                                    },
+                    const element = await this.createElement('ww-flexbox', {
+                        _state: {
+                            name: 'Custom menu container',
+                            style: {
+                                default: {
+                                    width: '100%',
                                 },
-                            }
-                        }
-                    );
+                            },
+                        },
+                    });
                     this.$emit('update:content:effect', {
                         customMenuElement: element,
                     });
@@ -433,7 +416,7 @@ export default {
                 blockquote: this.content.parameterQuote ?? true,
                 undo: this.content.parameterUndo ?? true,
                 redo: this.content.parameterRedo ?? true,
-            }
+            };
         },
         editorConfig() {
             return {
@@ -600,7 +583,7 @@ export default {
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
-                    Markdown,
+                    Markdown.configure({ breaks: true }),
                     Image.configure({ ...this.editorConfig.image }),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
@@ -642,6 +625,7 @@ export default {
                 },
                 editorProps: {
                     handleClickOn: (view, pos, node) => {
+                        console.log('Node: ', node);
                         if (node.type.name === 'mention') {
                             this.$emit('trigger-event', {
                                 name: 'mention:click',
@@ -751,6 +735,8 @@ export default {
 
 <style lang="scss">
 .ww-rich-text {
+    border: 1px solid green;
+
     --menu-color: unset;
     display: flex;
     flex-direction: column;
