@@ -267,8 +267,6 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            console.log('VALUE 🔥', value);
-
             if (value !== this.getContent()) {
                 this.richEditor.commands.setContent(value);
                 this.setValue(value);
@@ -625,7 +623,6 @@ export default {
                 },
                 editorProps: {
                     handleClickOn: (view, pos, node) => {
-                        console.log('Node: ', node);
                         if (node.type.name === 'mention') {
                             this.$emit('trigger-event', {
                                 name: 'mention:click',
@@ -735,8 +732,6 @@ export default {
 
 <style lang="scss">
 .ww-rich-text {
-    border: 1px solid green;
-
     --menu-color: unset;
     display: flex;
     flex-direction: column;
