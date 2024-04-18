@@ -635,7 +635,6 @@ export default {
             } else {
                 this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
             }
-            console.log('Set mentions');
             this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
         },
         setLink(url) {
