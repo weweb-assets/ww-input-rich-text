@@ -590,7 +590,12 @@ export default {
                 autofocus: this.editorConfig.autofocus,
                 extensions: [
                     StarterKit,
-                    Link,
+                    Link.configure({
+                        HTMLAttributes: {
+                            rel: 'noopener noreferrer',
+                        },
+                    
+                    }),
                     TextStyle,
                     Color,
                     Underline,
