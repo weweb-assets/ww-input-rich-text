@@ -422,7 +422,7 @@ export default {
                 textColor: this.content.parameterTextColor ?? true,
                 bulletList: this.content.parameterBulletList ?? true,
                 orderedList: this.content.parameterOrderedList ?? true,
-                taskList: this.content.parameterTaskList ?? true,
+                taskList: this.content.parameterTaskList ?? false,
                 link: this.content.parameterLink ?? true,
                 codeBlock: this.content.parameterCodeBlock ?? true,
                 blockquote: this.content.parameterQuote ?? true,
