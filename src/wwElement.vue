@@ -8,12 +8,7 @@
         <template v-if="richEditor">
             <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
-                <select
-                    id="rich-size"
-                    v-model="currentTextType"
-                    :disabled="!isEditable"
-                    v-if="menu.textType"
-                >
+                <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
                 </select>
 
@@ -62,15 +57,7 @@
                 </button>
 
                 <!-- Show the separator only if at least on of the previous block are visible -->
-                <span
-                    class="separator"
-                    v-if="
-                        menu.bold ||
-                        menu.italic ||
-                        menu.underline ||
-                        menu.strike
-                    "
-                ></span>
+                <span class="separator" v-if="menu.bold || menu.italic || menu.underline || menu.strike"></span>
 
                 <!-- Color -->
                 <label
@@ -152,10 +139,7 @@
                     <i class="fas fa-quote-left"></i>
                 </button>
 
-                <span
-                    class="separator"
-                    v-if="menu.link || menu.codeBlock || menu.blockquote"
-                ></span>
+                <span class="separator" v-if="menu.link || menu.codeBlock || menu.blockquote"></span>
 
                 <!-- Undo/Redo -->
                 <button
@@ -272,7 +256,7 @@ export default {
             setStates,
             randomUid,
             /* wwEditor:start */
-            createElement
+            createElement,
             /* wwEditor:end */
         };
     },
@@ -283,11 +267,13 @@ export default {
 
     watch: {
         'content.initialValue'(value) {
-            if (value !== this.getContent()){
+            if (value !== this.getContent()) {
                 this.richEditor.commands.setContent(value);
                 this.setValue(value);
             }
             this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
+
+            if (this.isReadonly) this.handleOnUpdate();
         },
         isEditable(value) {
             this.richEditor.setEditable(value);
@@ -312,19 +298,16 @@ export default {
         'content.customMenu': {
             async handler(value) {
                 if (value && !this.content.customMenuElement) {
-                    const element = await this.createElement(
-                        'ww-flexbox',
-                        {
-                            _state: { 
-                                name: 'Custom menu container',
-                                style: {
-                                    default: {
-                                        width: '100%',
-                                    },
+                    const element = await this.createElement('ww-flexbox', {
+                        _state: {
+                            name: 'Custom menu container',
+                            style: {
+                                default: {
+                                    width: '100%',
                                 },
-                            }
-                        }
-                    );
+                            },
+                        },
+                    });
                     this.$emit('update:content:effect', {
                         customMenuElement: element,
                     });
@@ -433,7 +416,7 @@ export default {
                 blockquote: this.content.parameterQuote ?? true,
                 undo: this.content.parameterUndo ?? true,
                 redo: this.content.parameterRedo ?? true,
-            }
+            };
         },
         editorConfig() {
             return {
@@ -605,7 +588,7 @@ export default {
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
-                    Markdown,
+                    Markdown.configure({ breaks: true }),
                     Image.configure({ ...this.editorConfig.image }),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
@@ -627,24 +610,7 @@ export default {
                     this.setValue(this.getContent());
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
-                onUpdate: () => {
-                    const htmlValue = this.getContent();
-                    if (this.variableValue === htmlValue) return;
-                    this.setValue(htmlValue);
-                    if (this.content.debounce) {
-                        this.isDebouncing = true;
-                        if (this.debounce) {
-                            clearTimeout(this.debounce);
-                        }
-                        this.debounce = setTimeout(() => {
-                            this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
-                            this.isDebouncing = false;
-                        }, this.delay);
-                    } else {
-                        this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
-                    }
-                    this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
-                },
+                onUpdate: this.handleOnUpdate,
                 editorProps: {
                     handleClickOn: (view, pos, node) => {
                         if (node.type.name === 'mention') {
@@ -657,6 +623,24 @@ export default {
                 },
             });
             this.loading = false;
+        },
+        handleOnUpdate() {
+            const htmlValue = this.getContent();
+            if (this.variableValue === htmlValue) return;
+            this.setValue(htmlValue);
+            if (this.content.debounce) {
+                this.isDebouncing = true;
+                if (this.debounce) {
+                    clearTimeout(this.debounce);
+                }
+                this.debounce = setTimeout(() => {
+                    this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+                    this.isDebouncing = false;
+                }, this.delay);
+            } else {
+                this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+            }
+            this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
         },
         setLink(url) {
             if (this.richEditor.isActive('link')) {
