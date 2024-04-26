@@ -729,10 +729,10 @@ export default {
             else {
                 let url;
                 /* wwEditor:start */
-                url = wwLib.getEditorWindow().prompt('URL');
+                url = wwLib.getEditorWindow().prompt('Image URL');
                 /* wwEditor:end */
                 /* wwFront:start */
-                url = wwLib.getFrontWindow().prompt('URL');
+                url = wwLib.getFrontWindow().prompt('Image URL');
                 /* wwFront:end */
 
                 if (!url) return;
