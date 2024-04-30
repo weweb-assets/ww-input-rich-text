@@ -568,6 +568,8 @@ export default {
                 // img
                 '--img-max-width': this.content.img?.maxWidth,
                 '--img-max-height': this.content.img?.maxHeight,
+                // checkbox
+                '--checkbox-color': this.content.checkbox.color,
             };
         },
         delay() {
@@ -1021,6 +1023,11 @@ export default {
 
                 ul[data-type='taskList'] > li {
                     display: flex;
+                }
+
+                input[type='checkbox'] {
+                    cursor: pointer;
+                    accent-color: var(--checkbox-color);
                 }
             }
         }

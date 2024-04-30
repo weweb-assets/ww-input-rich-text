@@ -24,7 +24,22 @@ export default {
         customStylePropertiesOrder: [
             'customMenu',
             'menuColor',
-            ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code', 'img'],
+            [
+                'selectedTag',
+                'h1',
+                'h2',
+                'h3',
+                'h4',
+                'h5',
+                'h6',
+                'p',
+                'mention',
+                'a',
+                'blockquote',
+                'code',
+                'img',
+                'checkbox',
+            ],
         ],
         customSettingsPropertiesOrder: [
             'readonly',
@@ -376,6 +391,7 @@ export default {
                     { value: 'blockquote', label: { en: 'blockquote' } },
                     { value: 'code', label: { en: 'code' } },
                     { value: 'mention', label: { en: 'mention' } },
+                    { value: 'checkbox', label: { en: 'checkbox' } },
                 ],
             },
             defaultValue: null,
@@ -830,6 +846,33 @@ export default {
                 maxWidth: 'auto',
                 maxHeight: 'auto',
                 inline: false,
+            },
+            states: true,
+            classes: true,
+            responsive: true,
+        },
+        checkbox: {
+            type: 'Object',
+            hidden: (content, sidepanelContent) => {
+                return sidepanelContent.selectedTag !== 'checkbox';
+            },
+            options: {
+                item: {
+                    color: {
+                        type: 'Color',
+                        label: {
+                            en: 'Accent color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                },
+                singleLine: true,
+            },
+            defaultValue: {
+                color: '#000',
             },
             states: true,
             classes: true,
