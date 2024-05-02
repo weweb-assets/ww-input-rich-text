@@ -59,6 +59,56 @@
                 <!-- Show the separator only if at least on of the previous block are visible -->
                 <span class="separator" v-if="menu.bold || menu.italic || menu.underline || menu.strike"></span>
 
+                <!-- Text align -->
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="setTextAlign('left')"
+                    :class="{ 'is-active': richEditor.isActive({ textAlign: 'left' }) }"
+                    :disabled="!isEditable"
+                    v-if="menu.alignLeft"
+                >
+                    <i class="fas fa-align-left"></i>
+                </button>
+
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="setTextAlign('center')"
+                    :class="{ 'is-active': richEditor.isActive({ textAlign: 'center' }) }"
+                    :disabled="!isEditable"
+                    v-if="menu.alignCenter"
+                >
+                    <i class="fas fa-align-center"></i>
+                </button>
+
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="setTextAlign('right')"
+                    :class="{ 'is-active': richEditor.isActive({ textAlign: 'right' }) }"
+                    :disabled="!isEditable"
+                    v-if="menu.alignRight"
+                >
+                    <i class="fas fa-align-right"></i>
+                </button>
+
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="setTextAlign('justify')"
+                    :class="{ 'is-active': richEditor.isActive({ textAlign: 'justify' }) }"
+                    :disabled="!isEditable"
+                    v-if="menu.alignJustify"
+                >
+                    <i class="fas fa-align-justify"></i>
+                </button>
+
+                <span
+                    class="separator"
+                    v-if="menu.alignLeft || menu.alignCenter || menu.alignRight || menu.alignJustify"
+                ></span>
+
                 <!-- Color -->
                 <label
                     class="ww-rich-text__menu-item"
@@ -125,6 +175,17 @@
                     <i class="fas fa-link"></i>
                 </button>
 
+                <!-- Image -->
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="setImage()"
+                    :disabled="!isEditable"
+                    v-if="menu.image"
+                >
+                    <i class="fas fa-image"></i>
+                </button>
+
                 <!-- Code -->
                 <button
                     type="button"
@@ -149,7 +210,7 @@
                     <i class="fas fa-quote-left"></i>
                 </button>
 
-                <span class="separator" v-if="menu.link || menu.codeBlock || menu.blockquote"></span>
+                <span class="separator" v-if="menu.link || menu.image || menu.codeBlock || menu.blockquote"></span>
 
                 <!-- Undo/Redo -->
                 <button
@@ -284,6 +345,8 @@ export default {
                 this.setValue(value);
             }
             this.$emit('trigger-event', { name: 'initValueChange', event: { value } });
+
+            if (this.isReadonly) this.handleOnUpdate();
         },
         isEditable(value) {
             this.richEditor.setEditable(value);
@@ -419,11 +482,16 @@ export default {
                 italic: this.content.parameterItalic ?? true,
                 underline: this.content.parameterUnderline ?? true,
                 strike: this.content.parameterStrike ?? true,
+                alignLeft: this.content.parameterAlignLeft ?? false,
+                alignCenter: this.content.parameterAlignCenter ?? false,
+                alignRight: this.content.parameterAlignRight ?? false,
+                alignJustify: this.content.parameterAlignJustify ?? false,
                 textColor: this.content.parameterTextColor ?? true,
                 bulletList: this.content.parameterBulletList ?? true,
                 orderedList: this.content.parameterOrderedList ?? true,
                 taskList: this.content.parameterTaskList ?? false,
                 link: this.content.parameterLink ?? true,
+                image: this.content.parameterImage ?? false,
                 codeBlock: this.content.parameterCodeBlock ?? true,
                 blockquote: this.content.parameterQuote ?? true,
                 undo: this.content.parameterUndo ?? true,
@@ -587,7 +655,12 @@ export default {
                 autofocus: this.editorConfig.autofocus,
                 extensions: [
                     StarterKit,
-                    Link,
+                    Link.configure({
+                        HTMLAttributes: {
+                            rel: 'noopener noreferrer',
+                        },
+                    
+                    }),
                     TextStyle,
                     Color,
                     Underline,
@@ -601,7 +674,7 @@ export default {
                     Placeholder.configure({
                         placeholder: this.editorConfig.placeholder,
                     }),
-                    Markdown,
+                    Markdown.configure({ breaks: true }),
                     Image.configure({ ...this.editorConfig.image }),
                     this.editorConfig.mention.enabled &&
                         Mention.configure({
@@ -623,24 +696,7 @@ export default {
                     this.setValue(this.getContent());
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
-                onUpdate: () => {
-                    const htmlValue = this.getContent();
-                    if (this.variableValue === htmlValue) return;
-                    this.setValue(htmlValue);
-                    if (this.content.debounce) {
-                        this.isDebouncing = true;
-                        if (this.debounce) {
-                            clearTimeout(this.debounce);
-                        }
-                        this.debounce = setTimeout(() => {
-                            this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
-                            this.isDebouncing = false;
-                        }, this.delay);
-                    } else {
-                        this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
-                    }
-                    this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
-                },
+                onUpdate: this.handleOnUpdate,
                 editorProps: {
                     handleClickOn: (view, pos, node) => {
                         if (node.type.name === 'mention') {
@@ -653,6 +709,24 @@ export default {
                 },
             });
             this.loading = false;
+        },
+        handleOnUpdate() {
+            const htmlValue = this.getContent();
+            if (this.variableValue === htmlValue) return;
+            this.setValue(htmlValue);
+            if (this.content.debounce) {
+                this.isDebouncing = true;
+                if (this.debounce) {
+                    clearTimeout(this.debounce);
+                }
+                this.debounce = setTimeout(() => {
+                    this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+                    this.isDebouncing = false;
+                }, this.delay);
+            } else {
+                this.$emit('trigger-event', { name: 'change', event: { value: this.variableValue } });
+            }
+            this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
         },
         setLink(url) {
             if (this.richEditor.isActive('link')) {
@@ -679,7 +753,19 @@ export default {
             this.richEditor.chain().focus().extendMarkRange('link').setLink({ href: selectedUrl }).run();
         },
         setImage(src, alt = '', title = '') {
-            this.richEditor.commands.setImage({ src, alt, title });
+            if (this.content.customMenu) this.richEditor.commands.setImage({ src, alt, title });
+            else {
+                let url;
+                /* wwEditor:start */
+                url = wwLib.getEditorWindow().prompt('Image URL');
+                /* wwEditor:end */
+                /* wwFront:start */
+                url = wwLib.getFrontWindow().prompt('Image URL');
+                /* wwFront:end */
+
+                if (!url) return;
+                this.richEditor.chain().focus().setImage({ src: url }).run();
+            }
         },
         focusEditor() {
             this.richEditor.chain().focus().run();

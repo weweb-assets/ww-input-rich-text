@@ -67,11 +67,16 @@ export default {
                 'parameterItalic',
                 'parameterUnderline',
                 'parameterStrike',
+                'parameterAlignLeft',
+                'parameterAlignCenter',
+                'parameterAlignRight',
+                'parameterAlignJustify',
                 'parameterTextColor',
                 'parameterBulletList',
                 'parameterOrderedList',
                 'parameterTaskList',
                 'parameterLink',
+                'parameterImage',
                 'parameterCodeBlock',
                 'parameterQuote',
                 'parameterUndo',
@@ -1015,6 +1020,94 @@ export default {
             },
             defaultValue: true,
         },
+        parameterAlignLeft: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Align left',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        default: true,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
+        },
+        parameterAlignCenter: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Align center',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        default: true,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
+        },
+        parameterAlignRight: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Align right',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        default: true,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
+        },
+        parameterAlignJustify: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Align justify',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        default: true,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
+        },
         parameterTextColor: {
             section: 'settings',
             hidden: content => content.customMenu,
@@ -1124,6 +1217,28 @@ export default {
                 ],
             },
             defaultValue: true,
+        },
+        parameterImage: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Image',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        default: true,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
         },
         parameterCodeBlock: {
             section: 'settings',
