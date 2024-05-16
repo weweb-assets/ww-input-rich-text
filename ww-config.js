@@ -24,7 +24,22 @@ export default {
         customStylePropertiesOrder: [
             'customMenu',
             'menuColor',
-            ['selectedTag', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'mention', 'a', 'blockquote', 'code', 'img'],
+            [
+                'selectedTag',
+                'h1',
+                'h2',
+                'h3',
+                'h4',
+                'h5',
+                'h6',
+                'p',
+                'mention',
+                'a',
+                'blockquote',
+                'code',
+                'img',
+                'checkbox',
+            ],
         ],
         customSettingsPropertiesOrder: [
             'readonly',
@@ -59,6 +74,7 @@ export default {
                 'parameterTextColor',
                 'parameterBulletList',
                 'parameterOrderedList',
+                'parameterTaskList',
                 'parameterLink',
                 'parameterImage',
                 'parameterCodeBlock',
@@ -154,6 +170,7 @@ export default {
         },
         { label: 'Toggle Bullet List', action: 'toggleBulletList' },
         { label: 'Toggle Ordered List', action: 'toggleOrderedList' },
+        { label: 'Toggle Check List', action: 'toggleTaskList' },
         { label: 'Toggle Code Block', action: 'toggleCodeBlock' },
         { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
         { label: 'Undo', action: 'undo' },
@@ -379,6 +396,7 @@ export default {
                     { value: 'blockquote', label: { en: 'blockquote' } },
                     { value: 'code', label: { en: 'code' } },
                     { value: 'mention', label: { en: 'mention' } },
+                    { value: 'checkbox', label: { en: 'checkbox' } },
                 ],
             },
             defaultValue: null,
@@ -838,6 +856,33 @@ export default {
             classes: true,
             responsive: true,
         },
+        checkbox: {
+            type: 'Object',
+            hidden: (content, sidepanelContent) => {
+                return sidepanelContent.selectedTag !== 'checkbox';
+            },
+            options: {
+                item: {
+                    color: {
+                        type: 'Color',
+                        label: {
+                            en: 'Accent color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                },
+                singleLine: true,
+            },
+            defaultValue: {
+                color: '#000',
+            },
+            states: true,
+            classes: true,
+            responsive: true,
+        },
         customMenuElement: {
             hidden: true,
             defaultValue: {
@@ -1128,6 +1173,28 @@ export default {
                 ],
             },
             defaultValue: true,
+        },
+        parameterTaskList: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Check list',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        default: true,
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
         },
         parameterLink: {
             section: 'settings',

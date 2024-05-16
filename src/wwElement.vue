@@ -150,8 +150,18 @@
                 >
                     <i class="fas fa-list-ol"></i>
                 </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="toggleTaskList"
+                    :class="{ 'is-active': richEditor.isActive('taskList') }"
+                    :disabled="!isEditable"
+                    v-if="menu.taskList"
+                >
+                    <i class="fas fa-check-square"></i>
+                </button>
 
-                <span class="separator" v-if="menu.bulletList || menu.orderedList"></span>
+                <span class="separator" v-if="menu.bulletList || menu.orderedList || menu.taskList"></span>
 
                 <!-- Link -->
                 <button
@@ -238,7 +248,9 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import TaskItem from '@tiptap/extension-task-item';
 import TextAlign from '@tiptap/extension-text-align';
+import TaskList from '@tiptap/extension-task-list';
 import { Markdown } from 'tiptap-markdown';
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
@@ -417,6 +429,7 @@ export default {
                 strike: this.richEditor.isActive('strike'),
                 bulletList: this.richEditor.isActive('bulletList'),
                 orderedList: this.richEditor.isActive('orderedList'),
+                taskList: this.richEditor.isActive('taskList'),
                 link: this.richEditor.isActive('link'),
                 codeBlock: this.richEditor.isActive('codeBlock'),
                 blockquote: this.richEditor.isActive('blockquote'),
@@ -476,6 +489,7 @@ export default {
                 textColor: this.content.parameterTextColor ?? true,
                 bulletList: this.content.parameterBulletList ?? true,
                 orderedList: this.content.parameterOrderedList ?? true,
+                taskList: this.content.parameterTaskList ?? false,
                 link: this.content.parameterLink ?? true,
                 image: this.content.parameterImage ?? false,
                 codeBlock: this.content.parameterCodeBlock ?? true,
@@ -622,6 +636,8 @@ export default {
                 // img
                 '--img-max-width': this.content.img?.maxWidth,
                 '--img-max-height': this.content.img?.maxHeight,
+                // checkbox
+                '--checkbox-color': this.content.checkbox.color,
             };
         },
         delay() {
@@ -648,6 +664,10 @@ export default {
                     TextStyle,
                     Color,
                     Underline,
+                    TaskList,
+                    TaskItem.configure({
+                        nested: true,
+                    }),
                     TextAlign.configure({
                         types: ['heading', 'paragraph'],
                     }),
@@ -789,6 +809,9 @@ export default {
         },
         toggleOrderedList() {
             this.richEditor.chain().focus().toggleOrderedList().run();
+        },
+        toggleTaskList() {
+            this.richEditor.chain().focus().toggleTaskList().run();
         },
         toggleCodeBlock() {
             this.richEditor.chain().focus().toggleCodeBlock().run();
@@ -1056,6 +1079,43 @@ export default {
         img {
             max-width: var(--img-max-width);
             max-height: var(--img-max-height);
+        }
+
+        ul[data-type='taskList'] {
+            list-style: none;
+            padding: 0;
+
+            p {
+                margin: 0;
+            }
+
+            li {
+                display: flex;
+
+                > label {
+                    flex: 0 0 auto;
+                    margin-right: var(--ww-spacing-01);
+                    user-select: none;
+                }
+
+                > div {
+                    flex: 1 1 auto;
+                }
+
+                ul li,
+                ol li {
+                    display: list-item;
+                }
+
+                ul[data-type='taskList'] > li {
+                    display: flex;
+                }
+
+                input[type='checkbox'] {
+                    cursor: pointer;
+                    accent-color: var(--checkbox-color);
+                }
+            }
         }
     }
 
