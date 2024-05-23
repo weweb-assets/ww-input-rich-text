@@ -429,7 +429,7 @@ export default {
                 strike: this.richEditor.isActive('strike'),
                 bulletList: this.richEditor.isActive('bulletList'),
                 orderedList: this.richEditor.isActive('orderedList'),
-                taskList: this.richEditor.isActive('taskList'),
+                checkList: this.richEditor.isActive('taskList'),
                 link: this.richEditor.isActive('link'),
                 codeBlock: this.richEditor.isActive('codeBlock'),
                 blockquote: this.richEditor.isActive('blockquote'),
@@ -659,7 +659,6 @@ export default {
                         HTMLAttributes: {
                             rel: 'noopener noreferrer',
                         },
-                    
                     }),
                     TextStyle,
                     Color,
