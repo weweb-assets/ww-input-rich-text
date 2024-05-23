@@ -637,7 +637,7 @@ export default {
                 '--img-max-width': this.content.img?.maxWidth,
                 '--img-max-height': this.content.img?.maxHeight,
                 // checkbox
-                '--checkbox-color': this.content.checkbox.color,
+                '--checkbox-color': this.content.checkbox?.color,
             };
         },
         delay() {
