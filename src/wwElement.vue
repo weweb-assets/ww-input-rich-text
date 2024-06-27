@@ -456,8 +456,8 @@ export default {
             const data = wwLib.wwUtils.getDataFromCollection(this.content.mentionList);
             if (!Array.isArray(data)) return [];
             return data.map(mention => ({
-                id: wwLib.resolveObjectPropertyPath(mention, this.content.mentionIdPath || 'id') || '',
-                label: wwLib.resolveObjectPropertyPath(mention, this.content.mentionLabelPath || 'label') || '',
+                id: wwLib.wwUtils.resolveObjectPropertyPath(mention, this.content.mentionIdPath || 'id') || '',
+                label: wwLib.wwUtils.resolveObjectPropertyPath(mention, this.content.mentionLabelPath || 'label') || '',
             }));
         },
         mentionListLength() {
