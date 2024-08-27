@@ -653,6 +653,12 @@ export default {
                 content: String(this.content.initialValue || ''),
                 editable: this.isEditable,
                 autofocus: this.editorConfig.autofocus,
+                onFocus: ({ editor, event }) => {
+                    this.$emit('trigger-event', { name: 'focus', event: { editor, event } });
+                },
+                onBlur: ({ editor, event }) => {
+                    this.$emit('trigger-event', { name: 'blur', event: { editor, event } });
+                },
                 extensions: [
                     StarterKit,
                     Link.configure({

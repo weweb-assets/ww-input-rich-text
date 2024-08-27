@@ -88,6 +88,8 @@ export default {
         { name: 'change', label: { en: 'On change' }, event: { value: '' } },
         { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
         { name: 'mention:click', label: { en: 'On mention click' }, event: { mention: { id: '', label: '' } } },
+        { name: 'focus', label: { en: 'On focus' }, event: { value: '' } },
+        { name: 'blur', label: { en: 'On blur' }, event: { value: '' } },
     ],
     actions: [
         { label: 'Focus Rich text', action: 'focusEditor' },
