@@ -1,12 +1,7 @@
 <template>
-    <div
-        class="ww-rich-text"
-        :class="{ '-readonly': isReadonly }"
-        :style="isEditing && 'pointer-events: none;'"
-        data-capture
-    >
+    <div class="ww-rich-text" :class="{ '-readonly': isReadonly, editing: isEditing }" data-capture>
         <template v-if="richEditor">
-            <div class="ww-rich-text__menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
+            <div class="ww-rich-text__menu native-menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
                 <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
                     <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
@@ -233,7 +228,7 @@
                 </button>
             </div>
             <wwElement class="ww-rich-text__menu" v-else-if="content.customMenu" v-bind="content.customMenuElement" />
-            <editor-content :editor="richEditor" :style="richStyles" />
+            <editor-content class="ww-rich-text__input" :editor="richEditor" :style="richStyles" />
         </template>
     </div>
 </template>
@@ -847,9 +842,27 @@ export default {
 <style lang="scss">
 .ww-rich-text {
     --menu-color: unset;
-    display: flex;
     flex-direction: column;
-    height: inherit !important;
+
+    &.editing .ww-rich-text__input {
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+    }
+
+    &.editing .native-menu {
+        position: relative;
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+    }
 
     .separator {
         background: rgb(235, 236, 240);
