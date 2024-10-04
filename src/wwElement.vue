@@ -4,7 +4,9 @@
             <div class="ww-rich-text__menu native-menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
                 <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
-                    <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
+                    <option v-for="option in textTypeOptions" :key="option.value" :value="option.value">
+                        {{ option.label }}
+                    </option>
                 </select>
 
                 <span class="separator" v-if="menu.textType"></span>
@@ -537,6 +539,8 @@ export default {
         },
         richStyles() {
             return {
+                display: 'flex',
+                flex: 1,
                 overflow: 'auto',
                 // H1
                 '--h1-fontSize': this.content.h1.fontSize,
