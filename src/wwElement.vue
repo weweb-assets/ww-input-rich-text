@@ -160,6 +160,189 @@
 
                 <span class="separator" v-if="menu.bulletList || menu.orderedList || menu.taskList"></span>
 
+                <!-- Table -->
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="insertTable"
+                    :disabled="!isEditable"
+                    v-if="menu.table"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="23" cy="23" r="7" fill="currentColor" />
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M3 1C1.34315 1 0 2.34315 0 4V26C0 27.6569 1.34315 29 3 29H16.2917C15.7549 28.4003 15.2974 27.7281 14.9355 27H11V20H14.5121C14.7638 19.2879 15.1025 18.617 15.5155 18H11V12H17L17 16.2917C17.5997 15.7549 18.2719 15.2974 19 14.9355V12H26V14.5121C26.7121 14.7638 27.383 15.1025 28 15.5155V4C28 2.34315 26.6569 1 25 1H3ZM2 4C2 3.44772 2.44772 3 3 3H9V10H2V4ZM11 10V3L17 3V10H11ZM9 20V27H3C2.44772 27 2 26.5523 2 26V20H9ZM9 18H2V12H9V18ZM19 10H26V4C26 3.44772 25.5523 3 25 3H19V10Z"
+                            fill="currentColor"
+                        />
+                        <line x1="19" y1="23" x2="27" y2="23" stroke="white" stroke-width="2" />
+                        <line x1="23" y1="27" x2="23" y2="19" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="addRowBefore"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M2 20L2 10L26 10L26 16.0703C26.7528 16.5057 27.4281 17.0604 28 17.7084L28 10C28 8.89543 27.1046 8 26 8L2 8C0.895431 8 1.5627e-07 8.89543 1.43099e-07 10L2.38498e-08 20C1.06779e-08 21.1046 0.895431 22 2 22L14.0619 22C14.149 21.3014 14.3262 20.6307 14.5815 20L2 20Z"
+                            fill="currentColor"
+                        />
+                        <circle cx="22" cy="23" r="7" transform="rotate(-90 22 23)" fill="currentColor" />
+                        <line x1="6" y1="9" x2="6" y2="2" stroke="currentColor" stroke-width="2" />
+                        <path d="M6 1.58933e-07L10.3301 4.5L1.66987 4.5L6 1.58933e-07Z" fill="currentColor" />
+                        <line x1="22" y1="27" x2="22" y2="19" stroke="white" stroke-width="2" />
+                        <line x1="26" y1="23" x2="18" y2="23" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="addRowAfter"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M2 16L2 6L26 6L26 12.0703C26.7528 12.5057 27.4281 13.0604 28 13.7084L28 6C28 4.89543 27.1046 4 26 4L2 4C0.895431 4 1.5627e-07 4.89543 1.43099e-07 6L2.38498e-08 16C1.06779e-08 17.1046 0.895431 18 2 18L14.0619 18C14.149 17.3014 14.3262 16.6307 14.5815 16L2 16Z"
+                            fill="currentColor"
+                        />
+                        <circle cx="22" cy="19" r="7" transform="rotate(-90 22 19)" fill="currentColor" />
+                        <line
+                            y1="-1"
+                            x2="7"
+                            y2="-1"
+                            transform="matrix(-1.19249e-08 1 1 1.19249e-08 7 17)"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+                        <path d="M6 26L10.3301 21.5L1.66987 21.5L6 26Z" fill="currentColor" />
+                        <line x1="22" y1="23" x2="22" y2="15" stroke="white" stroke-width="2" />
+                        <line x1="26" y1="19" x2="18" y2="19" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="addColumnBefore"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M14 3H24V27H17.9297C17.4943 27.7528 16.9396 28.4281 16.2916 29H24C25.1046 29 26 28.1046 26 27V3C26 1.89543 25.1046 1 24 1H14C12.8954 1 12 1.89543 12 3V15.0619C12.6986 15.149 13.3693 15.3262 14 15.5815L14 3Z"
+                            fill="currentColor"
+                        />
+                        <circle cx="11" cy="23" r="7" fill="currentColor" />
+                        <line
+                            y1="-1"
+                            x2="7"
+                            y2="-1"
+                            transform="matrix(-1 0 0 1 13 8)"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        />
+                        <path d="M4 7L8.5 11.3301L8.5 2.66987L4 7Z" fill="currentColor" />
+                        <line x1="7" y1="23" x2="15" y2="23" stroke="white" stroke-width="2" />
+                        <line x1="11" y1="27" x2="11" y2="19" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="addColumnAfter"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M6 3H16V15.5815C16.6307 15.3262 17.3014 15.149 18 15.0619V3C18 1.89543 17.1046 1 16 1H6C4.89543 1 4 1.89543 4 3V27C4 28.1046 4.89543 29 6 29H13.7084C13.0604 28.4281 12.5057 27.7528 12.0703 27H6L6 3Z"
+                            fill="currentColor"
+                        />
+                        <circle cx="19" cy="23" r="7" fill="currentColor" />
+                        <line x1="17" y1="7" x2="24" y2="7" stroke="currentColor" stroke-width="2" />
+                        <path d="M26 7L21.5 11.3301L21.5 2.66987L26 7Z" fill="currentColor" />
+                        <line x1="15" y1="23" x2="23" y2="23" stroke="white" stroke-width="2" />
+                        <line x1="19" y1="27" x2="19" y2="19" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="deleteRow"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M2 16L2 6L26 6L26 12.0703C26.7528 12.5057 27.4281 13.0604 28 13.7084L28 6C28 4.89543 27.1046 4 26 4L2 4C0.895431 4 1.5627e-07 4.89543 1.43099e-07 6L2.38498e-08 16C1.06779e-08 17.1046 0.895431 18 2 18L14.0619 18C14.149 17.3014 14.3262 16.6307 14.5815 16L2 16Z"
+                            fill="currentColor"
+                        />
+                        <circle cx="22" cy="19" r="7" transform="rotate(-90 22 19)" fill="currentColor" />
+                        <line x1="26" y1="19" x2="18" y2="19" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="deleteColumn"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M14 3H24V27H17.9297C17.4943 27.7528 16.9396 28.4281 16.2916 29H24C25.1046 29 26 28.1046 26 27V3C26 1.89543 25.1046 1 24 1H14C12.8954 1 12 1.89543 12 3V15.0619C12.6986 15.149 13.3693 15.3262 14 15.5815L14 3Z"
+                            fill="currentColor"
+                        />
+                        <circle cx="11" cy="23" r="7" fill="currentColor" />
+                        <line x1="7" y1="23" x2="15" y2="23" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="deleteTable"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <svg class="icon" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="23" cy="23" r="7" fill="currentColor" />
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M3 1C1.34315 1 0 2.34315 0 4V26C0 27.6569 1.34315 29 3 29H16.2917C15.7549 28.4003 15.2974 27.7281 14.9355 27H11V20H14.5121C14.7638 19.2879 15.1025 18.617 15.5155 18H11V12H17L17 16.2917C17.5997 15.7549 18.2719 15.2974 19 14.9355V12H26V14.5121C26.7121 14.7638 27.383 15.1025 28 15.5155V4C28 2.34315 26.6569 1 25 1H3ZM2 4C2 3.44772 2.44772 3 3 3H9V10H2V4ZM11 10V3L17 3V10H11ZM9 20V27H3C2.44772 27 2 26.5523 2 26V20H9ZM9 18H2V12H9V18ZM19 10H26V4C26 3.44772 25.5523 3 25 3H19V10Z"
+                            fill="currentColor"
+                        />
+                        <line x1="19" y1="23" x2="27" y2="23" stroke="white" stroke-width="2" />
+                    </svg>
+                </button>
+
+                <span class="separator" v-if="menu.bulletList || menu.orderedList || menu.taskList"></span>
+
                 <!-- Link -->
                 <button
                     type="button"
@@ -230,6 +413,7 @@
                 </button>
             </div>
             <wwElement class="ww-rich-text__menu" v-else-if="content.customMenu" v-bind="content.customMenuElement" />
+
             <editor-content class="ww-rich-text__input" :editor="richEditor" :style="richStyles" />
         </template>
     </div>
@@ -248,9 +432,14 @@ import Image from '@tiptap/extension-image';
 import TaskItem from '@tiptap/extension-task-item';
 import TextAlign from '@tiptap/extension-text-align';
 import TaskList from '@tiptap/extension-task-list';
-import { Markdown } from 'tiptap-markdown';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
+
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
+import { Markdown } from 'tiptap-markdown';
 
 function extractMentions(acc, currentNode) {
     if (currentNode.type === 'mention') {
@@ -439,6 +628,7 @@ export default {
                     : this.richEditor.isActive({ textAlign: 'justify' })
                     ? 'justify'
                     : false,
+                table: this.richEditor.isActive('table'),
             };
         },
         currentColor() {
@@ -487,6 +677,9 @@ export default {
                 bulletList: this.content.parameterBulletList ?? true,
                 orderedList: this.content.parameterOrderedList ?? true,
                 taskList: this.content.parameterTaskList ?? false,
+
+                table: this.content.parameterTable ?? false,
+
                 link: this.content.parameterLink ?? true,
                 image: this.content.parameterImage ?? false,
                 codeBlock: this.content.parameterCodeBlock ?? true,
@@ -637,6 +830,13 @@ export default {
                 '--img-max-height': this.content.img?.maxHeight,
                 // checkbox
                 '--checkbox-color': this.content.checkbox?.color,
+                // table
+                '--table-border-color': this.content.table?.borderColor,
+                '--table-border-width': this.content.table?.borderWidth,
+                '--table-header-bg-color': this.content.table?.headerBgColor,
+                '--table-header-color': this.content.table?.headerColor,
+                '--table-cell-bg-color': this.content.table?.cellBgColor,
+                '--table-cell-color': this.content.table?.cellColor,
             };
         },
         delay() {
@@ -668,6 +868,12 @@ export default {
                     TextStyle,
                     Color,
                     Underline,
+                    Table.configure({
+                        resizable: true,
+                    }),
+                    TableCell,
+                    TableHeader,
+                    TableRow,
                     TaskList,
                     TaskItem.configure({
                         nested: true,
@@ -715,7 +921,7 @@ export default {
             this.loading = false;
         },
         handleOnUpdate() {
-            const htmlValue = this.getContent();
+            let htmlValue = this.getContent();
             if (this.variableValue === htmlValue) return;
             this.setValue(htmlValue);
             if (this.content.debounce) {
@@ -833,6 +1039,31 @@ export default {
             if (this.content.output === 'markdown') return this.richEditor.storage.markdown.getMarkdown();
             return this.richEditor.getHTML();
         },
+        /* Table */
+        insertTable() {
+            this.richEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+        },
+        addRowBefore() {
+            this.richEditor.chain().focus().addRowBefore().run();
+        },
+        addRowAfter() {
+            this.richEditor.chain().focus().addRowAfter().run();
+        },
+        addColumnBefore() {
+            this.richEditor.chain().focus().addColumnBefore().run();
+        },
+        addColumnAfter() {
+            this.richEditor.chain().focus().addColumnAfter().run();
+        },
+        deleteRow() {
+            this.richEditor.chain().focus().deleteRow().run();
+        },
+        deleteColumn() {
+            this.richEditor.chain().focus().deleteColumn().run();
+        },
+        deleteTable() {
+            this.richEditor.chain().focus().deleteTable().run();
+        },
     },
     mounted() {
         this.loadEditor();
@@ -907,6 +1138,12 @@ export default {
             border-radius: 4px;
             i {
                 width: 24px;
+            }
+            .icon {
+                color: var(--menu-color);
+                display: flex;
+                width: 24px;
+                max-height: 16px;
             }
             &:hover {
                 background-color: rgb(245, 245, 245);
@@ -1041,39 +1278,78 @@ export default {
         }
 
         table {
-            margin: 64px 0 !important;
-            width: 100% !important;
-            display: table;
             border-collapse: collapse;
-            box-sizing: border-box;
-            text-indent: initial;
-            border-spacing: 2px;
+            margin: 0;
+            overflow: hidden;
+            display: table;
+            width: 100%;
 
-            thead > tr {
-                background: #f7f7fa;
+            td,
+            th {
+                text-align: left;
+                padding: 1.25em 1rem !important;
+                border: var(--table-border-width) solid var(--table-border-color);
+            box-sizing: border-box;
+                min-width: 1em;
+                padding: 6px 8px;
+                position: relative;
+                vertical-align: top;
+
+                > * {
+                    margin-bottom: 0;
+                }
+            }
 
                 th {
-                    color: #5a6482;
-                    font-family: Work Sans;
+                color: var(--table-header-color);
                     font-style: normal;
                     font-weight: 500;
                     font-size: 15px;
                     line-height: 18px;
                     letter-spacing: -0.08px;
-                }
+                background-color: var(--table-header-bg-color);
             }
-            td,
-            th {
-                text-align: left;
-                padding: 1.25em 1rem !important;
+
+            td {
+                background-color: var(--table-cell-bg-color);
+                color: var(--table-cell-color);
             }
-            tbody {
-                border: 1px solid #d1cfd7;
-                tr:nth-child(2n) {
-                    background: #f7f7fa;
-                }
+
+            /*
+            .selectedCell:after {
+                background: blue;
+                content: '';
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                pointer-events: none;
+                position: absolute;
+                z-index: 2;
+            }
+                */
+
+            .column-resize-handle {
+                background-color: red;
+                bottom: -2px;
+                pointer-events: none;
+                position: absolute;
+                right: -2px;
+                top: 0;
+                width: 4px;
             }
         }
+
+        .tableWrapper {
+            margin: 1.5rem 0;
+            overflow-x: auto;
+                }
+
+        &.resize-cursor {
+            cursor: ew-resize;
+            cursor: col-resize;
+        }
+
         blockquote {
             color: var(--blockquote-color);
             border-left: 0.2rem solid var(--blockquote-border-color);

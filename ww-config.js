@@ -39,7 +39,8 @@ export default {
                 'code',
                 'img',
                 'checkbox',
-            ],
+                'table',
+            ]
         ],
         customSettingsPropertiesOrder: [
             'readonly',
@@ -75,6 +76,7 @@ export default {
                 'parameterBulletList',
                 'parameterOrderedList',
                 'parameterTaskList',
+                'parameterTable',
                 'parameterLink',
                 'parameterImage',
                 'parameterCodeBlock',
@@ -402,6 +404,7 @@ export default {
                     { value: 'code', label: { en: 'code' } },
                     { value: 'mention', label: { en: 'mention' } },
                     { value: 'checkbox', label: { en: 'checkbox' } },
+                    { value: 'table', label: { en: 'table' } },
                 ],
             },
             defaultValue: null,
@@ -906,6 +909,89 @@ export default {
                 hidden: content => !content.customMenu,
             },
         },
+        table: {
+            type: 'Object',
+            hidden: (content, sidepanelContent) => {
+                return sidepanelContent.selectedTag !== 'table';
+            },
+            options: {
+                item: {
+                    borderColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Border color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                    borderWidth: {
+                        type: 'Length',
+                        label: {
+                            en: 'Border width',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
+                        },
+                    },
+                    headerBgColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Header background color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                    headerColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Header text color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                    cellBgColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Cell background color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                    cellColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Cell text color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                },
+                singleLine: true,
+            },
+            defaultValue: {
+                borderColor: '#5E5E5E',
+                borderWidth: '1px',
+                headerBgColor: '#f5f5f5',
+                headerColor: '#000',
+                cellBgColor: '#fff',
+                cellColor: '#000',
+            },
+            states: true,
+            classes: true,
+            responsive: true,
+        },
         parameterTitle: {
             section: 'settings',
             hidden: content => content.customMenu,
@@ -1200,6 +1286,28 @@ export default {
                 ],
             },
             defaultValue: false,
+        },
+        parameterTable: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Table',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                        default: true,
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: true,
         },
         parameterLink: {
             section: 'settings',
