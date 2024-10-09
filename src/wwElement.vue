@@ -728,6 +728,7 @@ export default {
         menuStyles() {
             return {
                 '--menu-color': this.content.menuColor,
+                'flex-wrap': this.content.wrapMenu ? 'wrap' : 'nowrap',
             };
         },
         richStyles() {

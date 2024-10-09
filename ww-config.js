@@ -46,6 +46,7 @@ export default {
             'readonly',
             'editable',
             'hideMenu',
+            'wrapMenu',
             'initialValue',
             'output',
             'placeholder',
@@ -365,6 +366,16 @@ export default {
             section: 'settings',
             label: {
                 en: 'Hide menu',
+            },
+            type: 'OnOff',
+            defaultValue: false,
+            bindable: true,
+            hidden: content => content.customMenu,
+        },
+        wrapMenu: {
+            section: 'settings',
+            label: {
+                en: 'Wrap menu',
             },
             type: 'OnOff',
             defaultValue: false,
