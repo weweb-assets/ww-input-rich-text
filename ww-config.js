@@ -183,6 +183,51 @@ export default {
         { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
         { label: 'Undo', action: 'undo' },
         { label: 'Redo', action: 'redo' },
+        // Table
+        {
+            label: 'Insert Table',
+            action: 'insertTable',
+        },
+        {
+            label: 'Insert Row',
+            action: 'insertRow',
+            args: [
+                {
+                    name: 'Position',
+                    type: 'select',
+                    options: [
+                        { value: 'before', label: { en: 'Before' } },
+                        { value: 'after', label: { en: 'After' } },
+                    ],
+                },
+            ],
+        },
+        {
+            label: 'Insert Column',
+            action: 'insertColumn',
+            args: [
+                {
+                    name: 'Position',
+                    type: 'select',
+                    options: [
+                        { value: 'before', label: { en: 'Before' } },
+                        { value: 'after', label: { en: 'After' } },
+                    ],
+                },
+            ],
+        },
+        {
+            label: 'Delete Row',
+            action: 'deleteRow',
+        },
+        {
+            label: 'Delete Column',
+            action: 'deleteColumn',
+        },
+        {
+            label: 'Delete Table',
+            action: 'deleteTable',
+        }
     ],
     properties: {
         readonly: {
@@ -968,10 +1013,20 @@ export default {
                             nullable: true,
                         },
                     },
-                    cellBgColor: {
+                    pairCellBgColor: {
                         type: 'Color',
                         label: {
-                            en: 'Cell background color',
+                            en: 'Pair row background color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                    },
+                    oddCellBgColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Impair row background color',
                         },
                         bindable: true,
                         options: {
@@ -988,16 +1043,41 @@ export default {
                             nullable: true,
                         },
                     },
+                    cellPaddingY: {
+                        type: 'Length',
+                        label: {
+                            en: 'Cell padding Y',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
+                        },
+                    },
+                    cellPaddingX: {
+                        type: 'Length',
+                        label: {
+                            en: 'Cell padding X',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
+                        },
+                    },
                 },
                 singleLine: true,
             },
             defaultValue: {
-                borderColor: '#5E5E5E',
+                borderColor: '#C7C7C7',
                 borderWidth: '1px',
                 headerBgColor: '#f5f5f5',
                 headerColor: '#000',
-                cellBgColor: '#fff',
+                pairCellBgColor: '#fff',
+                oddCellBgColor: '#FDFDFD',
                 cellColor: '#000',
+                cellPaddingY: '6px',
+                cellPaddingX: '8px',
             },
             states: true,
             classes: true,

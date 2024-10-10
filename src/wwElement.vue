@@ -185,7 +185,7 @@
                     type="button"
                     class="ww-rich-text__menu-item"
                     :class="{ 'is-highlighted': richEditor.isActive('table') }"
-                    @click="addRowBefore"
+                    @click="insertRow('before')"
                     :disabled="!isEditable"
                     v-if="menu.table && richEditor.isActive('table')"
                 >
@@ -207,7 +207,7 @@
                     type="button"
                     class="ww-rich-text__menu-item"
                     :class="{ 'is-highlighted': richEditor.isActive('table') }"
-                    @click="addRowAfter"
+                    @click="insertRow('after')"
                     :disabled="!isEditable"
                     v-if="menu.table && richEditor.isActive('table')"
                 >
@@ -236,7 +236,7 @@
                     type="button"
                     class="ww-rich-text__menu-item"
                     :class="{ 'is-highlighted': richEditor.isActive('table') }"
-                    @click="addColumnBefore"
+                    @click="insertColumn('before')"
                     :disabled="!isEditable"
                     v-if="menu.table && richEditor.isActive('table')"
                 >
@@ -265,7 +265,7 @@
                     type="button"
                     class="ww-rich-text__menu-item"
                     :class="{ 'is-highlighted': richEditor.isActive('table') }"
-                    @click="addColumnAfter"
+                    @click="insertColumn('after')"
                     :disabled="!isEditable"
                     v-if="menu.table && richEditor.isActive('table')"
                 >
@@ -836,8 +836,11 @@ export default {
                 '--table-border-width': this.content.table?.borderWidth,
                 '--table-header-bg-color': this.content.table?.headerBgColor,
                 '--table-header-color': this.content.table?.headerColor,
-                '--table-cell-bg-color': this.content.table?.cellBgColor,
+                '--table-pair-cell-bg-color': this.content.table?.pairCellBgColor,
+                '--table-odd-cell-bg-color': this.content.table?.oddCellBgColor,
                 '--table-cell-color': this.content.table?.cellColor,
+                '--table-cell-padding-x': this.content.table?.cellPaddingX,
+                '--table-cell-padding-y': this.content.table?.cellPaddingY,
             };
         },
         delay() {
@@ -1044,17 +1047,15 @@ export default {
         insertTable() {
             this.richEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
         },
-        addRowBefore() {
-            this.richEditor.chain().focus().addRowBefore().run();
+        insertRow(direction) {
+            direction === 'before'
+                ? this.richEditor.chain().focus().addRowBefore().run()
+                : this.richEditor.chain().focus().addRowAfter().run();
         },
-        addRowAfter() {
-            this.richEditor.chain().focus().addRowAfter().run();
-        },
-        addColumnBefore() {
-            this.richEditor.chain().focus().addColumnBefore().run();
-        },
-        addColumnAfter() {
-            this.richEditor.chain().focus().addColumnAfter().run();
+        insertColumn(direction) {
+            direction === 'before'
+                ? this.richEditor.chain().focus().addColumnBefore().run()
+                : this.richEditor.chain().focus().addColumnAfter().run();
         },
         deleteRow() {
             this.richEditor.chain().focus().deleteRow().run();
@@ -1160,6 +1161,7 @@ export default {
         /* Basic editor styles */
         cursor: text;
         max-height: 100%;
+        width: 100%;
         overflow: auto;
         padding: 8px;
         &-focused {
@@ -1288,11 +1290,10 @@ export default {
             td,
             th {
                 text-align: left;
-                padding: 1.25em 1rem !important;
                 border: var(--table-border-width) solid var(--table-border-color);
-            box-sizing: border-box;
+                box-sizing: border-box;
                 min-width: 1em;
-                padding: 6px 8px;
+                padding: var(--table-cell-padding-y) var(--table-cell-padding-x);
                 position: relative;
                 vertical-align: top;
 
@@ -1301,19 +1302,23 @@ export default {
                 }
             }
 
-                th {
+            th {
                 color: var(--table-header-color);
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 15px;
-                    line-height: 18px;
-                    letter-spacing: -0.08px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 15px;
+                line-height: 18px;
+                letter-spacing: -0.08px;
                 background-color: var(--table-header-bg-color);
             }
 
             td {
-                background-color: var(--table-cell-bg-color);
+                background-color: var(--table-pair-cell-bg-color);
                 color: var(--table-cell-color);
+            }
+
+            tr:nth-child(odd) td {
+                background-color: var(--table-odd-cell-bg-color);
             }
 
             /*
@@ -1344,7 +1349,7 @@ export default {
         .tableWrapper {
             margin: 1.5rem 0;
             overflow-x: auto;
-                }
+        }
 
         &.resize-cursor {
             cursor: ew-resize;
