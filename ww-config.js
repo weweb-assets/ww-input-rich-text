@@ -646,6 +646,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
                         bindable: true,
                     },
@@ -659,6 +660,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                 },
@@ -756,6 +758,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     marginBottom: {
@@ -768,6 +771,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                 },
@@ -823,6 +827,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     paddingX: {
@@ -835,6 +840,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     paddingY: {
@@ -847,6 +853,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                 },
@@ -884,6 +891,7 @@ export default {
                                 { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     maxHeight: {
@@ -899,6 +907,7 @@ export default {
                                 { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     inline: {
@@ -981,6 +990,8 @@ export default {
                         options: {
                             nullable: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     borderWidth: {
                         type: 'Length',
@@ -991,7 +1002,10 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     headerBgColor: {
                         type: 'Color',
@@ -1002,6 +1016,8 @@ export default {
                         options: {
                             nullable: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     headerColor: {
                         type: 'Color',
@@ -1012,6 +1028,8 @@ export default {
                         options: {
                             nullable: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     pairCellBgColor: {
                         type: 'Color',
@@ -1022,6 +1040,8 @@ export default {
                         options: {
                             nullable: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     oddCellBgColor: {
                         type: 'Color',
@@ -1032,6 +1052,8 @@ export default {
                         options: {
                             nullable: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     cellColor: {
                         type: 'Color',
@@ -1042,6 +1064,8 @@ export default {
                         options: {
                             nullable: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     cellPaddingY: {
                         type: 'Length',
@@ -1052,7 +1076,10 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                     cellPaddingX: {
                         type: 'Length',
@@ -1063,7 +1090,10 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
+                        classes: true,
+                        states: true,
                     },
                 },
                 singleLine: true,
