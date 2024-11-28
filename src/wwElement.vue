@@ -158,9 +158,9 @@
                     <i class="fas fa-check-square"></i>
                 </button>
 
-                <span class="separator" v-if="menu.bulletList || menu.orderedList || menu.taskList"></span>
-
                 <!-- Table -->
+                <span class="separator" v-if="menu.table"></span>
+
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
@@ -735,15 +735,17 @@ export default {
                 // checkbox
                 '--checkbox-color': this.content.checkbox?.color,
                 // table
-                '--table-border-color': this.content.table?.borderColor,
-                '--table-border-width': this.content.table?.borderWidth,
-                '--table-header-bg-color': this.content.table?.headerBgColor,
-                '--table-header-color': this.content.table?.headerColor,
-                '--table-pair-cell-bg-color': this.content.table?.pairCellBgColor,
-                '--table-odd-cell-bg-color': this.content.table?.oddCellBgColor,
-                '--table-cell-color': this.content.table?.cellColor,
-                '--table-cell-padding-x': this.content.table?.cellPaddingX,
-                '--table-cell-padding-y': this.content.table?.cellPaddingY,
+                '--table-border-color': this.content.table?.borderColor || '#C7C7C7',
+                '--table-border-width': this.content.table?.borderWidth || '1px',
+                '--table-header-bg-color': this.content.table?.headerBgColor || '#f5f5f5',
+                '--table-header-color': this.content.table?.headerColor || '#000',
+                '--table-pair-cell-bg-color':
+                    this.content.table?.pairCellBgColor || '#fff',
+                '--table-odd-cell-bg-color':
+                    this.content.table?.oddCellBgColor || '#FDFDFD',
+                '--table-cell-color': this.content.table?.cellColor || '#000',
+                '--table-cell-padding-x': this.content.table?.cellPaddingX || '8px',
+                '--table-cell-padding-y': this.content.table?.cellPaddingY || '6px',
             };
         },
         delay() {

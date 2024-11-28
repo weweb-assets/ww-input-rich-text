@@ -992,6 +992,7 @@ export default {
                         },
                         classes: true,
                         states: true,
+                        defaultValue: '#099af2',
                     },
                     borderWidth: {
                         type: 'Length',
@@ -1006,6 +1007,7 @@ export default {
                         },
                         classes: true,
                         states: true,
+                        defaultValue: '1px',
                     },
                     headerBgColor: {
                         type: 'Color',
@@ -1420,11 +1422,11 @@ export default {
                     {
                         value: true,
                         label: 'Show',
-                        default: true,
                     },
                     {
                         value: false,
                         label: 'Hide',
+                        default: true,
                     },
                 ],
             },
