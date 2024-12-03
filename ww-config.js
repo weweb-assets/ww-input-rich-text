@@ -39,12 +39,14 @@ export default {
                 'code',
                 'img',
                 'checkbox',
-            ],
+                'table',
+            ]
         ],
         customSettingsPropertiesOrder: [
             'readonly',
             'editable',
             'hideMenu',
+            'wrapMenu',
             'initialValue',
             'output',
             'placeholder',
@@ -75,6 +77,7 @@ export default {
                 'parameterBulletList',
                 'parameterOrderedList',
                 'parameterTaskList',
+                'parameterTable',
                 'parameterLink',
                 'parameterImage',
                 'parameterCodeBlock',
@@ -180,6 +183,51 @@ export default {
         { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
         { label: 'Undo', action: 'undo' },
         { label: 'Redo', action: 'redo' },
+        // Table
+        {
+            label: 'Insert Table',
+            action: 'insertTable',
+        },
+        {
+            label: 'Insert Row',
+            action: 'insertRow',
+            args: [
+                {
+                    name: 'Position',
+                    type: 'select',
+                    options: [
+                        { value: 'before', label: { en: 'Before' } },
+                        { value: 'after', label: { en: 'After' } },
+                    ],
+                },
+            ],
+        },
+        {
+            label: 'Insert Column',
+            action: 'insertColumn',
+            args: [
+                {
+                    name: 'Position',
+                    type: 'select',
+                    options: [
+                        { value: 'before', label: { en: 'Before' } },
+                        { value: 'after', label: { en: 'After' } },
+                    ],
+                },
+            ],
+        },
+        {
+            label: 'Delete Row',
+            action: 'deleteRow',
+        },
+        {
+            label: 'Delete Column',
+            action: 'deleteColumn',
+        },
+        {
+            label: 'Delete Table',
+            action: 'deleteTable',
+        }
     ],
     properties: {
         readonly: {
@@ -369,6 +417,16 @@ export default {
             bindable: true,
             hidden: content => content.customMenu,
         },
+        wrapMenu: {
+            section: 'settings',
+            label: {
+                en: 'Wrap menu',
+            },
+            type: 'OnOff',
+            defaultValue: false,
+            bindable: true,
+            hidden: content => content.customMenu,
+        },
         menuColor: {
             label: {
                 en: 'Menu color',
@@ -402,6 +460,7 @@ export default {
                     { value: 'code', label: { en: 'code' } },
                     { value: 'mention', label: { en: 'mention' } },
                     { value: 'checkbox', label: { en: 'checkbox' } },
+                    { value: 'table', label: { en: 'table' } },
                 ],
             },
             defaultValue: null,
@@ -587,6 +646,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
                         bindable: true,
                     },
@@ -600,6 +660,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                 },
@@ -697,6 +758,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     marginBottom: {
@@ -709,6 +771,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                 },
@@ -764,6 +827,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     paddingX: {
@@ -776,6 +840,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     paddingY: {
@@ -788,6 +853,7 @@ export default {
                         options: {
                             unitChoices: [{ value: 'px', label: 'px', min: 1, max: 100 }],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                 },
@@ -825,6 +891,7 @@ export default {
                                 { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     maxHeight: {
@@ -840,6 +907,7 @@ export default {
                                 { value: 'px', label: 'px', min: 1, max: 300 },
                             ],
                             noRange: true,
+                            useVar: true,
                         },
                     },
                     inline: {
@@ -905,6 +973,147 @@ export default {
             navigator: {
                 hidden: content => !content.customMenu,
             },
+        },
+        table: {
+            type: 'Object',
+            hidden: (content, sidepanelContent) => {
+                return sidepanelContent.selectedTag !== 'table';
+            },
+            options: {
+                item: {
+                    borderColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Border color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                        classes: true,
+                        states: true,
+                        defaultValue: '#099af2',
+                    },
+                    borderWidth: {
+                        type: 'Length',
+                        label: {
+                            en: 'Border width',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
+                            useVar: true,
+                        },
+                        classes: true,
+                        states: true,
+                        defaultValue: '1px',
+                    },
+                    headerBgColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Header background color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                        classes: true,
+                        states: true,
+                    },
+                    headerColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Header text color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                        classes: true,
+                        states: true,
+                    },
+                    pairCellBgColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Pair row background color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                        classes: true,
+                        states: true,
+                    },
+                    oddCellBgColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Impair row background color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                        classes: true,
+                        states: true,
+                    },
+                    cellColor: {
+                        type: 'Color',
+                        label: {
+                            en: 'Cell text color',
+                        },
+                        bindable: true,
+                        options: {
+                            nullable: true,
+                        },
+                        classes: true,
+                        states: true,
+                    },
+                    cellPaddingY: {
+                        type: 'Length',
+                        label: {
+                            en: 'Cell padding Y',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
+                            useVar: true,
+                        },
+                        classes: true,
+                        states: true,
+                    },
+                    cellPaddingX: {
+                        type: 'Length',
+                        label: {
+                            en: 'Cell padding X',
+                        },
+                        bindable: true,
+                        options: {
+                            unitChoices: [{ value: 'px', label: 'px', min: 1, max: 10 }],
+                            noRange: true,
+                            useVar: true,
+                        },
+                        classes: true,
+                        states: true,
+                    },
+                },
+                singleLine: true,
+            },
+            defaultValue: {
+                borderColor: '#C7C7C7',
+                borderWidth: '1px',
+                headerBgColor: '#f5f5f5',
+                headerColor: '#000',
+                pairCellBgColor: '#fff',
+                oddCellBgColor: '#FDFDFD',
+                cellColor: '#000',
+                cellPaddingY: '6px',
+                cellPaddingX: '8px',
+            },
+            states: true,
+            classes: true,
+            responsive: true,
         },
         parameterTitle: {
             section: 'settings',
@@ -1200,6 +1409,28 @@ export default {
                 ],
             },
             defaultValue: false,
+        },
+        parameterTable: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Table',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        label: 'Hide',
+                        default: true,
+                    },
+                ],
+            },
+            defaultValue: true,
         },
         parameterLink: {
             section: 'settings',

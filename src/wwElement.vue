@@ -4,7 +4,9 @@
             <div class="ww-rich-text__menu native-menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
                 <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
-                    <option v-for="option in textTypeOptions" :value="option.value">{{ option.label }}</option>
+                    <option v-for="option in textTypeOptions" :key="option.value" :value="option.value">
+                        {{ option.label }}
+                    </option>
                 </select>
 
                 <span class="separator" v-if="menu.textType"></span>
@@ -156,6 +158,90 @@
                     <i class="fas fa-check-square"></i>
                 </button>
 
+                <!-- Table -->
+                <span class="separator" v-if="menu.table"></span>
+
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="insertTable"
+                    :disabled="!isEditable"
+                    v-if="menu.table"
+                >
+                    <table-icon icon="table-insert" />
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="insertRow('before')"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <table-icon icon="row-insert-before" />
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="insertRow('after')"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <table-icon icon="row-insert-after" />
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="insertColumn('before')"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <table-icon icon="column-inster-before" />
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="insertColumn('after')"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <table-icon icon="column-insert-after" />
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="deleteRow"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <table-icon icon="row-delete" />
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="deleteColumn"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <table-icon icon="column-delete" />
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    :class="{ 'is-highlighted': richEditor.isActive('table') }"
+                    @click="deleteTable"
+                    :disabled="!isEditable"
+                    v-if="menu.table && richEditor.isActive('table')"
+                >
+                    <table-icon icon="table-delete" />
+                </button>
+
                 <span class="separator" v-if="menu.bulletList || menu.orderedList || menu.taskList"></span>
 
                 <!-- Link -->
@@ -228,6 +314,7 @@
                 </button>
             </div>
             <wwElement class="ww-rich-text__menu" v-else-if="content.customMenu" v-bind="content.customMenuElement" />
+
             <editor-content class="ww-rich-text__input" :editor="richEditor" :style="richStyles" />
         </template>
     </div>
@@ -246,9 +333,15 @@ import Image from '@tiptap/extension-image';
 import TaskItem from '@tiptap/extension-task-item';
 import TextAlign from '@tiptap/extension-text-align';
 import TaskList from '@tiptap/extension-task-list';
-import { Markdown } from 'tiptap-markdown';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
+
 import { computed } from 'vue';
 import suggestion from './suggestion.js';
+import { Markdown } from 'tiptap-markdown';
+import TableIcon from './icons/table-icon.vue';
 
 function extractMentions(acc, currentNode) {
     if (currentNode.type === 'mention') {
@@ -274,6 +367,7 @@ const TAGS_MAP = {
 export default {
     components: {
         EditorContent,
+        TableIcon,
     },
     props: {
         content: { type: Object, required: true },
@@ -437,6 +531,7 @@ export default {
                     : this.richEditor.isActive({ textAlign: 'justify' })
                     ? 'justify'
                     : false,
+                table: this.richEditor.isActive('table'),
             };
         },
         currentColor() {
@@ -485,6 +580,9 @@ export default {
                 bulletList: this.content.parameterBulletList ?? true,
                 orderedList: this.content.parameterOrderedList ?? true,
                 taskList: this.content.parameterTaskList ?? false,
+
+                table: this.content.parameterTable ?? false,
+
                 link: this.content.parameterLink ?? true,
                 image: this.content.parameterImage ?? false,
                 codeBlock: this.content.parameterCodeBlock ?? true,
@@ -533,10 +631,13 @@ export default {
         menuStyles() {
             return {
                 '--menu-color': this.content.menuColor,
+                'flex-wrap': this.content.wrapMenu ? 'wrap' : 'nowrap',
             };
         },
         richStyles() {
             return {
+                display: 'flex',
+                flex: 1,
                 overflow: 'auto',
                 // H1
                 '--h1-fontSize': this.content.h1.fontSize,
@@ -633,6 +734,18 @@ export default {
                 '--img-max-height': this.content.img?.maxHeight,
                 // checkbox
                 '--checkbox-color': this.content.checkbox?.color,
+                // table
+                '--table-border-color': this.content.table?.borderColor || '#C7C7C7',
+                '--table-border-width': this.content.table?.borderWidth || '1px',
+                '--table-header-bg-color': this.content.table?.headerBgColor || '#f5f5f5',
+                '--table-header-color': this.content.table?.headerColor || '#000',
+                '--table-pair-cell-bg-color':
+                    this.content.table?.pairCellBgColor || '#fff',
+                '--table-odd-cell-bg-color':
+                    this.content.table?.oddCellBgColor || '#FDFDFD',
+                '--table-cell-color': this.content.table?.cellColor || '#000',
+                '--table-cell-padding-x': this.content.table?.cellPaddingX || '8px',
+                '--table-cell-padding-y': this.content.table?.cellPaddingY || '6px',
             };
         },
         delay() {
@@ -664,6 +777,12 @@ export default {
                     TextStyle,
                     Color,
                     Underline,
+                    Table.configure({
+                        resizable: true,
+                    }),
+                    TableCell,
+                    TableHeader,
+                    TableRow,
                     TaskList,
                     TaskItem.configure({
                         nested: true,
@@ -711,7 +830,7 @@ export default {
             this.loading = false;
         },
         handleOnUpdate() {
-            const htmlValue = this.getContent();
+            let htmlValue = this.getContent();
             if (this.variableValue === htmlValue) return;
             this.setValue(htmlValue);
             if (this.content.debounce) {
@@ -829,6 +948,29 @@ export default {
             if (this.content.output === 'markdown') return this.richEditor.storage.markdown.getMarkdown();
             return this.richEditor.getHTML();
         },
+        /* Table */
+        insertTable() {
+            this.richEditor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+        },
+        insertRow(direction) {
+            direction === 'before'
+                ? this.richEditor.chain().focus().addRowBefore().run()
+                : this.richEditor.chain().focus().addRowAfter().run();
+        },
+        insertColumn(direction) {
+            direction === 'before'
+                ? this.richEditor.chain().focus().addColumnBefore().run()
+                : this.richEditor.chain().focus().addColumnAfter().run();
+        },
+        deleteRow() {
+            this.richEditor.chain().focus().deleteRow().run();
+        },
+        deleteColumn() {
+            this.richEditor.chain().focus().deleteColumn().run();
+        },
+        deleteTable() {
+            this.richEditor.chain().focus().deleteTable().run();
+        },
     },
     mounted() {
         this.loadEditor();
@@ -904,6 +1046,12 @@ export default {
             i {
                 width: 24px;
             }
+            .icon {
+                color: var(--menu-color);
+                display: flex;
+                width: 24px;
+                max-height: 16px;
+            }
             &:hover {
                 background-color: rgb(245, 245, 245);
             }
@@ -918,6 +1066,7 @@ export default {
         /* Basic editor styles */
         cursor: text;
         max-height: 100%;
+        width: 100%;
         overflow: auto;
         padding: 8px;
         &-focused {
@@ -1037,39 +1186,81 @@ export default {
         }
 
         table {
-            margin: 64px 0 !important;
-            width: 100% !important;
-            display: table;
             border-collapse: collapse;
-            box-sizing: border-box;
-            text-indent: initial;
-            border-spacing: 2px;
+            margin: 0;
+            overflow: hidden;
+            display: table;
+            width: 100%;
 
-            thead > tr {
-                background: #f7f7fa;
-
-                th {
-                    color: #5a6482;
-                    font-family: Work Sans;
-                    font-style: normal;
-                    font-weight: 500;
-                    font-size: 15px;
-                    line-height: 18px;
-                    letter-spacing: -0.08px;
-                }
-            }
             td,
             th {
                 text-align: left;
-                padding: 1.25em 1rem !important;
-            }
-            tbody {
-                border: 1px solid #d1cfd7;
-                tr:nth-child(2n) {
-                    background: #f7f7fa;
+                border: var(--table-border-width) solid var(--table-border-color);
+                box-sizing: border-box;
+                min-width: 1em;
+                padding: var(--table-cell-padding-y) var(--table-cell-padding-x);
+                position: relative;
+                vertical-align: top;
+
+                > * {
+                    margin-bottom: 0;
                 }
             }
+
+            th {
+                color: var(--table-header-color);
+                font-style: normal;
+                font-weight: 500;
+                font-size: 15px;
+                line-height: 18px;
+                letter-spacing: -0.08px;
+                background-color: var(--table-header-bg-color);
+            }
+
+            td {
+                background-color: var(--table-pair-cell-bg-color);
+                color: var(--table-cell-color);
+            }
+
+            tr:nth-child(odd) td {
+                background-color: var(--table-odd-cell-bg-color);
+            }
+
+            /*
+            .selectedCell:after {
+                background: blue;
+                content: '';
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                pointer-events: none;
+                position: absolute;
+                z-index: 2;
+            }
+                */
+
+            .column-resize-handle {
+                background-color: red;
+                bottom: -2px;
+                pointer-events: none;
+                position: absolute;
+                right: -2px;
+                top: 0;
+                width: 4px;
+            }
         }
+
+        .tableWrapper {
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        &.resize-cursor {
+            cursor: ew-resize;
+            cursor: col-resize;
+        }
+
         blockquote {
             color: var(--blockquote-color);
             border-left: 0.2rem solid var(--blockquote-border-color);
