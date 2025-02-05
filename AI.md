@@ -1,17 +1,14 @@
 ---
 name: ww-input-rich-text
-description: A versatile rich text editor enabling text content creation with formatting options, headings, lists, tables, media, read-only mode, mention support, and output format selection.
+description: A versatile rich text editor enabling text content creation with formatting options, headings, lists, tables, media, read-only mode, mention support, and output format selection. This is for editing rich text, not just rendering rich text.
 keywords:
   - rich text editor
-  - text formatting
+  - text edition
   - customizable editor
   - mention feature
   - multi-language support
-  - html output
-  - markdown output
-  - debounce event
-  - custom menu
-  - weweb integration
+  - markdown input
+  - advanced text input
 ---
 
 #### ww-input-rich-text
@@ -35,7 +32,7 @@ Properties:
 - menuColor: string - Menu color. Default: "#000000ad"
 
 Children:
-- customMenuElement: ww-flexbox - Optional custom menu element
+- customMenuElement: ww-div - Optional custom menu element
 
 Events:
 - change: {value: string} - Triggered when content changes
