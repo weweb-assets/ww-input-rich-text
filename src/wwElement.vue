@@ -606,7 +606,7 @@ export default {
         },
         editorConfig() {
             return {
-                placeholder: this.content.placeholder,
+                placeholder: wwLib.wwLang.getText(this.content.placeholder),
                 autofocus: this.content.autofocus,
                 image: {
                     inline: this.content.img?.inline,
