@@ -85,3 +85,7 @@ Variables:
 - value: string - Current editor content
 - mentions: array - List of mentions in content
 - states: object - Editor states (text formatting, alignment, etc)
+
+Special features:
+- Hide the menu for a minimalistic render
+- Use as readonly to display rich text content
