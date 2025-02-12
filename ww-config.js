@@ -299,6 +299,7 @@ export default {
             },
             type: 'Textarea',
             defaultValue: 'Type here...',
+            multiLang: true,
             bindable: true,
         },
         enableMention: {
