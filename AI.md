@@ -16,8 +16,8 @@ keywords:
 Properties:
 - readonly: boolean - Whether editor is read-only. Default: false
 - editable: boolean - Whether editor is editable. Default: true
-- initialValue: string - Initial content. Default: ""
-- placeholder: string - Placeholder text. Default: "Type here..."
+- initialValue: string - Initial content. Default: "". This is not multilang and must be a string.
+- placeholder: string - Placeholder text. Default: "Type here...". This is not multilang and must be a string.
 - enableMention: boolean - Enable mention feature. Default: false
 - mentionChar: string - Mention trigger character. Default: "@"
 - mentionAllowSpaces: boolean - Allow spaces in mentions. Default: false
