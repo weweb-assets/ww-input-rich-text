@@ -338,7 +338,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import suggestion from './suggestion.js';
 import { Markdown } from 'tiptap-markdown';
 import TableIcon from './icons/table-icon.vue';
@@ -377,6 +377,7 @@ export default {
         wwEditorState: { type: Object, required: true },
         wwFrontState: { type: Object, required: true },
         /* wwEditor:end */
+        useForm: { type: Boolean, default: true },
     },
     emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
     setup(props, { emit }) {
@@ -408,6 +409,18 @@ export default {
         /* wwEditor:end */
 
         const randomUid = wwLib.wwUtils.getUid();
+
+        const useForm = inject('_wwForm:useForm', () => {});
+
+        const fieldName = computed(() => props.content.fieldName);
+        const validation = computed(() => props.content.validation);
+        const customValidation = computed(() => props.content.customValidation);
+
+        useForm(
+            variableValue,
+            { fieldName, validation, customValidation },
+            { elementState: props.wwElementState, emit, sidepanelFormPath: 'form' }
+        );
 
         return {
             variableValue,
@@ -525,12 +538,12 @@ export default {
                 textAlign: this.richEditor.isActive({ textAlign: 'left' })
                     ? 'left'
                     : this.richEditor.isActive({ textAlign: 'center' })
-                    ? 'center'
-                    : this.richEditor.isActive({ textAlign: 'right' })
-                    ? 'right'
-                    : this.richEditor.isActive({ textAlign: 'justify' })
-                    ? 'justify'
-                    : false,
+                      ? 'center'
+                      : this.richEditor.isActive({ textAlign: 'right' })
+                        ? 'right'
+                        : this.richEditor.isActive({ textAlign: 'justify' })
+                          ? 'justify'
+                          : false,
                 table: this.richEditor.isActive('table'),
             };
         },
@@ -593,7 +606,7 @@ export default {
         },
         editorConfig() {
             return {
-                placeholder: this.content.placeholder,
+                placeholder: wwLib.wwLang.getText(this.content.placeholder),
                 autofocus: this.content.autofocus,
                 image: {
                     inline: this.content.img?.inline,
@@ -739,10 +752,8 @@ export default {
                 '--table-border-width': this.content.table?.borderWidth || '1px',
                 '--table-header-bg-color': this.content.table?.headerBgColor || '#f5f5f5',
                 '--table-header-color': this.content.table?.headerColor || '#000',
-                '--table-pair-cell-bg-color':
-                    this.content.table?.pairCellBgColor || '#fff',
-                '--table-odd-cell-bg-color':
-                    this.content.table?.oddCellBgColor || '#FDFDFD',
+                '--table-pair-cell-bg-color': this.content.table?.pairCellBgColor || '#fff',
+                '--table-odd-cell-bg-color': this.content.table?.oddCellBgColor || '#FDFDFD',
                 '--table-cell-color': this.content.table?.cellColor || '#000',
                 '--table-cell-padding-x': this.content.table?.cellPaddingX || '8px',
                 '--table-cell-padding-y': this.content.table?.cellPaddingY || '6px',
