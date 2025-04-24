@@ -1,19 +1,20 @@
 ---
 name: ww-input-rich-text
 description: A versatile rich text editor enabling text content creation with formatting options, headings, lists, tables, media, read-only mode, mention support, and output format selection. This is for editing rich text, not just rendering rich text.
-keywords:
-  - rich text editor
-  - text edition
-  - customizable editor
-  - mention feature
-  - multi-language support
-  - markdown input
-  - advanced text input
+keywords: rich text editor, text edition, customizable editor, mention feature, multi-language support, markdown input, advanced text input
 ---
 
 #### ww-input-rich-text
 
-Properties:
+***Purpose:***
+A versatile rich text editor enabling text content creation with formatting options, headings, lists, tables, media, read-only mode, mention support, and output format selection. This is for editing rich text, not just rendering rich text.
+
+***Features:***
+- Hide the menu for a minimalistic render
+- Use as readonly to display rich text content
+- Enable features in the menu that make sense given the building context
+
+***Properties:***
 - readonly: boolean - Whether editor is read-only. Default: false
 - editable: boolean - Whether editor is editable. Default: true
 - initialValue: string - Initial content. Default: "". This is not multilang and must be a string.
@@ -46,17 +47,22 @@ Properties:
 - checkbox: object - Checkbox styles
 - table: object - Table styles
 
-Children:
+***Slots:***
 - customMenuElement: ww-div - Optional custom menu element
 
-Events:
+***Exposed Variables:***
+- value: string - Current editor content. (path: variables['current_element_uid-value'])
+- mentions: array - List of mentions in content. (path: variables['current_element_uid-mentions'])
+- states: object - Editor states (text formatting, alignment, etc). (path: variables['current_element_uid-states'])
+
+***Events:***
 - change: {value: string} - Triggered when content changes
 - initValueChange: {value: string} - Triggered when initial value changes
 - mention:click: {mention: {id: string, label: string}} - Triggered when clicking a mention
 - focus: {value: string} - Triggered when editor gets focus
 - blur: {value: string} - Triggered when editor loses focus
 
-Actions:
+***Exposed Element Actions:***
 - `focusEditor`: Focus the editor. No args allowed
 - `setLink`: Set a link. Args: URL (Text)
 - `setImage`: Set an image. Args: Source (Text), Alt (Text), Title (Text)
@@ -80,13 +86,3 @@ Actions:
 - `deleteRow`: Delete row. No args allowed
 - `deleteColumn`: Delete column. No args allowed
 - `deleteTable`: Delete table. No args allowed
-
-Variables:
-- value: string - Current editor content
-- mentions: array - List of mentions in content
-- states: object - Editor states (text formatting, alignment, etc)
-
-Special features:
-- Hide the menu for a minimalistic render
-- Use as readonly to display rich text content
-- Enable features in the menu that make sense given the building context
