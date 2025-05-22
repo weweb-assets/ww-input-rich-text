@@ -70,7 +70,7 @@ export const textOptions = {
         },
         label: {
             en: 'Alignment',
-            fr: 'Alignment',
+            fr: 'Alignement',
         },
         responsive: true,
         bindable: true,
