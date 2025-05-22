@@ -1,19 +1,20 @@
 ---
 name: ww-input-rich-text
 description: A versatile rich text editor enabling text content creation with formatting options, headings, lists, tables, media, read-only mode, mention support, and output format selection. This is for editing rich text, not just rendering rich text.
-keywords:
-  - rich text editor
-  - text edition
-  - customizable editor
-  - mention feature
-  - multi-language support
-  - markdown input
-  - advanced text input
+keywords: rich text editor, text edition, customizable editor, mention feature, multi-language support, markdown input, advanced text input
 ---
 
 #### ww-input-rich-text
 
-Properties:
+***Purpose:***
+A versatile rich text editor enabling text content creation with formatting options, headings, lists, tables, media, read-only mode, mention support, and output format selection. This is for editing rich text, not just rendering rich text.
+
+***Features:***
+- Hide the menu for a minimalistic render
+- Use as readonly to display rich text content
+- Enable features in the menu that make sense given the building context
+
+***Properties:***
 - readonly: boolean - Whether editor is read-only. Default: false
 - editable: boolean - Whether editor is editable. Default: true
 - initialValue: string - Initial content. Default: "". This is not multilang and must be a string.
@@ -46,17 +47,17 @@ Properties:
 - checkbox: object - Checkbox styles
 - table: object - Table styles
 
-Children:
-- customMenuElement: ww-div - Optional custom menu element
+***Slots:***
+- customMenuElement: (element) ww-div - Optional custom menu element
 
-Events:
-- change: {value: string} - Triggered when content changes
-- initValueChange: {value: string} - Triggered when initial value changes
-- mention:click: {mention: {id: string, label: string}} - Triggered when clicking a mention
-- focus: {value: string} - Triggered when editor gets focus
-- blur: {value: string} - Triggered when editor loses focus
+***Events:***
+- change: Triggered when content changes. Payload: {value: string}
+- initValueChange: Triggered when initial value changes. Payload: {value: string}
+- mention:click: Triggered when clicking a mention. Payload: {mention: {id: string, label: string}}
+- focus: Triggered when editor gets focus. Payload: {value: string} 
+- blur: Triggered when editor loses focus. Payload: {value: string}
 
-Actions:
+***Exposed Element Actions:***
 - `focusEditor`: Focus the editor. No args allowed
 - `setLink`: Set a link. Args: URL (Text)
 - `setImage`: Set an image. Args: Source (Text), Alt (Text), Title (Text)
@@ -81,12 +82,8 @@ Actions:
 - `deleteColumn`: Delete column. No args allowed
 - `deleteTable`: Delete table. No args allowed
 
-Variables:
-- value: string - Current editor content
-- mentions: array - List of mentions in content
-- states: object - Editor states (text formatting, alignment, etc)
+***Exposed Variables:***
+- value: string - Current editor content (path: variables['current_element_uid-value'])
+- mentions: array - List of mentions in content (path: variables['current_element_uid-mentions'])
+- states: object - Editor states (text formatting, alignment, etc) (path: variables['current_element_uid-states'])
 
-Special features:
-- Hide the menu for a minimalistic render
-- Use as readonly to display rich text content
-- Enable features in the menu that make sense given the building context
