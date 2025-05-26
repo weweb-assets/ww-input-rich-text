@@ -69,7 +69,7 @@ export const textOptions = {
             ],
         },
         label: {
-            en: 'Alignement',
+            en: 'Alignment',
             fr: 'Alignement',
         },
         responsive: true,
