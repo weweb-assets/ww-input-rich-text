@@ -1605,7 +1605,7 @@ export default {
             section: 'settings',
             type: 'Formula',
             defaultValue: '',
-            bindable: true,
+            bindable: false,
             hidden: (content, sidePanelContent) => !sidePanelContent.form?.uid || !content.customValidation,
         },
     },
