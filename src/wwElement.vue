@@ -1080,6 +1080,12 @@ export default {
         width: 100%;
         overflow: auto;
         padding: 8px;
+        font-size: var(--p-fontSize);
+        font-family: var(--p-fontFamily);
+        font-weight: var(--p-fontSize);
+        text-align: var(--p-textAlign);
+        color: var(--p-color);
+        line-height: var(--p-lineHeight);
         &-focused {
             outline: unset;
         }
@@ -1177,12 +1183,7 @@ export default {
             line-height: var(--a-lineHeight);
             cursor: pointer;
         }
-        font-size: var(--p-fontSize);
-        font-family: var(--p-fontFamily);
-        font-weight: var(--p-fontSize);
-        text-align: var(--p-textAlign);
-        color: var(--p-color);
-        line-height: var(--p-lineHeight);
+     
 
         .mention {
             border: var(--mention-borderSize) solid var(--mention-color);
