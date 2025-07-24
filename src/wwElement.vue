@@ -890,7 +890,6 @@ export default {
                     }),
                 ],
                 onCreate: ({ editor: currentEditor }) => {
-                    migrateMathStrings(currentEditor);
                     this.setValue(this.getContent());
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
