@@ -291,7 +291,37 @@
                     <i class="fas fa-quote-left"></i>
                 </button>
 
-                <span class="separator" v-if="menu.link || menu.image || menu.codeBlock || menu.blockquote"></span>
+                <!-- Math -->
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="insertInlineMath"
+                    :disabled="!isEditable"
+                    v-if="menu.inlineMath"
+                >
+                    <i class="fas fa-subscript"></i>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="insertBlockMath"
+                    :disabled="!isEditable"
+                    v-if="menu.blockMath"
+                >
+                    <i class="fas fa-square-root-alt"></i>
+                </button>
+
+                <span
+                    class="separator"
+                    v-if="
+                        menu.link ||
+                        menu.image ||
+                        menu.codeBlock ||
+                        menu.blockquote ||
+                        menu.inlineMath ||
+                        menu.blockMath
+                    "
+                ></span>
 
                 <!-- Undo/Redo -->
                 <button
@@ -321,6 +351,7 @@
 </template>
 
 <script>
+import 'katex/dist/katex.min.css';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import Mention from '@tiptap/extension-mention';
@@ -337,6 +368,7 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
+import { Mathematics, migrateMathStrings } from '@tiptap/extension-mathematics';
 
 import { computed, inject } from 'vue';
 import suggestion from './suggestion.js';
@@ -381,7 +413,6 @@ export default {
     },
     emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
     setup(props, { emit }) {
-
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
             name: 'value',
@@ -539,13 +570,15 @@ export default {
                 textAlign: this.richEditor.isActive({ textAlign: 'left' })
                     ? 'left'
                     : this.richEditor.isActive({ textAlign: 'center' })
-                      ? 'center'
-                      : this.richEditor.isActive({ textAlign: 'right' })
-                        ? 'right'
-                        : this.richEditor.isActive({ textAlign: 'justify' })
-                          ? 'justify'
-                          : false,
+                    ? 'center'
+                    : this.richEditor.isActive({ textAlign: 'right' })
+                    ? 'right'
+                    : this.richEditor.isActive({ textAlign: 'justify' })
+                    ? 'justify'
+                    : false,
                 table: this.richEditor.isActive('table'),
+                inlineMath: this.richEditor.isActive('inlineMath'),
+                blockMath: this.richEditor.isActive('blockMath'),
             };
         },
         currentColor() {
@@ -601,6 +634,8 @@ export default {
                 image: this.content.parameterImage ?? false,
                 codeBlock: this.content.parameterCodeBlock ?? true,
                 blockquote: this.content.parameterQuote ?? true,
+                inlineMath: this.content.parameterInlineMath ?? false,
+                blockMath: this.content.parameterBlockMath ?? false,
                 undo: this.content.parameterUndo ?? true,
                 redo: this.content.parameterRedo ?? true,
             };
@@ -822,8 +857,40 @@ export default {
                                 char: this.editorConfig.mention.char,
                             },
                         }),
+                    Mathematics.configure({
+                        inlineOptions: {
+                            onClick: (node, pos) => {
+                                const newCalculation = window.prompt('Inline math expression:', node.attrs.latex);
+                                if (newCalculation) {
+                                    this.richEditor
+                                        .chain()
+                                        .setNodeSelection(pos)
+                                        .updateInlineMath({ latex: newCalculation })
+                                        .focus()
+                                        .run();
+                                }
+                            },
+                        },
+                        blockOptions: {
+                            onClick: (node, pos) => {
+                                const newCalculation = window.prompt('Block math expression:', node.attrs.latex);
+                                if (newCalculation) {
+                                    this.richEditor
+                                        .chain()
+                                        .setNodeSelection(pos)
+                                        .updateBlockMath({ latex: newCalculation })
+                                        .focus()
+                                        .run();
+                                }
+                            },
+                        },
+                        katexOptions: {
+                            throwOnError: false,
+                        },
+                    }),
                 ],
-                onCreate: () => {
+                onCreate: ({ editor: currentEditor }) => {
+                    migrateMathStrings(currentEditor);
                     this.setValue(this.getContent());
                     this.setMentions(this.richEditor.getJSON().content.reduce(extractMentions, []));
                 },
@@ -949,6 +1016,28 @@ export default {
         },
         toggleBlockquote() {
             this.richEditor.chain().focus().toggleBlockquote().run();
+        },
+        insertInlineMath(latex) {
+            const hasSelection = !this.richEditor.state.selection.empty;
+            if (hasSelection) {
+                return this.richEditor.chain().setInlineMath().focus().run();
+            }
+
+            const mathExpression = latex || window.prompt('Inline math expression:', '');
+            if (mathExpression) {
+                return this.richEditor.chain().insertInlineMath({ latex: mathExpression }).focus().run();
+            }
+        },
+        insertBlockMath(latex) {
+            const hasSelection = !this.richEditor.state.selection.empty;
+            if (hasSelection) {
+                return this.richEditor.chain().setBlockMath().focus().run();
+            }
+
+            const mathExpression = latex || window.prompt('Block math expression:', '');
+            if (mathExpression) {
+                return this.richEditor.chain().insertBlockMath({ latex: mathExpression }).focus().run();
+            }
         },
         undo() {
             this.richEditor.chain().undo().run();
@@ -1184,7 +1273,6 @@ export default {
             line-height: var(--a-lineHeight);
             cursor: pointer;
         }
-     
 
         .mention {
             border: var(--mention-borderSize) solid var(--mention-color);
@@ -1343,6 +1431,44 @@ export default {
 
     &.-readonly .ProseMirror {
         cursor: inherit;
+    }
+
+    // Mathematics extension styles
+    .tiptap-mathematics-render {
+        padding: 0 0.25rem;
+        border-radius: 0.25rem;
+
+        &--editable {
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &:hover {
+                background: #eee;
+            }
+        }
+
+        &[data-type='inline-math'] {
+            display: inline-block;
+        }
+
+        &[data-type='block-math'] {
+            display: block;
+            margin: 1rem 0;
+            padding: 1rem;
+            text-align: center;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 0.375rem;
+        }
+
+        &.inline-math-error,
+        &.block-math-error {
+            background: #ffe6e6;
+            color: #d32f2f;
+            border: 1px solid #f44336;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+        }
     }
 }
 </style>
