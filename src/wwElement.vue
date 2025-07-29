@@ -295,7 +295,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="insertInlineMath"
+                    @click="insertInlineMath()"
                     :disabled="!isEditable"
                     v-if="menu.inlineMath"
                 >
@@ -304,7 +304,7 @@
                 <button
                     type="button"
                     class="ww-rich-text__menu-item"
-                    @click="insertBlockMath"
+                    @click="insertBlockMath()"
                     :disabled="!isEditable"
                     v-if="menu.blockMath"
                 >
@@ -368,7 +368,7 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
-import { Mathematics, migrateMathStrings } from '@tiptap/extension-mathematics';
+import { Mathematics } from '@tiptap/extension-mathematics';
 
 import { computed, inject } from 'vue';
 import suggestion from './suggestion.js';
@@ -577,8 +577,8 @@ export default {
                     ? 'justify'
                     : false,
                 table: this.richEditor.isActive('table'),
-                inlineMath: this.richEditor.isActive('inlineMath'),
-                blockMath: this.richEditor.isActive('blockMath'),
+                inlineMath: false,
+                blockMath: false,
             };
         },
         currentColor() {
@@ -858,32 +858,6 @@ export default {
                             },
                         }),
                     Mathematics.configure({
-                        inlineOptions: {
-                            onClick: (node, pos) => {
-                                const newCalculation = window.prompt('Inline math expression:', node.attrs.latex);
-                                if (newCalculation) {
-                                    this.richEditor
-                                        .chain()
-                                        .setNodeSelection(pos)
-                                        .updateInlineMath({ latex: newCalculation })
-                                        .focus()
-                                        .run();
-                                }
-                            },
-                        },
-                        blockOptions: {
-                            onClick: (node, pos) => {
-                                const newCalculation = window.prompt('Block math expression:', node.attrs.latex);
-                                if (newCalculation) {
-                                    this.richEditor
-                                        .chain()
-                                        .setNodeSelection(pos)
-                                        .updateBlockMath({ latex: newCalculation })
-                                        .focus()
-                                        .run();
-                                }
-                            },
-                        },
                         katexOptions: {
                             throwOnError: false,
                         },
@@ -1017,25 +991,33 @@ export default {
             this.richEditor.chain().focus().toggleBlockquote().run();
         },
         insertInlineMath(latex) {
-            const hasSelection = !this.richEditor.state.selection.empty;
-            if (hasSelection) {
-                return this.richEditor.chain().setInlineMath().focus().run();
-            }
+            // If latex is provided (from action), use it directly, otherwise prompt user
+            const latexExpression = latex || window.prompt('Enter inline LaTeX expression:', '');
+            if (latexExpression) {
+                // Insert with $ delimiters - the extension will auto-convert to rendered math
+                const fullExpression = `$${latexExpression}$`;
+                this.richEditor.chain().focus().insertContent(fullExpression).run();
 
-            const mathExpression = latex || window.prompt('Inline math expression:', '');
-            if (mathExpression) {
-                return this.richEditor.chain().insertInlineMath({ latex: mathExpression }).focus().run();
+                // Force decoration update by updating the editor state
+                setTimeout(() => {
+                    const { state } = this.richEditor;
+                    this.richEditor.view.updateState(state);
+                }, 10);
             }
         },
         insertBlockMath(latex) {
-            const hasSelection = !this.richEditor.state.selection.empty;
-            if (hasSelection) {
-                return this.richEditor.chain().setBlockMath().focus().run();
-            }
+            // If latex is provided (from action), use it directly, otherwise prompt user
+            const latexExpression = latex || window.prompt('Enter block LaTeX expression:', '');
+            if (latexExpression) {
+                // For v2.x, create block math using displaystyle
+                const blockContent = `<p style="text-align: center;">$\\displaystyle ${latexExpression}$</p>`;
+                this.richEditor.chain().focus().insertContent(blockContent).run();
 
-            const mathExpression = latex || window.prompt('Block math expression:', '');
-            if (mathExpression) {
-                return this.richEditor.chain().insertBlockMath({ latex: mathExpression }).focus().run();
+                // Force decoration update by updating the editor state
+                setTimeout(() => {
+                    const { state } = this.richEditor;
+                    this.richEditor.view.updateState(state);
+                }, 10);
             }
         },
         undo() {
@@ -1433,9 +1415,19 @@ export default {
     }
 
     // Mathematics extension styles
-    .tiptap-mathematics-render {
+    .Tiptap-mathematics-editor {
+        background: #202020;
+        color: #fff;
+        font-family: monospace;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+        display: inline-block;
+    }
+
+    .Tiptap-mathematics-render {
         padding: 0 0.25rem;
         border-radius: 0.25rem;
+        display: inline-block;
 
         &--editable {
             cursor: pointer;
@@ -1444,29 +1436,6 @@ export default {
             &:hover {
                 background: #eee;
             }
-        }
-
-        &[data-type='inline-math'] {
-            display: inline-block;
-        }
-
-        &[data-type='block-math'] {
-            display: block;
-            margin: 1rem 0;
-            padding: 1rem;
-            text-align: center;
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 0.375rem;
-        }
-
-        &.inline-math-error,
-        &.block-math-error {
-            background: #ffe6e6;
-            color: #d32f2f;
-            border: 1px solid #f44336;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
         }
     }
 }

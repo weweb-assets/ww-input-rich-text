@@ -190,7 +190,7 @@ export default {
             action: 'insertInlineMath',
             args: [
                 {
-                    name: 'LaTeX inline expression',
+                    name: 'Inline LaTeX Expression',
                     type: 'Text',
                 },
             ],
@@ -200,7 +200,7 @@ export default {
             action: 'insertBlockMath',
             args: [
                 {
-                    name: 'LaTeX block expression',
+                    name: 'Block LaTeX Expression',
                     type: 'Text',
                 },
             ],
