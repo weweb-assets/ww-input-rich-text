@@ -996,7 +996,21 @@ export default {
             if (latexExpression) {
                 // Insert with $ delimiters - the extension will auto-convert to rendered math
                 const fullExpression = `$${latexExpression}$`;
-                this.richEditor.chain().focus().insertContent(fullExpression).insertContent(' ').run();
+                this.richEditor.chain().focus().insertContent(fullExpression).run();
+
+                // Simulate a real space key press to trigger input rules/rendering
+                this.$nextTick(() => {
+                    const view = this.richEditor && this.richEditor.view;
+                    if (view && view.dom) {
+                        view.dom.focus();
+                        try {
+                            document.execCommand('insertText', false, ' ');
+                        } catch (e) {
+                            // Fallback if execCommand is unavailable
+                            this.richEditor.chain().focus().insertContent(' ').run();
+                        }
+                    }
+                });
 
                 // Force decoration update by updating the editor state
                 setTimeout(() => {
@@ -1011,7 +1025,21 @@ export default {
             if (latexExpression) {
                 // For v2.x, create block math using displaystyle
                 const blockContent = `<p style="text-align: center;">$\\displaystyle ${latexExpression}$</p>`;
-                this.richEditor.chain().focus().insertContent(blockContent).insertContent(' ').run();
+                this.richEditor.chain().focus().insertContent(blockContent).run();
+
+                // Simulate a real space key press to trigger input rules/rendering
+                this.$nextTick(() => {
+                    const view = this.richEditor && this.richEditor.view;
+                    if (view && view.dom) {
+                        view.dom.focus();
+                        try {
+                            document.execCommand('insertText', false, ' ');
+                        } catch (e) {
+                            // Fallback if execCommand is unavailable
+                            this.richEditor.chain().focus().insertContent(' ').run();
+                        }
+                    }
+                });
 
                 // Force decoration update by updating the editor state
                 setTimeout(() => {
