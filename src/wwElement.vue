@@ -1114,6 +1114,8 @@ export default {
             cursor: pointer;
             text-align: center;
             border-radius: 4px;
+            position: relative;
+            overflow: hidden;
             i {
                 width: 24px;
             }
@@ -1124,17 +1126,23 @@ export default {
                 justify-content: center;
                 width: 24px;
                 height: 24px;
+                position: relative;
+                z-index: 1;
             }
             .icon svg {
                 width: 16px;
                 height: 16px;
                 display: block;
+                position: relative;
+                z-index: 1;
             }
             /* Table toolbar icons come as <svg class="icon"> from TableIcon */
             svg.icon {
                 width: 16px !important;
                 height: 16px !important;
                 display: block;
+                position: relative;
+                z-index: 1;
             }
             /* Support class-based font icons like .icon-x, .icon-foo-bar */
             [class^='icon-'],
@@ -1147,13 +1155,24 @@ export default {
                 height: 24px;
                 font-size: 16px;
                 line-height: 16px;
+                position: relative;
+                z-index: 1;
             }
             &:hover {
                 background-color: rgb(245, 245, 245);
             }
             &.is-active {
-                color: white;
-                background-color: var(--menu-color);
+                color: var(--menu-color);
+            }
+            &.is-active::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-color: currentColor;
+                opacity: 0.2;
+                border-radius: inherit;
+                pointer-events: none;
+                z-index: 0;
             }
         }
     }
