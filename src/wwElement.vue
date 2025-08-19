@@ -996,7 +996,7 @@ export default {
             if (latexExpression) {
                 // Insert with $ delimiters - the extension will auto-convert to rendered math
                 const fullExpression = `$${latexExpression}$`;
-                this.richEditor.chain().focus().insertContent(fullExpression).run();
+                this.richEditor.chain().focus().insertContent(fullExpression).insertContent(' ').run();
 
                 // Force decoration update by updating the editor state
                 setTimeout(() => {
@@ -1011,7 +1011,7 @@ export default {
             if (latexExpression) {
                 // For v2.x, create block math using displaystyle
                 const blockContent = `<p style="text-align: center;">$\\displaystyle ${latexExpression}$</p>`;
-                this.richEditor.chain().focus().insertContent(blockContent).run();
+                this.richEditor.chain().focus().insertContent(blockContent).insertContent(' ').run();
 
                 // Force decoration update by updating the editor state
                 setTimeout(() => {
