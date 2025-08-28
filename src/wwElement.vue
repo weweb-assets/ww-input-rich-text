@@ -19,6 +19,7 @@
                     :class="{ 'is-active': richEditor.isActive('bold') }"
                     :disabled="!isEditable"
                     v-if="menu.bold"
+                    title="Bold"
                 >
                     <div class="icon" v-html="iconHTMLs.bold"></div>
                 </button>
@@ -29,6 +30,7 @@
                     :class="{ 'is-active': richEditor.isActive('italic') }"
                     :disabled="!isEditable"
                     v-if="menu.italic"
+                    title="Italic"
                 >
                     <div class="icon" v-html="iconHTMLs.italic"></div>
                 </button>
@@ -39,6 +41,7 @@
                     :class="{ 'is-active': richEditor.isActive('underline') }"
                     :disabled="!isEditable"
                     v-if="menu.underline"
+                    title="Underline"
                 >
                     <div class="icon" v-html="iconHTMLs.underline"></div>
                 </button>
@@ -49,6 +52,7 @@
                     :class="{ 'is-active': richEditor.isActive('strike') }"
                     :disabled="!isEditable"
                     v-if="menu.strike"
+                    title="Strikethrough"
                 >
                     <div class="icon" v-html="iconHTMLs.strikethrough"></div>
                 </button>
@@ -64,6 +68,7 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'left' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignLeft"
+                    title="Align left"
                 >
                     <div class="icon" v-html="iconHTMLs['align-left']"></div>
                 </button>
@@ -75,6 +80,7 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'center' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignCenter"
+                    title="Align center"
                 >
                     <div class="icon" v-html="iconHTMLs['align-center']"></div>
                 </button>
@@ -86,6 +92,7 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'right' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignRight"
+                    title="Align right"
                 >
                     <div class="icon" v-html="iconHTMLs['align-right']"></div>
                 </button>
@@ -97,6 +104,7 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'justify' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignJustify"
+                    title="Align justify"
                 >
                     <div class="icon" v-html="iconHTMLs['align-justify']"></div>
                 </button>
@@ -112,6 +120,7 @@
                     :for="`rich-color-${randomUid}`"
                     @click="richEditor.commands.focus()"
                     v-if="menu.textColor"
+                    title="Text color"
                 >
                     <div class="icon" v-html="iconHTMLs.palette"></div>
                     <input
@@ -134,6 +143,7 @@
                     :class="{ 'is-active': richEditor.isActive('bulletList') }"
                     :disabled="!isEditable"
                     v-if="menu.bulletList"
+                    title="Bullet list"
                 >
                     <div class="icon" v-html="iconHTMLs.list"></div>
                 </button>
@@ -144,6 +154,7 @@
                     :class="{ 'is-active': richEditor.isActive('orderedList') }"
                     :disabled="!isEditable"
                     v-if="menu.orderedList"
+                    title="Ordered list"
                 >
                     <div class="icon" v-html="iconHTMLs['list-ordered']"></div>
                 </button>
@@ -287,8 +298,9 @@
                     :class="{ 'is-active': richEditor.isActive('blockquote') }"
                     :disabled="!isEditable"
                     v-if="menu.blockquote"
+                    title="Blockquote"
                 >
-                    <i class="fas fa-quote-left"></i>
+                    <div class="icon" v-html="iconHTMLs.quote"></div>
                 </button>
 
                 <!-- Math -->
@@ -298,8 +310,9 @@
                     @click="insertInlineMath()"
                     :disabled="!isEditable"
                     v-if="menu.inlineMath"
+                    title="Inline math"
                 >
-                    <i class="fas fa-subscript"></i>
+                    <div class="icon" v-html="iconHTMLs['square-function']"></div>
                 </button>
                 <button
                     type="button"
@@ -307,8 +320,9 @@
                     @click="insertBlockMath()"
                     :disabled="!isEditable"
                     v-if="menu.blockMath"
+                    title="Block math"
                 >
-                    <i class="fas fa-square-root-alt"></i>
+                    <div class="icon" v-html="iconHTMLs.sigma"></div>
                 </button>
 
                 <span
@@ -330,6 +344,7 @@
                     @click="undo"
                     :disabled="!isEditable"
                     v-if="menu.undo"
+                    title="Undo"
                 >
                     <div class="icon" v-html="iconHTMLs.undo"></div>
                 </button>
@@ -339,6 +354,7 @@
                     @click="redo"
                     :disabled="!isEditable"
                     v-if="menu.redo"
+                    title="Redo"
                 >
                     <div class="icon" v-html="iconHTMLs.redo"></div>
                 </button>
@@ -821,6 +837,8 @@ export default {
                     'lucide/image',
                     'lucide/code',
                     'lucide/quote',
+                    'lucide/square-function',
+                    'lucide/sigma',
                     'lucide/undo',
                     'lucide/redo',
                 ];
@@ -851,8 +869,10 @@ export default {
                     image: results[13],
                     code: results[14],
                     quote: results[15],
-                    undo: results[16],
-                    redo: results[17],
+                    'square-function': results[16],
+                    sigma: results[17],
+                    undo: results[18],
+                    redo: results[19],
                 };
             } catch (e) {
                 this.iconHTMLs = {};
