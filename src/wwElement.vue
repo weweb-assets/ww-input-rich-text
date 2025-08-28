@@ -322,10 +322,6 @@
                         menu.blockMath
                     "
                 ></span>
-                    <div class="icon" v-html="iconHTMLs.quote"></div>
-                </button>
-
-                <span class="separator" v-if="menu.link || menu.image || menu.codeBlock || menu.blockquote"></span>
 
                 <!-- Undo/Redo -->
                 <button
