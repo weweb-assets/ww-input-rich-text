@@ -84,6 +84,8 @@ export default {
                 'parameterImage',
                 'parameterCodeBlock',
                 'parameterQuote',
+                'parameterInlineMath',
+                'parameterBlockMath',
                 'parameterUndo',
                 'parameterRedo',
             ],
@@ -91,6 +93,28 @@ export default {
     },
     options: {
         displayAllowedValues: ['flex', 'inline-flex'],
+        icons: [
+            'lucide/bold',
+            'lucide/italic',
+            'lucide/underline',
+            'lucide/strikethrough',
+            'lucide/align-left',
+            'lucide/align-center',
+            'lucide/align-right',
+            'lucide/align-justify',
+            'lucide/palette',
+            'lucide/list',
+            'lucide/list-ordered',
+            'lucide/list-checks',
+            'lucide/link',
+            'lucide/image',
+            'lucide/code',
+            'lucide/quote',
+            'lucide/square-function',
+            'lucide/sigma',
+            'lucide/undo',
+            'lucide/redo',
+        ],
     },
     triggerEvents: [
         { name: 'change', label: { en: 'On change' }, event: { value: '' } },
@@ -183,6 +207,26 @@ export default {
         { label: 'Toggle Check List', action: 'toggleTaskList' },
         { label: 'Toggle Code Block', action: 'toggleCodeBlock' },
         { label: 'Toggle Blockquote', action: 'toggleBlockquote' },
+        {
+            label: 'Insert Inline Math',
+            action: 'insertInlineMath',
+            args: [
+                {
+                    name: 'Inline LaTeX Expression',
+                    type: 'Text',
+                },
+            ],
+        },
+        {
+            label: 'Insert Block Math',
+            action: 'insertBlockMath',
+            args: [
+                {
+                    name: 'Block LaTeX Expression',
+                    type: 'Text',
+                },
+            ],
+        },
         { label: 'Undo', action: 'undo' },
         { label: 'Redo', action: 'redo' },
         // Table
@@ -1521,6 +1565,50 @@ export default {
                 ],
             },
             defaultValue: true,
+        },
+        parameterInlineMath: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Inline math',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        default: true,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
+        },
+        parameterBlockMath: {
+            section: 'settings',
+            hidden: content => content.customMenu,
+            label: {
+                en: 'Block math',
+            },
+            type: 'TextRadioGroup',
+            options: {
+                choices: [
+                    {
+                        value: true,
+                        label: 'Show',
+                    },
+                    {
+                        value: false,
+                        default: true,
+                        label: 'Hide',
+                    },
+                ],
+            },
+            defaultValue: false,
         },
         parameterUndo: {
             section: 'settings',

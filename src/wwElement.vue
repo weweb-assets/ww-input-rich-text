@@ -19,8 +19,9 @@
                     :class="{ 'is-active': richEditor.isActive('bold') }"
                     :disabled="!isEditable"
                     v-if="menu.bold"
+                    title="Bold"
                 >
-                    <i class="fas fa-bold"></i>
+                    <div class="icon" v-html="iconHTMLs.bold"></div>
                 </button>
                 <button
                     type="button"
@@ -29,8 +30,9 @@
                     :class="{ 'is-active': richEditor.isActive('italic') }"
                     :disabled="!isEditable"
                     v-if="menu.italic"
+                    title="Italic"
                 >
-                    <i class="fas fa-italic"></i>
+                    <div class="icon" v-html="iconHTMLs.italic"></div>
                 </button>
                 <button
                     type="button"
@@ -39,8 +41,9 @@
                     :class="{ 'is-active': richEditor.isActive('underline') }"
                     :disabled="!isEditable"
                     v-if="menu.underline"
+                    title="Underline"
                 >
-                    <i class="fas fa-underline"></i>
+                    <div class="icon" v-html="iconHTMLs.underline"></div>
                 </button>
                 <button
                     type="button"
@@ -49,8 +52,9 @@
                     :class="{ 'is-active': richEditor.isActive('strike') }"
                     :disabled="!isEditable"
                     v-if="menu.strike"
+                    title="Strikethrough"
                 >
-                    <i class="fas fa-strikethrough"></i>
+                    <div class="icon" v-html="iconHTMLs.strikethrough"></div>
                 </button>
 
                 <!-- Show the separator only if at least on of the previous block are visible -->
@@ -64,8 +68,9 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'left' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignLeft"
+                    title="Align left"
                 >
-                    <i class="fas fa-align-left"></i>
+                    <div class="icon" v-html="iconHTMLs['align-left']"></div>
                 </button>
 
                 <button
@@ -75,8 +80,9 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'center' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignCenter"
+                    title="Align center"
                 >
-                    <i class="fas fa-align-center"></i>
+                    <div class="icon" v-html="iconHTMLs['align-center']"></div>
                 </button>
 
                 <button
@@ -86,8 +92,9 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'right' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignRight"
+                    title="Align right"
                 >
-                    <i class="fas fa-align-right"></i>
+                    <div class="icon" v-html="iconHTMLs['align-right']"></div>
                 </button>
 
                 <button
@@ -97,8 +104,9 @@
                     :class="{ 'is-active': richEditor.isActive({ textAlign: 'justify' }) }"
                     :disabled="!isEditable"
                     v-if="menu.alignJustify"
+                    title="Align justify"
                 >
-                    <i class="fas fa-align-justify"></i>
+                    <div class="icon" v-html="iconHTMLs['align-justify']"></div>
                 </button>
 
                 <span
@@ -112,8 +120,9 @@
                     :for="`rich-color-${randomUid}`"
                     @click="richEditor.commands.focus()"
                     v-if="menu.textColor"
+                    title="Text color"
                 >
-                    <i class="fas fa-palette"></i>
+                    <div class="icon" v-html="iconHTMLs.palette"></div>
                     <input
                         :id="`rich-color-${randomUid}`"
                         type="color"
@@ -134,8 +143,9 @@
                     :class="{ 'is-active': richEditor.isActive('bulletList') }"
                     :disabled="!isEditable"
                     v-if="menu.bulletList"
+                    title="Bullet list"
                 >
-                    <i class="fas fa-list-ul"></i>
+                    <div class="icon" v-html="iconHTMLs.list"></div>
                 </button>
                 <button
                     type="button"
@@ -144,8 +154,9 @@
                     :class="{ 'is-active': richEditor.isActive('orderedList') }"
                     :disabled="!isEditable"
                     v-if="menu.orderedList"
+                    title="Ordered list"
                 >
-                    <i class="fas fa-list-ol"></i>
+                    <div class="icon" v-html="iconHTMLs['list-ordered']"></div>
                 </button>
                 <button
                     type="button"
@@ -155,7 +166,7 @@
                     :disabled="!isEditable"
                     v-if="menu.taskList"
                 >
-                    <i class="fas fa-check-square"></i>
+                    <div class="icon" v-html="iconHTMLs['check-square']"></div>
                 </button>
 
                 <!-- Table -->
@@ -253,7 +264,7 @@
                     :disabled="!isEditable"
                     v-if="menu.link"
                 >
-                    <i class="fas fa-link"></i>
+                    <div class="icon" v-html="iconHTMLs.link"></div>
                 </button>
 
                 <!-- Image -->
@@ -264,7 +275,7 @@
                     :disabled="!isEditable"
                     v-if="menu.image"
                 >
-                    <i class="fas fa-image"></i>
+                    <div class="icon" v-html="iconHTMLs.image"></div>
                 </button>
 
                 <!-- Code -->
@@ -276,7 +287,7 @@
                     :disabled="!isEditable"
                     v-if="menu.codeBlock"
                 >
-                    <i class="fas fa-code"></i>
+                    <div class="icon" v-html="iconHTMLs.code"></div>
                 </button>
 
                 <!-- Quote -->
@@ -287,11 +298,44 @@
                     :class="{ 'is-active': richEditor.isActive('blockquote') }"
                     :disabled="!isEditable"
                     v-if="menu.blockquote"
+                    title="Blockquote"
                 >
-                    <i class="fas fa-quote-left"></i>
+                    <div class="icon" v-html="iconHTMLs.quote"></div>
                 </button>
 
-                <span class="separator" v-if="menu.link || menu.image || menu.codeBlock || menu.blockquote"></span>
+                <!-- Math -->
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="insertInlineMath()"
+                    :disabled="!isEditable"
+                    v-if="menu.inlineMath"
+                    title="Inline math"
+                >
+                    <div class="icon" v-html="iconHTMLs['square-function']"></div>
+                </button>
+                <button
+                    type="button"
+                    class="ww-rich-text__menu-item"
+                    @click="insertBlockMath()"
+                    :disabled="!isEditable"
+                    v-if="menu.blockMath"
+                    title="Block math"
+                >
+                    <div class="icon" v-html="iconHTMLs.sigma"></div>
+                </button>
+
+                <span
+                    class="separator"
+                    v-if="
+                        menu.link ||
+                        menu.image ||
+                        menu.codeBlock ||
+                        menu.blockquote ||
+                        menu.inlineMath ||
+                        menu.blockMath
+                    "
+                ></span>
 
                 <!-- Undo/Redo -->
                 <button
@@ -300,8 +344,9 @@
                     @click="undo"
                     :disabled="!isEditable"
                     v-if="menu.undo"
+                    title="Undo"
                 >
-                    <i class="fas fa-undo"></i>
+                    <div class="icon" v-html="iconHTMLs.undo"></div>
                 </button>
                 <button
                     type="button"
@@ -309,8 +354,9 @@
                     @click="redo"
                     :disabled="!isEditable"
                     v-if="menu.redo"
+                    title="Redo"
                 >
-                    <i class="fas fa-redo"></i>
+                    <div class="icon" v-html="iconHTMLs.redo"></div>
                 </button>
             </div>
             <wwElement class="ww-rich-text__menu" v-else-if="content.customMenu" v-bind="content.customMenuElement" />
@@ -321,6 +367,7 @@
 </template>
 
 <script>
+import 'katex/dist/katex.min.css';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import Mention from '@tiptap/extension-mention';
@@ -337,6 +384,7 @@ import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
+import { Mathematics } from '@tiptap/extension-mathematics';
 
 import { computed, inject } from 'vue';
 import suggestion from './suggestion.js';
@@ -381,7 +429,6 @@ export default {
     },
     emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
     setup(props, { emit }) {
-
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
             name: 'value',
@@ -439,6 +486,7 @@ export default {
     data: () => ({
         richEditor: null,
         loading: false,
+        iconHTMLs: {},
     }),
 
     watch: {
@@ -539,13 +587,15 @@ export default {
                 textAlign: this.richEditor.isActive({ textAlign: 'left' })
                     ? 'left'
                     : this.richEditor.isActive({ textAlign: 'center' })
-                      ? 'center'
-                      : this.richEditor.isActive({ textAlign: 'right' })
-                        ? 'right'
-                        : this.richEditor.isActive({ textAlign: 'justify' })
-                          ? 'justify'
-                          : false,
+                    ? 'center'
+                    : this.richEditor.isActive({ textAlign: 'right' })
+                    ? 'right'
+                    : this.richEditor.isActive({ textAlign: 'justify' })
+                    ? 'justify'
+                    : false,
                 table: this.richEditor.isActive('table'),
+                inlineMath: false,
+                blockMath: false,
             };
         },
         currentColor() {
@@ -601,6 +651,8 @@ export default {
                 image: this.content.parameterImage ?? false,
                 codeBlock: this.content.parameterCodeBlock ?? true,
                 blockquote: this.content.parameterQuote ?? true,
+                inlineMath: this.content.parameterInlineMath ?? false,
+                blockMath: this.content.parameterBlockMath ?? false,
                 undo: this.content.parameterUndo ?? true,
                 redo: this.content.parameterRedo ?? true,
             };
@@ -765,6 +817,67 @@ export default {
         },
     },
     methods: {
+        async loadIcons() {
+            try {
+                const { getIcon } = wwLib.useIcons();
+                const names = [
+                    'lucide/bold',
+                    'lucide/italic',
+                    'lucide/underline',
+                    'lucide/strikethrough',
+                    'lucide/align-left',
+                    'lucide/align-center',
+                    'lucide/align-right',
+                    'lucide/align-justify',
+                    'lucide/palette',
+                    'lucide/list',
+                    'lucide/list-ordered',
+                    'lucide/list-checks',
+                    'lucide/link',
+                    'lucide/image',
+                    'lucide/code',
+                    'lucide/quote',
+                    'lucide/square-function',
+                    'lucide/sigma',
+                    'lucide/undo',
+                    'lucide/redo',
+                ];
+                const results = await Promise.all(
+                    names.map(async n => {
+                        try {
+                            const html = await getIcon(n);
+                            return html || null;
+                        } catch (e) {
+                            return null;
+                        }
+                    })
+                );
+                this.iconHTMLs = {
+                    bold: results[0],
+                    italic: results[1],
+                    underline: results[2],
+                    strikethrough: results[3],
+                    'align-left': results[4],
+                    'align-center': results[5],
+                    'align-right': results[6],
+                    'align-justify': results[7],
+                    palette: results[8],
+                    list: results[9],
+                    'list-ordered': results[10],
+                    'check-square': results[11],
+                    link: results[12],
+                    image: results[13],
+                    code: results[14],
+                    quote: results[15],
+                    'square-function': results[16],
+                    sigma: results[17],
+                    undo: results[18],
+                    redo: results[19],
+                };
+            } catch (e) {
+                this.iconHTMLs = {};
+            }
+        },
         loadEditor() {
             if (this.loading) return;
             this.loading = true;
@@ -986,6 +1099,7 @@ export default {
     },
     mounted() {
         this.loadEditor();
+        this.loadIcons();
     },
     beforeUnmount() {
         if (this.richEditor) this.richEditor.destroy();
@@ -1055,21 +1169,65 @@ export default {
             cursor: pointer;
             text-align: center;
             border-radius: 4px;
+            position: relative;
+            overflow: hidden;
             i {
                 width: 24px;
             }
             .icon {
                 color: var(--menu-color);
-                display: flex;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 width: 24px;
-                max-height: 16px;
+                height: 24px;
+                position: relative;
+                z-index: 1;
+            }
+            .icon svg {
+                width: 16px;
+                height: 16px;
+                display: block;
+                position: relative;
+                z-index: 1;
+            }
+            /* Table toolbar icons come as <svg class="icon"> from TableIcon */
+            svg.icon {
+                width: 16px !important;
+                height: 16px !important;
+                display: block;
+                position: relative;
+                z-index: 1;
+            }
+            /* Support class-based font icons like .icon-x, .icon-foo-bar */
+            [class^='icon-'],
+            [class*=' icon-'] {
+                color: var(--menu-color);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 24px;
+                height: 24px;
+                font-size: 16px;
+                line-height: 16px;
+                position: relative;
+                z-index: 1;
             }
             &:hover {
                 background-color: rgb(245, 245, 245);
             }
             &.is-active {
-                color: white;
-                background-color: var(--menu-color);
+                color: var(--menu-color);
+            }
+            &.is-active::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-color: currentColor;
+                opacity: 0.2;
+                border-radius: inherit;
+                pointer-events: none;
+                z-index: 0;
             }
         }
     }
@@ -1184,7 +1342,6 @@ export default {
             line-height: var(--a-lineHeight);
             cursor: pointer;
         }
-     
 
         .mention {
             border: var(--mention-borderSize) solid var(--mention-color);
@@ -1343,6 +1500,31 @@ export default {
 
     &.-readonly .ProseMirror {
         cursor: inherit;
+    }
+
+    // Mathematics extension styles
+    .Tiptap-mathematics-editor {
+        background: #202020;
+        color: #fff;
+        font-family: monospace;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.25rem;
+        display: inline-block;
+    }
+
+    .Tiptap-mathematics-render {
+        padding: 0 0.25rem;
+        border-radius: 0.25rem;
+        display: inline-block;
+
+        &--editable {
+            cursor: pointer;
+            transition: background 0.2s;
+
+            &:hover {
+                background: #eee;
+            }
+        }
     }
 }
 </style>
