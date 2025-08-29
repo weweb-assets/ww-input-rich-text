@@ -110,6 +110,8 @@ export default {
             'lucide/image',
             'lucide/code',
             'lucide/quote',
+            'lucide/square-function',
+            'lucide/sigma',
             'lucide/undo',
             'lucide/redo',
         ],
