@@ -18,6 +18,7 @@ import { textOptions } from './src/settings';
 
 export default {
     editor: {
+        deprecated: 'Use a rich text from the Elements panel instead of this one.',
         label: {
             en: 'Rich text',
         },
