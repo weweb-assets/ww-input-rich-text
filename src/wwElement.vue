@@ -210,7 +210,7 @@
                     :disabled="!isEditable"
                     v-if="menu.table && richEditor.isActive('table')"
                 >
-                    <table-icon icon="column-inster-before" />
+                    <table-icon icon="column-insert-before" />
                 </button>
                 <button
                     type="button"
@@ -696,7 +696,10 @@ export default {
         },
         menuStyles() {
             return {
-                '--menu-color': this.content.menuColor,
+                '--menu-color': this.content?.menuColor,
+                '--menu-hover-color': this.content?.menuHoverColor,
+                '--menu-bg-color': this.content?.menuBgColor,
+                '--menu-hover-bg-color': this.content?.menuHoverBgColor,
                 'flex-wrap': this.content.wrapMenu ? 'wrap' : 'nowrap',
             };
         },
@@ -1144,6 +1147,9 @@ export default {
 <style lang="scss">
 .ww-rich-text {
     --menu-color: unset;
+    --menu-hover-color: #000000ad;
+    --menu-bg-color: transparent;
+    --menu-hover-bg-color: rgb(245, 245, 245);
     flex-direction: column;
 
     &.editing .ww-rich-text__input {
@@ -1192,14 +1198,16 @@ export default {
             font-weight: 700;
             cursor: pointer;
             color: var(--menu-color);
-            background-color: transparent;
+            background-color: var(--menu-bg-color);
             &:hover {
-                background-color: rgb(245, 245, 245);
+                color: var(--menu-hover-color) !important;
+                background-color: var(--menu-hover-bg-color) !important;
             }
         }
         &-item {
             padding: 2px;
             color: var(--menu-color);
+            background-color: var(--menu-bg-color);
             cursor: pointer;
             text-align: center;
             border-radius: 4px;
@@ -1225,14 +1233,6 @@ export default {
                 position: relative;
                 z-index: 1;
             }
-            /* Table toolbar icons come as <svg class="icon"> from TableIcon */
-            svg.icon {
-                width: 16px !important;
-                height: 16px !important;
-                display: block;
-                position: relative;
-                z-index: 1;
-            }
             /* Support class-based font icons like .icon-x, .icon-foo-bar */
             [class^='icon-'],
             [class*=' icon-'] {
@@ -1248,7 +1248,18 @@ export default {
                 z-index: 1;
             }
             &:hover {
-                background-color: rgb(245, 245, 245);
+                color: var(--menu-hover-color) !important;
+                background-color: var(--menu-hover-bg-color) !important;
+                .icon {
+                    color: var(--menu-hover-color) !important;
+                }
+                i {
+                    color: var(--menu-hover-color) !important;
+                }
+                [class^='icon-'],
+                [class*=' icon-'] {
+                    color: var(--menu-hover-color) !important;
+                }
             }
             &.is-active {
                 color: var(--menu-color);
