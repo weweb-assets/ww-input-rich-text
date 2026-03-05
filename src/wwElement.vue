@@ -935,6 +935,19 @@ export default {
                                 char: this.editorConfig.mention.char,
                             },
                         }),
+                    Mathematics.configure({
+                        regex: /(?<!\$)\$([^\$]+)\$(?!\$)/gi,
+                        katexOptions: {
+                            throwOnError: false,
+                        },
+                    }),
+                    Mathematics.extend({ name: 'MathematicsDisplay' }).configure({
+                        regex: /\$\$([^\$]+)\$\$/gi,
+                        katexOptions: {
+                            throwOnError: false,
+                            displayMode: true,
+                        },
+                    }),
                 ],
                 onCreate: () => {
                     this.setValue(this.getContent());
@@ -1036,9 +1049,6 @@ export default {
         toggleItalic() {
             this.richEditor.chain().focus().toggleItalic().run();
         },
-        toggleUnderline() {
-            this.richEditor.chain().focus().toggleUnderline().run();
-        },
         toggleStrike() {
             this.richEditor.chain().focus().toggleStrike().run();
         },
@@ -1062,6 +1072,30 @@ export default {
         },
         toggleBlockquote() {
             this.richEditor.chain().focus().toggleBlockquote().run();
+        },
+        insertInlineMath(latex) {
+            const frontWindow = wwLib.getFrontWindow();
+            const latexExpression = latex || frontWindow.prompt('Enter inline LaTeX expression:', '');
+            if (latexExpression) {
+                const fullExpression = `$${latexExpression}$`;
+                this.richEditor.chain().focus().insertContent(fullExpression).run();
+                setTimeout(() => {
+                    const { state } = this.richEditor;
+                    this.richEditor.view.updateState(state);
+                }, 10);
+            }
+        },
+        insertBlockMath(latex) {
+            const frontWindow = wwLib.getFrontWindow();
+            const latexExpression = latex || frontWindow.prompt('Enter block LaTeX expression:', '');
+            if (latexExpression) {
+                const blockContent = `$$${latexExpression}$$`;
+                this.richEditor.chain().focus().insertContent(blockContent).run();
+                setTimeout(() => {
+                    const { state } = this.richEditor;
+                    this.richEditor.view.updateState(state);
+                }, 10);
+            }
         },
         undo() {
             this.richEditor.chain().undo().run();
@@ -1516,6 +1550,13 @@ export default {
         padding: 0 0.25rem;
         border-radius: 0.25rem;
         display: inline-block;
+
+        // Display math ($$...$$) renders as centered block
+        &:has(.katex-display) {
+            display: block;
+            text-align: center;
+            padding: 0.5em 0;
+        }
 
         &--editable {
             cursor: pointer;
