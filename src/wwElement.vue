@@ -115,23 +115,16 @@
                 ></span>
 
                 <!-- Color -->
-                <label
+                <button
+                    type="button"
                     class="ww-rich-text__menu-item"
-                    :for="`rich-color-${randomUid}`"
-                    @click="richEditor.commands.focus()"
+                    @click="openColorModal"
                     v-if="menu.textColor"
+                    :disabled="!isEditable"
                     title="Text color"
                 >
                     <div class="icon" v-html="iconHTMLs.palette"></div>
-                    <input
-                        :id="`rich-color-${randomUid}`"
-                        type="color"
-                        @input="setColor($event.target.value)"
-                        :value="richEditor.getAttributes('textStyle').color"
-                        style="display: none"
-                        :disabled="!isEditable"
-                    />
-                </label>
+                </button>
 
                 <span class="separator" v-if="menu.textColor"></span>
 
@@ -362,6 +355,51 @@
             <wwElement class="ww-rich-text__menu" v-else-if="content.customMenu" v-bind="content.customMenuElement" />
 
             <editor-content class="ww-rich-text__input" :editor="richEditor" :style="richStyles" />
+
+            <!-- Color Picker Modal -->
+            <div class="ww-rich-text__color-modal" v-if="showColorModal" :style="menuStyles">
+                <div class="ww-rich-text__color-modal-backdrop" @click="cancelColorModal"></div>
+                <div class="ww-rich-text__color-modal-content">
+                    <div class="ww-rich-text__color-modal-header">Text Color</div>
+                    <hex-color-picker
+                        :color="colorInputValue"
+                        @color-changed="onColorChanged"
+                    ></hex-color-picker>
+                    <input
+                        class="ww-rich-text__color-modal-input"
+                        v-model="colorInputValue"
+                        placeholder="#000000"
+                        @keydown.enter="confirmColorModal"
+                        @keydown.esc="cancelColorModal"
+                    />
+                    <div class="ww-rich-text__color-modal-actions">
+                        <button type="button" class="cancel-btn" @click="cancelColorModal">Cancel</button>
+                        <button type="button" class="confirm-btn" @click="confirmColorModal">Apply</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LaTeX Input Modal -->
+            <div class="ww-rich-text__latex-modal" v-if="showLatexModal" :style="menuStyles">
+                <div class="ww-rich-text__latex-modal-backdrop" @click="cancelLatexModal"></div>
+                <div class="ww-rich-text__latex-modal-content">
+                    <div class="ww-rich-text__latex-modal-header">
+                        {{ latexModalType === 'inline' ? 'Inline LaTeX' : 'Block LaTeX' }}
+                    </div>
+                    <input
+                        ref="latexInput"
+                        class="ww-rich-text__latex-modal-input"
+                        v-model="latexInputValue"
+                        placeholder="e.g. x^2 + y^2 = z^2"
+                        @keydown.enter="confirmLatexModal"
+                        @keydown.esc="cancelLatexModal"
+                    />
+                    <div class="ww-rich-text__latex-modal-actions">
+                        <button type="button" class="cancel-btn" @click="cancelLatexModal">Cancel</button>
+                        <button type="button" class="confirm-btn" @click="confirmLatexModal">Insert</button>
+                    </div>
+                </div>
+            </div>
         </template>
     </div>
 </template>
@@ -385,6 +423,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 import { Mathematics } from '@tiptap/extension-mathematics';
+import 'vanilla-colorful';
 
 import { computed, inject } from 'vue';
 import suggestion from './suggestion.js';
@@ -487,6 +526,11 @@ export default {
         richEditor: null,
         loading: false,
         iconHTMLs: {},
+        showColorModal: false,
+        colorInputValue: '#000000',
+        showLatexModal: false,
+        latexModalType: 'inline',
+        latexInputValue: '',
     }),
 
     watch: {
@@ -700,6 +744,8 @@ export default {
                 '--menu-hover-color': this.content?.menuHoverColor,
                 '--menu-bg-color': this.content?.menuBgColor,
                 '--menu-hover-bg-color': this.content?.menuHoverBgColor,
+                '--modal-bg': this.content?.menuBgColor && this.content.menuBgColor !== 'transparent' ? this.content.menuBgColor : '#fff',
+                '--latex-modal-bg': this.content?.menuBgColor && this.content.menuBgColor !== 'transparent' ? this.content.menuBgColor : '#fff',
                 'flex-wrap': this.content.wrapMenu ? 'wrap' : 'nowrap',
             };
         },
@@ -1058,6 +1104,22 @@ export default {
         setTextAlign(textAlign) {
             this.richEditor.chain().focus().setTextAlign(textAlign).run();
         },
+        openColorModal() {
+            this.colorInputValue = this.richEditor?.getAttributes('textStyle')?.color || '#000000';
+            this.showColorModal = true;
+        },
+        onColorChanged(e) {
+            this.colorInputValue = e?.detail?.value;
+        },
+        confirmColorModal() {
+            if (!this.colorInputValue) return;
+            this.showColorModal = false;
+            this.richEditor?.chain().focus().setColor(this.colorInputValue).run();
+        },
+        cancelColorModal() {
+            this.showColorModal = false;
+            this.richEditor?.chain().focus().run();
+        },
         setColor(color) {
             this.richEditor.chain().focus().setColor(color).run();
         },
@@ -1077,28 +1139,50 @@ export default {
             this.richEditor.chain().focus().toggleBlockquote().run();
         },
         insertInlineMath(latex) {
-            const frontWindow = wwLib.getFrontWindow();
-            const latexExpression = latex || frontWindow.prompt('Enter inline LaTeX expression:', '');
-            if (latexExpression) {
-                const fullExpression = `$${latexExpression}$`;
+            if (latex) {
+                const fullExpression = `$${latex}$`;
                 this.richEditor.chain().focus().insertContent(fullExpression).run();
                 setTimeout(() => {
                     const { state } = this.richEditor;
                     this.richEditor.view.updateState(state);
                 }, 10);
+                return;
             }
+            this.latexModalType = 'inline';
+            this.latexInputValue = '';
+            this.showLatexModal = true;
+            this.$nextTick(() => this.$refs.latexInput?.focus());
         },
         insertBlockMath(latex) {
-            const frontWindow = wwLib.getFrontWindow();
-            const latexExpression = latex || frontWindow.prompt('Enter block LaTeX expression:', '');
-            if (latexExpression) {
-                const blockContent = `$$${latexExpression}$$`;
+            if (latex) {
+                const blockContent = `$$${latex}$$`;
                 this.richEditor.chain().focus().insertContent(blockContent).run();
                 setTimeout(() => {
                     const { state } = this.richEditor;
                     this.richEditor.view.updateState(state);
                 }, 10);
+                return;
             }
+            this.latexModalType = 'block';
+            this.latexInputValue = '';
+            this.showLatexModal = true;
+            this.$nextTick(() => this.$refs.latexInput?.focus());
+        },
+        confirmLatexModal() {
+            if (!this.latexInputValue) return;
+            const expr = this.latexModalType === 'inline'
+                ? `$${this.latexInputValue}$`
+                : `$$${this.latexInputValue}$$`;
+            this.showLatexModal = false;
+            this.richEditor.chain().focus().insertContent(expr).run();
+            setTimeout(() => {
+                const { state } = this.richEditor;
+                this.richEditor.view.updateState(state);
+            }, 10);
+        },
+        cancelLatexModal() {
+            this.showLatexModal = false;
+            this.richEditor?.chain().focus().run();
         },
         undo() {
             this.richEditor.chain().undo().run();
@@ -1151,6 +1235,7 @@ export default {
     --menu-bg-color: transparent;
     --menu-hover-bg-color: rgb(245, 245, 245);
     flex-direction: column;
+    position: relative;
 
     &.editing .ww-rich-text__input {
         position: relative;
@@ -1307,6 +1392,106 @@ export default {
                 black calc(100% - 20px),
                 transparent
             );
+        }
+    }
+
+    &__color-modal,
+    &__latex-modal {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: inherit;
+        }
+
+        &-content {
+            position: relative;
+            background: var(--modal-bg, var(--latex-modal-bg, #fff));
+            border: 1px solid var(--menu-hover-bg-color, #e5e5e5);
+            border-radius: 8px;
+            padding: 16px;
+            min-width: 280px;
+            max-width: 90%;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        &-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--menu-color, inherit);
+        }
+
+        &-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--menu-hover-bg-color, #e0e0e0);
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--menu-color, inherit);
+            background: transparent;
+            outline: none;
+            box-sizing: border-box;
+
+            &:focus {
+                border-color: var(--menu-hover-color, #666);
+            }
+        }
+
+        &-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+
+            button {
+                padding: 6px 16px;
+                border-radius: 6px;
+                font-size: 13px;
+                font-weight: 500;
+                cursor: pointer;
+                border: none;
+                transition: background 0.15s, color 0.15s;
+            }
+
+            .cancel-btn {
+                background: var(--menu-hover-bg-color, #f5f5f5);
+                color: var(--menu-color, inherit);
+
+                &:hover {
+                    background: var(--menu-hover-bg-color, #e8e8e8);
+                    filter: brightness(0.95);
+                }
+            }
+
+            .confirm-btn {
+                background: var(--menu-color, #333);
+                color: var(--modal-bg, var(--latex-modal-bg, #fff));
+
+                &:hover {
+                    background: var(--menu-hover-color, #000);
+                }
+            }
+        }
+    }
+
+    &__color-modal {
+        hex-color-picker {
+            width: 100%;
+            height: 160px;
+        }
+
+        &-content {
+            min-width: 280px;
         }
     }
 

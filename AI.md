@@ -13,6 +13,10 @@ A versatile rich text editor enabling text content creation with formatting opti
 - Hide the menu for a minimalistic render
 - Use as readonly to display rich text content
 - Enable features in the menu that make sense given the building context
+- LaTeX math support with inline ($...$) and display ($$...$$) modes
+- Custom color picker modal with hex input for text color selection
+- Customizable toolbar icon/button colors (normal + hover states)
+- Scrollable toolbar with hidden scrollbar and fade edges
 
 ***Properties:***
 - readonly: boolean - Whether editor is read-only. Default: false
@@ -33,7 +37,12 @@ A versatile rich text editor enabling text content creation with formatting opti
 - hideMenu: boolean - Hide formatting menu. Default: false
 - wrapMenu: boolean - Wrap formatting menu. Default: false
 - customMenu: boolean - Use custom menu. Default: false
-- menuColor: string - Menu color. Default: "#000000ad"
+- menuColor: string - Menu icon color. Default: "#000000ad"
+- menuHoverColor: string - Menu icon hover color. Default: "#000000ad"
+- menuBgColor: string - Menu button background color. Default: "transparent"
+- menuHoverBgColor: string - Menu button hover background color. Default: "rgb(245, 245, 245)"
+- parameterInlineMath: boolean - Show inline math button in menu. Default: false
+- parameterBlockMath: boolean - Show block math button in menu. Default: false
 - fieldName: string - Form field name. Default: ""
 - customValidation: boolean - Enable custom validation. Default: false
 - validation: string - Custom validation formula. Default: ""
@@ -73,6 +82,8 @@ A versatile rich text editor enabling text content creation with formatting opti
 - `toggleTaskList`: Toggle task list. No args allowed
 - `toggleCodeBlock`: Toggle code block. No args allowed
 - `toggleBlockquote`: Toggle blockquote. No args allowed
+- `insertInlineMath`: Insert inline LaTeX math. Args: Inline LaTeX Expression (Text)
+- `insertBlockMath`: Insert block LaTeX math. Args: Block LaTeX Expression (Text)
 - `undo`: Undo last action. No args allowed
 - `redo`: Redo last action. No args allowed
 - `insertTable`: Insert table. No args allowed
