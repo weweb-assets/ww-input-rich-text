@@ -1407,7 +1407,7 @@ export default {
         &-backdrop {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.15);
+            background: transparent;
             border-radius: inherit;
         }
 
