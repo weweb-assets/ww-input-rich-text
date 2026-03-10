@@ -1,7 +1,7 @@
 <template>
     <div class="ww-rich-text" :class="{ '-readonly': isReadonly, editing: isEditing }" data-capture>
         <template v-if="richEditor">
-            <div class="ww-rich-text__menu native-menu" v-if="!hideMenu && !content.customMenu" :style="menuStyles">
+            <div class="ww-rich-text__menu native-menu" :class="{ '-scrollable': !content?.wrapMenu }" v-if="!hideMenu && !content?.customMenu" :style="menuStyles">
                 <!-- Texte type (normal, ...) -->
                 <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
                     <option v-for="option in textTypeOptions" :key="option.value" :value="option.value">
@@ -1274,6 +1274,39 @@ export default {
                 pointer-events: none;
                 z-index: 0;
             }
+        }
+
+        &.-scrollable {
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .ww-rich-text__menu-item,
+            select,
+            .separator {
+                flex-shrink: 0;
+            }
+
+            padding-left: 8px;
+            padding-right: 8px;
+            mask-image: linear-gradient(
+                to right,
+                transparent,
+                black 20px,
+                black calc(100% - 20px),
+                transparent
+            );
+            -webkit-mask-image: linear-gradient(
+                to right,
+                transparent,
+                black 20px,
+                black calc(100% - 20px),
+                transparent
+            );
         }
     }
 
