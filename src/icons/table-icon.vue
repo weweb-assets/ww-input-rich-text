@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="icon">
         <svg
             v-if="icon == TableIconsEnum.TABLE_INSERT"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,7 @@
 
         <svg
             v-else-if="icon == TableIconsEnum.ROW_INSERT_BEFORE"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,7 @@
 
         <svg
             v-else-if="icon == TableIconsEnum.ROW_INSERT_AFTER"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +67,7 @@
 
         <svg
             v-else-if="icon == TableIconsEnum.COLUMN_INSERT_BEFORE"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@
 
         <svg
             v-else-if="icon == TableIconsEnum.COLUMN_INSERT_AFTER"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +107,7 @@
 
         <svg
             v-else-if="icon == TableIconsEnum.ROW_DELETE"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@
 
         <svg
             v-else-if="icon == TableIconsEnum.COLUMN_DELETE"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +141,7 @@
 
         <svg
             v-else-if="icon == TableIconsEnum.TABLE_DELETE"
-            class="icon"
+
             viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

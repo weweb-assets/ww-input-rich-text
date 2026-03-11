@@ -24,6 +24,9 @@ export default {
         customStylePropertiesOrder: [
             'customMenu',
             'menuColor',
+            'menuHoverColor',
+            'menuBgColor',
+            'menuHoverBgColor',
             [
                 'selectedTag',
                 'h1',
@@ -475,10 +478,43 @@ export default {
         },
         menuColor: {
             label: {
-                en: 'Menu color',
+                en: 'Menu icon color',
             },
             type: 'Color',
             defaultValue: '#000000ad',
+            states: true,
+            classes: true,
+            responsive: true,
+            hidden: content => content.customMenu,
+        },
+        menuHoverColor: {
+            label: {
+                en: 'Menu icon hover color',
+            },
+            type: 'Color',
+            defaultValue: '#000000ad',
+            states: true,
+            classes: true,
+            responsive: true,
+            hidden: content => content.customMenu,
+        },
+        menuBgColor: {
+            label: {
+                en: 'Menu button bg color',
+            },
+            type: 'Color',
+            defaultValue: 'transparent',
+            states: true,
+            classes: true,
+            responsive: true,
+            hidden: content => content.customMenu,
+        },
+        menuHoverBgColor: {
+            label: {
+                en: 'Menu button hover bg color',
+            },
+            type: 'Color',
+            defaultValue: 'rgb(245, 245, 245)',
             states: true,
             classes: true,
             responsive: true,
