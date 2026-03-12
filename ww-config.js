@@ -577,7 +577,7 @@ export default {
             hidden: content => content.customMenu,
         },
         modalApplyColor: {
-            label: { en: 'Apply button color' },
+            label: { en: 'Apply text color' },
             type: 'Color',
             defaultValue: '#ffffff',
             states: true,
@@ -595,7 +595,7 @@ export default {
             hidden: content => content.customMenu,
         },
         modalCancelColor: {
-            label: { en: 'Cancel button color' },
+            label: { en: 'Cancel text color' },
             type: 'Color',
             defaultValue: '#000000',
             states: true,
