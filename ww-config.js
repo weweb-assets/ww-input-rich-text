@@ -31,7 +31,7 @@ export default {
             {
                 label: 'Modal',
                 isCollapsible: true,
-                properties: ['modalBgColor', 'modalTextColor', 'modalFontSize', 'modalBorderColor', 'modalApplyBgColor', 'modalApplyColor', 'modalCancelBgColor', 'modalCancelColor'],
+                properties: ['modalBgColor', 'modalTextColor', 'modalPlaceholderColor', 'modalFontSize', 'modalBorderColor', 'modalApplyBgColor', 'modalApplyColor', 'modalCancelBgColor', 'modalCancelColor'],
             },
             [
                 'selectedTag',
@@ -539,6 +539,15 @@ export default {
             label: { en: 'Text color' },
             type: 'Color',
             defaultValue: '#000000',
+            states: true,
+            classes: true,
+            responsive: true,
+            hidden: content => content.customMenu,
+        },
+        modalPlaceholderColor: {
+            label: { en: 'Placeholder color' },
+            type: 'Color',
+            defaultValue: '#adb5bd',
             states: true,
             classes: true,
             responsive: true,

@@ -759,6 +759,7 @@ export default {
             if (p?.lineHeight) styles['--p-lineHeight'] = p.lineHeight;
             styles['--modal-bg'] = this.content?.modalBgColor || '#ffffff';
             styles['--modal-text-color'] = this.content?.modalTextColor || '#000000';
+            styles['--modal-placeholder-color'] = this.content?.modalPlaceholderColor || '#adb5bd';
             styles['--modal-border-color'] = this.content?.modalBorderColor || '#e5e5e5';
             styles['--modal-font-size'] = this.content?.modalFontSize || '14px';
             styles['--modal-apply-bg'] = this.content?.modalApplyBgColor || '#000000';
@@ -1465,6 +1466,10 @@ export default {
                 background: transparent;
                 outline: none;
                 box-sizing: border-box;
+
+                &::placeholder {
+                    color: var(--modal-placeholder-color, #adb5bd);
+                }
 
                 &:focus {
                     border-color: var(--modal-border-color, #666);
