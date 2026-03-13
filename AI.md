@@ -37,10 +37,19 @@ A versatile rich text editor enabling text content creation with formatting opti
 - hideMenu: boolean - Hide formatting menu. Default: false
 - wrapMenu: boolean - Wrap formatting menu. Default: false
 - customMenu: boolean - Use custom menu. Default: false
-- menuColor: string - Menu icon color. Default: "#000000ad"
-- menuHoverColor: string - Menu icon hover color. Default: "#000000ad"
-- menuBgColor: string - Menu button background color. Default: "transparent"
-- menuHoverBgColor: string - Menu button hover background color. Default: "rgb(245, 245, 245)"
+- menuColor: string - Toolbar icon color. Default: "#000000ad"
+- menuHoverColor: string - Toolbar icon hover color. Default: "#000000ad"
+- menuBgColor: string - Toolbar button background. Default: "transparent"
+- menuHoverBgColor: string - Toolbar button hover background. Default: "rgb(245, 245, 245)"
+- modalBgColor: string - Modal background color. Default: "#ffffff"
+- modalTextColor: string - Modal text color. Default: "#000000"
+- modalPlaceholderColor: string - Modal input placeholder color. Default: "#adb5bd"
+- modalFontSize: string - Modal font size. Default: "14px"
+- modalBorderColor: string - Modal border color (also used for inputs). Default: "#e5e5e5"
+- modalApplyBgColor: string - Modal apply button background. Default: "#000000"
+- modalApplyColor: string - Modal apply button text color. Default: "#ffffff"
+- modalCancelBgColor: string - Modal cancel button background. Default: "transparent"
+- modalCancelColor: string - Modal cancel button text color. Default: "#000000"
 - parameterInlineMath: boolean - Show inline math button in menu. Default: false
 - parameterBlockMath: boolean - Show block math button in menu. Default: false
 - fieldName: string - Form field name. Default: ""

@@ -357,7 +357,7 @@
             <editor-content class="ww-rich-text__input" :editor="richEditor" :style="richStyles" />
 
             <!-- Color Picker Modal -->
-            <div class="ww-rich-text__color-modal" v-if="showColorModal" :style="menuStyles">
+            <div class="ww-rich-text__color-modal" v-if="showColorModal" :style="modalStyles">
                 <div class="ww-rich-text__color-modal-backdrop" @click="cancelColorModal"></div>
                 <div class="ww-rich-text__color-modal-content">
                     <div class="ww-rich-text__color-modal-header">Text Color</div>
@@ -380,7 +380,7 @@
             </div>
 
             <!-- LaTeX Input Modal -->
-            <div class="ww-rich-text__latex-modal" v-if="showLatexModal" :style="menuStyles">
+            <div class="ww-rich-text__latex-modal" v-if="showLatexModal" :style="modalStyles">
                 <div class="ww-rich-text__latex-modal-backdrop" @click="cancelLatexModal"></div>
                 <div class="ww-rich-text__latex-modal-content">
                     <div class="ww-rich-text__latex-modal-header">
@@ -423,8 +423,6 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 import { Mathematics } from '@tiptap/extension-mathematics';
-import 'vanilla-colorful';
-
 import { computed, inject } from 'vue';
 import suggestion from './suggestion.js';
 import { Markdown } from 'tiptap-markdown';
@@ -468,6 +466,10 @@ export default {
     },
     emits: ['trigger-event', 'update:content:effect', 'update:sidepanel-content'],
     setup(props, { emit }) {
+        if (!customElements.get('hex-color-picker')) {
+            import('vanilla-colorful');
+        }
+
         const { value: variableValue, setValue } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
             name: 'value',
@@ -744,10 +746,27 @@ export default {
                 '--menu-hover-color': this.content?.menuHoverColor,
                 '--menu-bg-color': this.content?.menuBgColor,
                 '--menu-hover-bg-color': this.content?.menuHoverBgColor,
-                '--modal-bg': this.content?.menuBgColor && this.content.menuBgColor !== 'transparent' ? this.content.menuBgColor : '#fff',
-                '--latex-modal-bg': this.content?.menuBgColor && this.content.menuBgColor !== 'transparent' ? this.content.menuBgColor : '#fff',
                 'flex-wrap': this.content.wrapMenu ? 'wrap' : 'nowrap',
             };
+        },
+        modalStyles() {
+            const styles = {};
+            const p = this.content?.p;
+            if (p?.fontSize) styles['--p-fontSize'] = p.fontSize;
+            if (p?.fontFamily) styles['--p-fontFamily'] = p.fontFamily;
+            if (p?.fontWeight) styles['--p-fontWeight'] = p.fontWeight;
+            if (p?.color) styles['--p-color'] = p.color;
+            if (p?.lineHeight) styles['--p-lineHeight'] = p.lineHeight;
+            styles['--modal-bg'] = this.content?.modalBgColor || '#ffffff';
+            styles['--modal-text-color'] = this.content?.modalTextColor || '#000000';
+            styles['--modal-placeholder-color'] = this.content?.modalPlaceholderColor || '#adb5bd';
+            styles['--modal-border-color'] = this.content?.modalBorderColor || '#e5e5e5';
+            styles['--modal-font-size'] = this.content?.modalFontSize || '14px';
+            styles['--modal-apply-bg'] = this.content?.modalApplyBgColor || '#000000';
+            styles['--modal-apply-color'] = this.content?.modalApplyColor || '#ffffff';
+            styles['--modal-cancel-bg'] = this.content?.modalCancelBgColor || 'transparent';
+            styles['--modal-cancel-color'] = this.content?.modalCancelColor || '#000000';
+            return styles;
         },
         richStyles() {
             return {
@@ -1413,8 +1432,8 @@ export default {
 
         &-content {
             position: relative;
-            background: var(--modal-bg, var(--latex-modal-bg, #fff));
-            border: 1px solid var(--menu-hover-bg-color, #e5e5e5);
+            background: var(--modal-bg, #fff);
+            border: 1px solid var(--modal-border-color, #e5e5e5);
             border-radius: 8px;
             padding: 16px;
             min-width: 280px;
@@ -1423,62 +1442,67 @@ export default {
             display: flex;
             flex-direction: column;
             gap: 12px;
-        }
+            color: var(--modal-text-color, inherit);
+            font-size: var(--modal-font-size, 14px);
 
-        &-header {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--menu-color, inherit);
-        }
-
-        &-input {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--menu-hover-bg-color, #e0e0e0);
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 14px;
-            color: var(--menu-color, inherit);
-            background: transparent;
-            outline: none;
-            box-sizing: border-box;
-
-            &:focus {
-                border-color: var(--menu-hover-color, #666);
+            .ww-rich-text__color-modal-header,
+            .ww-rich-text__latex-modal-header {
+                font-size: inherit;
+                font-family: var(--p-fontFamily, inherit);
+                font-weight: 600;
+                color: var(--modal-text-color, inherit);
+                line-height: var(--p-lineHeight, normal);
             }
-        }
 
-        &-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-
-            button {
-                padding: 6px 16px;
+            .ww-rich-text__color-modal-input,
+            .ww-rich-text__latex-modal-input {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid var(--modal-border-color, #e0e0e0);
                 border-radius: 6px;
-                font-size: 13px;
-                font-weight: 500;
-                cursor: pointer;
-                border: none;
-                transition: background 0.15s, color 0.15s;
-            }
+                font-family: var(--p-fontFamily, monospace);
+                font-size: inherit;
+                color: var(--modal-text-color, inherit);
+                background: transparent;
+                outline: none;
+                box-sizing: border-box;
 
-            .cancel-btn {
-                background: var(--menu-hover-bg-color, #f5f5f5);
-                color: var(--menu-color, inherit);
+                &::placeholder {
+                    color: var(--modal-placeholder-color, #adb5bd);
+                }
 
-                &:hover {
-                    background: var(--menu-hover-bg-color, #e8e8e8);
-                    filter: brightness(0.95);
+                &:focus {
+                    border-color: var(--modal-border-color, #666);
+                    filter: brightness(0.85);
                 }
             }
 
-            .confirm-btn {
-                background: var(--menu-color, #333);
-                color: var(--modal-bg, var(--latex-modal-bg, #fff));
+            .ww-rich-text__color-modal-actions,
+            .ww-rich-text__latex-modal-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 4px;
 
-                &:hover {
-                    background: var(--menu-hover-color, #000);
+                button {
+                    padding: 6px 14px;
+                    border-radius: 6px;
+                    font-size: inherit;
+                    font-weight: 500;
+                    cursor: pointer;
+                    border: none;
+                    transition: background 0.15s, color 0.15s;
+                }
+
+                .cancel-btn {
+                    color: var(--modal-cancel-color, inherit);
+                    background-color: var(--modal-cancel-bg, transparent);
+                    &:hover { filter: brightness(0.9); }
+                }
+
+                .confirm-btn {
+                    color: var(--modal-apply-color, #fff);
+                    background-color: var(--modal-apply-bg, #000);
+                    &:hover { filter: brightness(0.85); }
                 }
             }
         }
