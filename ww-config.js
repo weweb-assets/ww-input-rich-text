@@ -126,11 +126,11 @@ export default {
         ],
     },
     triggerEvents: [
-        { name: 'change', label: { en: 'On change' }, event: { value: '' } },
-        { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' } },
-        { name: 'mention:click', label: { en: 'On mention click' }, event: { mention: { id: '', label: '' } } },
-        { name: 'focus', label: { en: 'On focus' }, event: { value: '' } },
-        { name: 'blur', label: { en: 'On blur' }, event: { value: '' } },
+        { name: 'change', label: { en: 'On change' }, event: { value: '' }, description: "Run when the value changes." },
+        { name: 'initValueChange', label: { en: 'On init value change' }, event: { value: '' }, description: "Run when the initial value changes." },
+        { name: 'mention:click', label: { en: 'On mention click' }, event: { mention: { id: '', label: '' } }, description: "Run when a mention is clicked." },
+        { name: 'focus', label: { en: 'On focus' }, event: { value: '' }, description: "Run when the input becomes active (for example, when clicked)." },
+        { name: 'blur', label: { en: 'On blur' }, event: { value: '' }, description: "Run when the input stops being active." },
     ],
     actions: [
         { label: 'Focus Rich text', action: 'focusEditor' },
