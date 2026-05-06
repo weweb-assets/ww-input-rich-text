@@ -1,7 +1,12 @@
 <template>
     <div class="ww-rich-text" :class="{ '-readonly': isReadonly, editing: isEditing }" data-capture>
         <template v-if="richEditor">
-            <div class="ww-rich-text__menu native-menu" :class="{ '-scrollable': !content?.wrapMenu }" v-if="!hideMenu && !content?.customMenu" :style="menuStyles">
+            <div
+                class="ww-rich-text__menu native-menu"
+                :class="{ '-scrollable': !content?.wrapMenu }"
+                v-if="!hideMenu && !content?.customMenu"
+                :style="menuStyles"
+            >
                 <!-- Texte type (normal, ...) -->
                 <select id="rich-size" v-model="currentTextType" :disabled="!isEditable" v-if="menu.textType">
                     <option v-for="option in textTypeOptions" :key="option.value" :value="option.value">
@@ -361,10 +366,7 @@
                 <div class="ww-rich-text__color-modal-backdrop" @click="cancelColorModal"></div>
                 <div class="ww-rich-text__color-modal-content">
                     <div class="ww-rich-text__color-modal-header">Text Color</div>
-                    <hex-color-picker
-                        :color="colorInputValue"
-                        @color-changed="onColorChanged"
-                    ></hex-color-picker>
+                    <hex-color-picker :color="colorInputValue" @color-changed="onColorChanged"></hex-color-picker>
                     <input
                         class="ww-rich-text__color-modal-input"
                         v-model="colorInputValue"
@@ -633,12 +635,12 @@ export default {
                 textAlign: this.richEditor.isActive({ textAlign: 'left' })
                     ? 'left'
                     : this.richEditor.isActive({ textAlign: 'center' })
-                    ? 'center'
-                    : this.richEditor.isActive({ textAlign: 'right' })
-                    ? 'right'
-                    : this.richEditor.isActive({ textAlign: 'justify' })
-                    ? 'justify'
-                    : false,
+                      ? 'center'
+                      : this.richEditor.isActive({ textAlign: 'right' })
+                        ? 'right'
+                        : this.richEditor.isActive({ textAlign: 'justify' })
+                          ? 'justify'
+                          : false,
                 table: this.richEditor.isActive('table'),
                 inlineMath: false,
                 blockMath: false,
@@ -774,95 +776,95 @@ export default {
                 flex: 1,
                 overflow: 'auto',
                 // H1
-                '--h1-fontSize': this.content.h1.fontSize,
-                '--h1-fontFamily': this.content.h1.fontFamily,
-                '--h1-fontWeight': this.content.h1.fontWeight,
-                '--h1-textAlign': this.content.h1.textAlign,
-                '--h1-color': this.content.h1.color,
-                '--h1-lineHeight': this.content.h1.lineHeight,
-                '--h1-margin-top': this.content.h1.marginTop,
-                '--h1-margin-bottom': this.content.h1.marginBottom,
+                '--h1-fontSize': this.content.h1?.fontSize,
+                '--h1-fontFamily': this.content.h1?.fontFamily,
+                '--h1-fontWeight': this.content.h1?.fontWeight,
+                '--h1-textAlign': this.content.h1?.textAlign,
+                '--h1-color': this.content.h1?.color,
+                '--h1-lineHeight': this.content.h1?.lineHeight,
+                '--h1-margin-top': this.content.h1?.marginTop,
+                '--h1-margin-bottom': this.content.h1?.marginBottom,
                 // H2
-                '--h2-fontSize': this.content.h2.fontSize,
-                '--h2-fontFamily': this.content.h2.fontFamily,
-                '--h2-fontWeight': this.content.h2.fontWeight,
-                '--h2-textAlign': this.content.h2.textAlign,
-                '--h2-color': this.content.h2.color,
-                '--h2-lineHeight': this.content.h2.lineHeight,
-                '--h2-margin-top': this.content.h2.marginTop,
-                '--h2-margin-bottom': this.content.h2.marginBottom,
+                '--h2-fontSize': this.content.h2?.fontSize,
+                '--h2-fontFamily': this.content.h2?.fontFamily,
+                '--h2-fontWeight': this.content.h2?.fontWeight,
+                '--h2-textAlign': this.content.h2?.textAlign,
+                '--h2-color': this.content.h2?.color,
+                '--h2-lineHeight': this.content.h2?.lineHeight,
+                '--h2-margin-top': this.content.h2?.marginTop,
+                '--h2-margin-bottom': this.content.h2?.marginBottom,
                 // H3
-                '--h3-fontSize': this.content.h3.fontSize,
-                '--h3-fontFamily': this.content.h3.fontFamily,
-                '--h3-fontWeight': this.content.h3.fontWeight,
-                '--h3-textAlign': this.content.h3.textAlign,
-                '--h3-color': this.content.h3.color,
-                '--h3-lineHeight': this.content.h3.lineHeight,
-                '--h3-margin-top': this.content.h3.marginTop,
-                '--h3-margin-bottom': this.content.h3.marginBottom,
+                '--h3-fontSize': this.content.h3?.fontSize,
+                '--h3-fontFamily': this.content.h3?.fontFamily,
+                '--h3-fontWeight': this.content.h3?.fontWeight,
+                '--h3-textAlign': this.content.h3?.textAlign,
+                '--h3-color': this.content.h3?.color,
+                '--h3-lineHeight': this.content.h3?.lineHeight,
+                '--h3-margin-top': this.content.h3?.marginTop,
+                '--h3-margin-bottom': this.content.h3?.marginBottom,
                 // H4
-                '--h4-fontSize': this.content.h4.fontSize,
-                '--h4-fontFamily': this.content.h4.fontFamily,
-                '--h4-fontWeight': this.content.h4.fontWeight,
-                '--h4-textAlign': this.content.h4.textAlign,
-                '--h4-color': this.content.h4.color,
-                '--h4-lineHeight': this.content.h4.lineHeight,
-                '--h4-margin-top': this.content.h4.marginTop,
-                '--h4-margin-bottom': this.content.h4.marginBottom,
+                '--h4-fontSize': this.content.h4?.fontSize,
+                '--h4-fontFamily': this.content.h4?.fontFamily,
+                '--h4-fontWeight': this.content.h4?.fontWeight,
+                '--h4-textAlign': this.content.h4?.textAlign,
+                '--h4-color': this.content.h4?.color,
+                '--h4-lineHeight': this.content.h4?.lineHeight,
+                '--h4-margin-top': this.content.h4?.marginTop,
+                '--h4-margin-bottom': this.content.h4?.marginBottom,
                 // H5
-                '--h5-fontSize': this.content.h5.fontSize,
-                '--h5-fontFamily': this.content.h5.fontFamily,
-                '--h5-fontWeight': this.content.h5.fontWeight,
-                '--h5-textAlign': this.content.h5.textAlign,
-                '--h5-color': this.content.h5.color,
-                '--h5-lineHeight': this.content.h5.lineHeight,
-                '--h5-margin-top': this.content.h5.marginTop,
-                '--h5-margin-bottom': this.content.h5.marginBottom,
+                '--h5-fontSize': this.content.h5?.fontSize,
+                '--h5-fontFamily': this.content.h5?.fontFamily,
+                '--h5-fontWeight': this.content.h5?.fontWeight,
+                '--h5-textAlign': this.content.h5?.textAlign,
+                '--h5-color': this.content.h5?.color,
+                '--h5-lineHeight': this.content.h5?.lineHeight,
+                '--h5-margin-top': this.content.h5?.marginTop,
+                '--h5-margin-bottom': this.content.h5?.marginBottom,
                 // H6
-                '--h6-fontSize': this.content.h6.fontSize,
-                '--h6-fontFamily': this.content.h6.fontFamily,
-                '--h6-fontWeight': this.content.h6.fontWeight,
-                '--h6-textAlign': this.content.h6.textAlign,
-                '--h6-color': this.content.h6.color,
-                '--h6-lineHeight': this.content.h6.lineHeight,
-                '--h6-margin-top': this.content.h6.marginTop,
-                '--h6-margin-bottom': this.content.h6.marginBottom,
+                '--h6-fontSize': this.content.h6?.fontSize,
+                '--h6-fontFamily': this.content.h6?.fontFamily,
+                '--h6-fontWeight': this.content.h6?.fontWeight,
+                '--h6-textAlign': this.content.h6?.textAlign,
+                '--h6-color': this.content.h6?.color,
+                '--h6-lineHeight': this.content.h6?.lineHeight,
+                '--h6-margin-top': this.content.h6?.marginTop,
+                '--h6-margin-bottom': this.content.h6?.marginBottom,
                 // p
-                '--p-fontSize': this.content.p.fontSize,
-                '--p-fontFamily': this.content.p.fontFamily,
-                '--p-fontWeight': this.content.p.fontWeight,
-                '--p-textAlign': this.content.p.textAlign,
-                '--p-color': this.content.p.color,
-                '--p-lineHeight': this.content.p.lineHeight,
-                '--p-margin-top': this.content.p.marginTop,
-                '--p-margin-bottom': this.content.p.marginBottom,
+                '--p-fontSize': this.content.p?.fontSize,
+                '--p-fontFamily': this.content.p?.fontFamily,
+                '--p-fontWeight': this.content.p?.fontWeight,
+                '--p-textAlign': this.content.p?.textAlign,
+                '--p-color': this.content.p?.color,
+                '--p-lineHeight': this.content.p?.lineHeight,
+                '--p-margin-top': this.content.p?.marginTop,
+                '--p-margin-bottom': this.content.p?.marginBottom,
                 // mention
-                '--mention-fontSize': this.content.mention.fontSize,
-                '--mention-fontFamily': this.content.mention.fontFamily,
-                '--mention-fontWeight': this.content.mention.fontWeight,
-                '--mention-color': this.content.mention.color,
-                '--mention-borderSize': this.content.mention.borderSize,
-                '--mention-border-radius': this.content.mention.borderRadius,
+                '--mention-fontSize': this.content.mention?.fontSize,
+                '--mention-fontFamily': this.content.mention?.fontFamily,
+                '--mention-fontWeight': this.content.mention?.fontWeight,
+                '--mention-color': this.content.mention?.color,
+                '--mention-borderSize': this.content.mention?.borderSize,
+                '--mention-border-radius': this.content.mention?.borderRadius,
                 // a
-                '--a-fontSize': this.content.a.fontSize,
-                '--a-fontFamily': this.content.a.fontFamily,
-                '--a-fontWeight': this.content.a.fontWeight,
-                '--a-textAlign': this.content.a.textAlign,
-                '--a-color': this.content.a.color,
-                '--a-lineHeight': this.content.a.lineHeight,
-                '--a-underline': this.content.a.isUnderline ? 'underline' : 'none',
+                '--a-fontSize': this.content.a?.fontSize,
+                '--a-fontFamily': this.content.a?.fontFamily,
+                '--a-fontWeight': this.content.a?.fontWeight,
+                '--a-textAlign': this.content.a?.textAlign,
+                '--a-color': this.content.a?.color,
+                '--a-lineHeight': this.content.a?.lineHeight,
+                '--a-underline': this.content.a?.isUnderline ? 'underline' : 'none',
                 // blockquote
-                '--blockquote-color': this.content.blockquote.color,
-                '--blockquote-border-color': this.content.blockquote.borderColor,
-                '--blockquote-margin-top': this.content.blockquote.marginTop,
-                '--blockquote-margin-bottom': this.content.blockquote.marginBottom,
+                '--blockquote-color': this.content.blockquote?.color,
+                '--blockquote-border-color': this.content.blockquote?.borderColor,
+                '--blockquote-margin-top': this.content.blockquote?.marginTop,
+                '--blockquote-margin-bottom': this.content.blockquote?.marginBottom,
                 // code
-                '--code-color': this.content.code.color,
-                '--code-bg-color': this.content.code.bgColor,
-                '--code-border-radius': this.content.code.borderRadius,
-                '--code-padding-y': this.content.code.paddingY,
-                '--code-padding-x': this.content.code.paddingX,
-                '--code-font-size': this.content.code.fontSize,
+                '--code-color': this.content.code?.color,
+                '--code-bg-color': this.content.code?.bgColor,
+                '--code-border-radius': this.content.code?.borderRadius,
+                '--code-padding-y': this.content.code?.paddingY,
+                '--code-padding-x': this.content.code?.paddingX,
+                '--code-font-size': this.content.code?.fontSize,
                 // img
                 '--img-max-width': this.content.img?.maxWidth,
                 '--img-max-height': this.content.img?.maxHeight,
@@ -1189,9 +1191,7 @@ export default {
         },
         confirmLatexModal() {
             if (!this.latexInputValue) return;
-            const expr = this.latexModalType === 'inline'
-                ? `$${this.latexInputValue}$`
-                : `$$${this.latexInputValue}$$`;
+            const expr = this.latexModalType === 'inline' ? `$${this.latexInputValue}$` : `$$${this.latexInputValue}$$`;
             this.showLatexModal = false;
             this.richEditor.chain().focus().insertContent(expr).run();
             setTimeout(() => {
@@ -1397,13 +1397,7 @@ export default {
 
             padding-left: 8px;
             padding-right: 8px;
-            mask-image: linear-gradient(
-                to right,
-                transparent,
-                black 20px,
-                black calc(100% - 20px),
-                transparent
-            );
+            mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
             -webkit-mask-image: linear-gradient(
                 to right,
                 transparent,
@@ -1490,19 +1484,25 @@ export default {
                     font-weight: 500;
                     cursor: pointer;
                     border: none;
-                    transition: background 0.15s, color 0.15s;
+                    transition:
+                        background 0.15s,
+                        color 0.15s;
                 }
 
                 .cancel-btn {
                     color: var(--modal-cancel-color, inherit);
                     background-color: var(--modal-cancel-bg, transparent);
-                    &:hover { filter: brightness(0.9); }
+                    &:hover {
+                        filter: brightness(0.9);
+                    }
                 }
 
                 .confirm-btn {
                     color: var(--modal-apply-color, #fff);
                     background-color: var(--modal-apply-bg, #000);
-                    &:hover { filter: brightness(0.85); }
+                    &:hover {
+                        filter: brightness(0.85);
+                    }
                 }
             }
         }
