@@ -699,8 +699,8 @@ export default {
                 image: this.content.parameterImage ?? false,
                 codeBlock: this.content.parameterCodeBlock ?? true,
                 blockquote: this.content.parameterQuote ?? true,
-                inlineMath: this.content.parameterInlineMath ?? false,
-                blockMath: this.content.parameterBlockMath ?? false,
+                inlineMath: (this.content.parameterInlineMath ?? false) && (this.content.enableLatex ?? true),
+                blockMath: (this.content.parameterBlockMath ?? false) && (this.content.enableLatex ?? true),
                 undo: this.content.parameterUndo ?? true,
                 redo: this.content.parameterRedo ?? true,
             };
@@ -718,6 +718,9 @@ export default {
                     list: this.mentionList,
                     allowSpaces: this.content.mentionAllowSpaces,
                     char: this.content.mentionChar,
+                },
+                latex: {
+                    enabled: this.content.enableLatex ?? true,
                 },
             };
         },
@@ -1005,19 +1008,21 @@ export default {
                                 char: this.editorConfig.mention.char,
                             },
                         }),
-                    Mathematics.configure({
-                        regex: /(?<!\$)\$([^\$]+)\$(?!\$)/gi,
-                        katexOptions: {
-                            throwOnError: false,
-                        },
-                    }),
-                    Mathematics.extend({ name: 'MathematicsDisplay' }).configure({
-                        regex: /\$\$([^\$]+)\$\$/gi,
-                        katexOptions: {
-                            throwOnError: false,
-                            displayMode: true,
-                        },
-                    }),
+                    this.editorConfig.latex.enabled &&
+                        Mathematics.configure({
+                            regex: /(?<!\$)\$([^\$]+)\$(?!\$)/gi,
+                            katexOptions: {
+                                throwOnError: false,
+                            },
+                        }),
+                    this.editorConfig.latex.enabled &&
+                        Mathematics.extend({ name: 'MathematicsDisplay' }).configure({
+                            regex: /\$\$([^\$]+)\$\$/gi,
+                            katexOptions: {
+                                throwOnError: false,
+                                displayMode: true,
+                            },
+                        }),
                 ],
                 onCreate: () => {
                     this.setValue(this.getContent());
