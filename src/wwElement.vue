@@ -587,6 +587,15 @@ export default {
             },
             immediate: true,
         },
+        // For updating legacy elements before introduction of enableLatex
+        'content.enableLatex': {
+            handler(value) {
+                if (value === undefined) {
+                    this.$emit('update:content:effect', { enableLatex: true });
+                }
+            },
+            immediate: true,
+        },
         'wwEditorState.isSelected'() {
             this.$emit('update:sidepanel-content', { path: 'selectedTag', value: null });
         },
