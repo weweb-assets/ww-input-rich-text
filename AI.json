@@ -81,6 +81,12 @@
       "defaultValue": false
     },
     {
+      "name": "enableLatex",
+      "description": "Enable LaTeX rendering in the editor. When true, text wrapped in single ($...$) or double ($$...$$) dollar signs is auto-converted to rendered math. Set to false to keep dollar-sign text literal (e.g. currency values like \"$6,500 or $3,700\").",
+      "type": "boolean",
+      "defaultValue": true
+    },
+    {
       "name": "mentionList",
       "description": "Array of objects used to populate the mention suggestions. Typically bound to a collection. Inactive when enableMention is false.",
       "type": "array",
@@ -659,20 +665,20 @@
     },
     {
       "name": "parameterInlineMath",
-      "description": "Show the inline-math button in the toolbar. Inactive when customMenu is true.",
+      "description": "Show the inline-math button in the toolbar. Inactive when customMenu is true, or when enableLatex is false.",
       "type": "boolean",
       "defaultValue": false,
       "inactiveProperty": {
-        "description": "Inactive when customMenu is true."
+        "description": "Inactive when customMenu is true, or when enableLatex is false."
       }
     },
     {
       "name": "parameterBlockMath",
-      "description": "Show the block-math button in the toolbar. Inactive when customMenu is true.",
+      "description": "Show the block-math button in the toolbar. Inactive when customMenu is true, or when enableLatex is false.",
       "type": "boolean",
       "defaultValue": false,
       "inactiveProperty": {
-        "description": "Inactive when customMenu is true."
+        "description": "Inactive when customMenu is true, or when enableLatex is false."
       }
     },
     {

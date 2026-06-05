@@ -73,6 +73,7 @@ export default {
                 'mentionIdPath',
                 'mentionLabelPath',
             ],
+            'enableLatex',
             [
                 'parameterTitle',
                 'parameterTextType',
@@ -361,6 +362,14 @@ export default {
             },
             type: 'OnOff',
             defaultValue: false,
+        },
+        enableLatex: {
+            section: 'settings',
+            label: {
+                en: 'LaTeX rendering',
+            },
+            type: 'OnOff',
+            defaultValue: true,
         },
         mentionList: {
             section: 'settings',
@@ -1696,7 +1705,7 @@ export default {
         },
         parameterInlineMath: {
             section: 'settings',
-            hidden: content => content.customMenu,
+            hidden: content => content.customMenu || !(content.enableLatex ?? true),
             label: {
                 en: 'Inline math',
             },
@@ -1718,7 +1727,7 @@ export default {
         },
         parameterBlockMath: {
             section: 'settings',
-            hidden: content => content.customMenu,
+            hidden: content => content.customMenu || !(content.enableLatex ?? true),
             label: {
                 en: 'Block math',
             },
